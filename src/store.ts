@@ -1,4 +1,4 @@
-import type { BudgetState, RecurringItem, Transaction } from './types'
+import type { BudgetState, Transaction } from './types'
 
 const STORAGE_KEY = 'budget-app-data'
 
@@ -51,7 +51,6 @@ function ensureRecurringApplied(state: BudgetState): BudgetState {
   const newTransactions: Transaction[] = [...state.transactions]
 
   state.recurring.forEach((r) => {
-    const start = new Date(thisYear, thisMonth, 1)
     // Apply for current month if we're on or past dayOfMonth
     if (today >= r.dayOfMonth) {
       const key = `${r.id}:${thisYear}-${String(thisMonth + 1).padStart(2, '0')}`

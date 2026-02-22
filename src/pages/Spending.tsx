@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getState, updateState, id } from '../store'
-import { formatCurrency, isCurrentMonth } from '../utils'
+import { formatCurrency } from '../utils'
 import type { Transaction } from '../types'
 
 export default function Spending() {

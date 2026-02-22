@@ -1,6 +1,9 @@
 node_modules/
 dist/
+*.tsbuildinfo
 *.local
 .DS_Store
 .env
 .env.*
+vite.config.js
+vite.config.d.ts
