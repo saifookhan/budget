@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { getState, getIncomeForMonth } from '../store'
+import { getState } from '../store'
 import { getStoredTheme, getChartColorsForTheme } from '../theme'
 import type { ThemeId } from '../theme'
 import {
