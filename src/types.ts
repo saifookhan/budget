@@ -2,6 +2,8 @@ export interface Account {
   id: string
   name: string
   purpose?: string
+  /** Money available in this account (user-set) */
+  balance?: number
 }
 
 export interface Category {
@@ -28,7 +30,7 @@ export interface RecurringItem {
   amount: number
   categoryId?: string
   accountId?: string
-  dayOfMonth: number // 1-28 for safety
+  dayOfMonth: number // 1-31
   type: 'subscription' | 'saving'
 }
 
@@ -41,8 +43,27 @@ export interface SavingsGoal {
   recurringId?: string // links to RecurringItem that auto-adds each month
 }
 
+export type CurrencyCode =
+  | 'EUR'
+  | 'USD'
+  | 'GBP'
+  | 'CHF'
+  | 'PLN'
+  | 'SEK'
+  | 'NOK'
+  | 'DKK'
+  | 'JPY'
+  | 'CAD'
+  | 'AUD'
+
+export type LanguageCode = 'en' | 'it' | 'de' | 'fr' | 'es'
+
 export interface BudgetState {
   monthlyIncome: number
+  /** Income for specific months (YYYY-MM). Falls back to monthlyIncome if not set. */
+  incomeByMonth?: Record<string, number>
+  currency: CurrencyCode
+  language: LanguageCode
   accounts: Account[]
   categories: Category[]
   transactions: Transaction[]

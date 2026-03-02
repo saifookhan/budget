@@ -3,7 +3,7 @@ import { getState, updateState, id } from '../store'
 import { formatCurrency } from '../utils'
 import type { Transaction } from '../types'
 
-export default function Spending() {
+export default function Expenses() {
   const state = getState()
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [amount, setAmount] = useState('')
@@ -60,7 +60,7 @@ export default function Spending() {
 
   return (
     <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Spending</h1>
+      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Expenses</h1>
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
         Add one-off expenses. For monthly subscriptions, use the Subscriptions page so they're added automatically each month.
       </p>

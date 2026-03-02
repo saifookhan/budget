@@ -20,7 +20,7 @@ export default function Subscriptions() {
     e.preventDefault()
     const num = Math.round(parseFloat(amount) * 100) / 100
     if (!(num > 0) || !label.trim()) return
-    const day = Math.min(28, Math.max(1, parseInt(dayOfMonth, 10) || 1))
+    const day = Math.min(31, Math.max(1, parseInt(dayOfMonth, 10) || 1))
     const next = updateState((s) => ({
       ...s,
       recurring: [
@@ -88,12 +88,12 @@ export default function Subscriptions() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="sub-day">Day of month (1–28)</label>
+          <label htmlFor="sub-day">Day of month (1–31)</label>
           <input
             id="sub-day"
             type="number"
             min="1"
-            max="28"
+            max="31"
             value={dayOfMonth}
             onChange={(e) => setDayOfMonth(e.target.value)}
           />

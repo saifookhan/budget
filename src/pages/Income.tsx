@@ -3,7 +3,8 @@ import { getState, setState } from '../store'
 import { formatCurrency } from '../utils'
 
 export default function Income() {
-  const [income, setIncome] = useState(0)
+  const state = getState()
+  const [income, setIncome] = useState(state.monthlyIncome)
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
@@ -21,19 +22,19 @@ export default function Income() {
     <>
       <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Monthly income</h1>
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        Enter your total take-home income per month. We use this to calculate how much you have left.
+        Enter your total take-home income per month. You can edit this anytime and click Save to update.
       </p>
 
       <form onSubmit={handleSubmit} className="card">
         <div className="form-group">
-          <label htmlFor="income">Income (€/month)</label>
+          <label htmlFor="income">Income ({state.currency}/month)</label>
           <input
             id="income"
             type="number"
             min="0"
-            step="1"
-            value={income || ''}
-            onChange={(e) => setIncome(Number(e.target.value) || 0)}
+            step="0.01"
+            value={income === 0 ? '' : income}
+            onChange={(e) => setIncome(parseFloat(e.target.value) || 0)}
             placeholder="e.g. 2500"
           />
         </div>
@@ -44,7 +45,7 @@ export default function Income() {
 
       {income > 0 && (
         <p className="muted" style={{ marginTop: '1rem' }}>
-          Your budget is based on {formatCurrency(income)} per month.
+          Your budget is based on {formatCurrency(income, state.currency)} per month.
         </p>
       )}
     </>

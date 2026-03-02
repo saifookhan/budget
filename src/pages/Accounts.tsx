@@ -55,15 +55,25 @@ export default function Accounts() {
     setPurpose('')
   }
 
+  const setBalance = (accountId: string, value: number) => {
+    const next = updateState((s) => ({
+      ...s,
+      accounts: s.accounts.map((a) =>
+        a.id === accountId ? { ...a, balance: value === 0 ? undefined : value } : a
+      ),
+    }))
+    setAccounts(next.accounts)
+  }
+
   return (
     <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Accounts</h1>
+      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Wallet</h1>
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        Add accounts like Revolut (for groceries), your bank (for rent), etc. You can assign transactions and recurring items to each.
+        Add wallets like Revolut (for groceries), your bank (for rent), etc. You can assign transactions and recurring items to each.
       </p>
 
       <form onSubmit={add} className="card" style={{ marginBottom: '1rem' }}>
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Add account</h2>
+        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Add wallet</h2>
         <div className="form-group">
           <label htmlFor="acc-name">Name</label>
           <input
@@ -83,13 +93,13 @@ export default function Accounts() {
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          Add account
+          Add wallet
         </button>
       </form>
 
       {accounts.length > 0 && (
         <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Your accounts</h2>
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Your wallets</h2>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {accounts.map((a) => (
               <li
@@ -123,11 +133,23 @@ export default function Accounts() {
                   </form>
                 ) : (
                   <>
-                    <div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
                       <strong>{a.name}</strong>
                       {a.purpose && <span className="muted"> — {a.purpose}</span>}
+                      <div className="muted" style={{ marginTop: '0.35rem', fontSize: '0.9rem' }}>
+                        Money available:{' '}
+                        <input
+                          type="number"
+                          min="0"
+                          step="1"
+                          value={a.balance ?? ''}
+                          onChange={(e) => setBalance(a.id, Number(e.target.value) || 0)}
+                          placeholder="0"
+                          style={{ width: '6rem', padding: '0.25rem 0.4rem', marginLeft: '0.25rem' }}
+                        />
+                      </div>
                     </div>
-                    <span>
+                    <span style={{ display: 'flex', gap: '0.5rem' }}>
                       <button type="button" className="btn btn-ghost" onClick={() => startEdit(a)}>Edit</button>
                       <button type="button" className="btn btn-ghost" onClick={() => remove(a.id)}>Remove</button>
                     </span>

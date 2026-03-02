@@ -4,6 +4,9 @@ const STORAGE_KEY = 'budget-app-data'
 
 const defaultState: BudgetState = {
   monthlyIncome: 0,
+  incomeByMonth: {},
+  currency: 'EUR',
+  language: 'en',
   accounts: [],
   categories: [],
   transactions: [],
@@ -18,6 +21,9 @@ function loadState(): BudgetState {
     const parsed = JSON.parse(raw) as BudgetState
     return {
       monthlyIncome: parsed.monthlyIncome ?? 0,
+      incomeByMonth: parsed.incomeByMonth ?? {},
+      currency: parsed.currency ?? 'EUR',
+      language: parsed.language ?? 'en',
       accounts: parsed.accounts ?? [],
       categories: parsed.categories ?? [],
       transactions: parsed.transactions ?? [],
@@ -51,11 +57,12 @@ function ensureRecurringApplied(state: BudgetState): BudgetState {
   const newTransactions: Transaction[] = [...state.transactions]
 
   state.recurring.forEach((r) => {
-    // Apply for current month if we're on or past dayOfMonth
-    if (today >= r.dayOfMonth) {
+    const lastDayOfMonth = new Date(thisYear, thisMonth + 1, 0).getDate()
+    const day = Math.min(r.dayOfMonth, lastDayOfMonth) // e.g. day 31 in Feb → 28
+    if (today >= day) {
       const key = `${r.id}:${thisYear}-${String(thisMonth + 1).padStart(2, '0')}`
       if (!applied.has(key)) {
-        const dateStr = `${thisYear}-${String(thisMonth + 1).padStart(2, '0')}-${String(r.dayOfMonth).padStart(2, '0')}`
+        const dateStr = `${thisYear}-${String(thisMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
         newTransactions.push({
           id: crypto.randomUUID(),
           type: r.type === 'saving' ? 'saving' : 'expense',
@@ -99,4 +106,10 @@ export function updateState(fn: (state: BudgetState) => BudgetState): BudgetStat
 
 export function id(): string {
   return crypto.randomUUID()
+}
+
+/** Income for a given month (YYYY-MM). Uses incomeByMonth if set, else monthlyIncome. */
+export function getIncomeForMonth(state: BudgetState, monthKey: string): number {
+  const override = state.incomeByMonth?.[monthKey]
+  return override !== undefined && override !== null ? override : state.monthlyIncome
 }

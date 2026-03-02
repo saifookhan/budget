@@ -103,7 +103,7 @@ export default function Categories() {
                 ) : (
                   <>
                     <span>{c.name}</span>
-                    <span>
+                    <span style={{ display: 'flex', gap: '0.5rem' }}>
                       <button type="button" className="btn btn-ghost" onClick={() => startEdit(c)}>Edit</button>
                       <button type="button" className="btn btn-ghost" onClick={() => remove(c.id)}>Remove</button>
                     </span>
