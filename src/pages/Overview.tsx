@@ -339,17 +339,46 @@ export default function Overview({ theme }: OverviewProps) {
 
             {chartType === 'bar' && (
               <div style={{ marginBottom: '0.5rem' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  {segments.map(({ catId, amount, color, pct }) => (
-                    <div key={catId} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                      <span style={{ width: '100px', flexShrink: 0, fontSize: '0.9rem' }}>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
-                      <div style={{ flex: 1, minWidth: 80, height: 24, background: 'var(--border)', borderRadius: 4, overflow: 'hidden', display: 'flex' }}>
-                        <div style={{ width: `${pct}%`, background: color, borderRadius: 4 }} aria-hidden />
+                <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: 160, padding: '0.5rem 0' }}>
+                  {segments.map(({ catId, amount, color }) => {
+                    const heightPct = maxAmount > 0 ? (amount / maxAmount) * 100 : 0
+                    return (
+                      <div
+                        key={catId}
+                        title={`${data.categoryNames[catId] ?? t('overview.uncategorized')}: ${formatCurrency(amount, data.currency)}`}
+                        style={{
+                          flex: 1,
+                          minWidth: 24,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: 4,
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: '100%',
+                            height: `${heightPct}%`,
+                            minHeight: heightPct > 0 ? 8 : 0,
+                            background: color,
+                            borderRadius: '4px 4px 0 0',
+                          }}
+                          aria-hidden
+                        />
+                        <span style={{ fontSize: '0.75rem', textAlign: 'center', lineHeight: 1.1 }}>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
                       </div>
-                      <span className="amount-negative" style={{ flexShrink: 0, fontSize: '0.9rem' }}>{formatCurrency(amount, data.currency)}</span>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
+                <ul className="overview-category-chart-legend" style={{ marginTop: '0.5rem' }} aria-label="Spending by category">
+                  {segments.map(({ catId, amount, color }) => (
+                    <li key={catId} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                      <span className="overview-category-chart-swatch" style={{ background: color }} aria-hidden />
+                      <span>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
+                      <span className="amount-negative" style={{ marginLeft: 'auto' }}>{formatCurrency(amount, data.currency)}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
 
