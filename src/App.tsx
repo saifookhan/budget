@@ -16,7 +16,9 @@ import ContactChat from './ContactChat'
 import { AuthProvider, useAuth } from './auth/AuthContext'
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { THEMES, getStoredTheme, setStoredTheme, applyTheme, type ThemeId } from './theme'
-import { getState, updateState } from './store'
+import { getState, updateState, subscribe } from './store'
+import { fetchBudgetState, pushBudgetState, replaceLocalState } from './budgetSync'
+import debounce from 'lodash.debounce'
 import { CURRENCIES, LANGUAGES } from './constants'
 import { t } from './i18n'
 import { LanguageProvider } from './LanguageContext'
@@ -55,6 +57,24 @@ function AppShell() {
   const [settingsStuck, setSettingsStuckState] = useState(getSettingsStuck)
   const [overviewKey, setOverviewKey] = useState(0)
   const { user, signOut } = useAuth()
+
+  // Sync budget to Supabase when logged in: load once on mount, then push on every change
+  useEffect(() => {
+    if (!user?.id) return
+    fetchBudgetState(user.id).then((remote) => {
+      if (remote && (remote.transactions?.length > 0 || remote.monthlyIncome !== 0 || (remote.accounts?.length ?? 0) > 0 || (remote.categories?.length ?? 0) > 0)) {
+        replaceLocalState(remote)
+      }
+    })
+    const push = debounce(() => {
+      pushBudgetState(user.id, getState())
+    }, 800)
+    const unsub = subscribe(() => push())
+    return () => {
+      unsub()
+      push.cancel()
+    }
+  }, [user?.id])
 
   useEffect(() => {
     if (location.pathname === '/') setOverviewKey((k) => k + 1)

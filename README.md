@@ -12,7 +12,9 @@ A personal budget app to track monthly income, spending by category, multiple ac
 - **Subscriptions** – Add monthly subscriptions (Netflix, gym…). They are added automatically each month on the day you choose (1–28) so you always see how much you spend per category
 - **Savings** – Set a monthly amount (e.g. €100). It’s added automatically at the start of each month and you see how much you’ve saved since you started
 
-Data is stored in your browser (localStorage). No server or account required.
+Data is stored in your browser (localStorage) and, when you're logged in, synced to your account in Supabase so it persists when you leave the app or use another device.
+
+**To enable sync:** In Supabase Dashboard → SQL Editor, run the script in `supabase_budget_table.sql` once. Then your budget data will be saved to Supabase whenever you're logged in.
 
 ## Run the app
 

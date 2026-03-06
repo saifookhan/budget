@@ -1,13 +1,14 @@
-export type ThemeId = 'warm' | 'black' | 'pink' | 'blue'
+export type ThemeId = 'neon' | 'warm' | 'black' | 'pink' | 'blue'
 
 export const THEMES: { id: ThemeId; label: string }[] = [
+  { id: 'neon', label: '✨ Neon pink' },
   { id: 'warm', label: '🌞 Warm' },
   { id: 'black', label: '🖤 Black' },
   { id: 'pink', label: '💗 Pink' },
   { id: 'blue', label: '💙 Blue' },
 ]
 
-const VALID_THEMES: ThemeId[] = ['warm', 'black', 'pink', 'blue']
+const VALID_THEMES: ThemeId[] = ['neon', 'warm', 'black', 'pink', 'blue']
 
 const STORAGE_KEY = 'budget-theme'
 
@@ -16,7 +17,7 @@ export function getStoredTheme(): ThemeId {
     const v = localStorage.getItem(STORAGE_KEY)
     if (v && VALID_THEMES.includes(v as ThemeId)) return v as ThemeId
   } catch {}
-  return 'warm'
+  return 'neon'
 }
 
 export function setStoredTheme(id: ThemeId): void {
@@ -33,6 +34,11 @@ export function applyTheme(id: ThemeId): void {
  * All palettes are muted / soft (no bright neon colors).
  */
 const CHART_COLORS_BY_THEME: Record<ThemeId, string[]> = {
+  neon: [
+    '#ff2a6d', '#ff6b9d', '#ff8ab3', '#ff4d87', '#e91a5c',
+    '#ff9ec4', '#ff3d7a', '#d41a5a', '#ff7aa8', '#ff5c8d',
+    '#e84d7a', '#ffb3cc',
+  ],
   warm: [
     '#c4a27b', '#a27f5a', '#8b6a4a', '#b68f68', '#d4b89a',
     '#9b7c63', '#7c6350', '#b39a82', '#8a7260', '#6d5a4a',
