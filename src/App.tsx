@@ -11,6 +11,8 @@ import PastOverviews from './pages/PastOverviews'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import ResetPassword from './pages/ResetPassword'
+import HomePage from './pages/HomePage'
+import ContactChat from './ContactChat'
 import { AuthProvider, useAuth } from './auth/AuthContext'
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { THEMES, getStoredTheme, setStoredTheme, applyTheme, type ThemeId } from './theme'
@@ -21,6 +23,7 @@ import { LanguageProvider } from './LanguageContext'
 import type { CurrencyCode, LanguageCode } from './types'
 
 const MENU_STUCK_KEY = 'budget-menu-stuck'
+const SETTINGS_STUCK_KEY = 'budget-settings-stuck'
 
 function getMenuStuck(): boolean {
   return typeof localStorage !== 'undefined' && localStorage.getItem(MENU_STUCK_KEY) === '1'
@@ -28,6 +31,16 @@ function getMenuStuck(): boolean {
 
 function persistMenuStuck(value: boolean): void {
   localStorage.setItem(MENU_STUCK_KEY, value ? '1' : '0')
+}
+
+function getSettingsStuck(): boolean {
+  if (typeof localStorage === 'undefined') return true
+  const v = localStorage.getItem(SETTINGS_STUCK_KEY)
+  return v !== '0'
+}
+
+function persistSettingsStuck(value: boolean): void {
+  localStorage.setItem(SETTINGS_STUCK_KEY, value ? '1' : '0')
 }
 
 function AppShell() {
@@ -38,6 +51,8 @@ function AppShell() {
   const [language, setLanguage] = useState<LanguageCode>(initial.language ?? 'en')
   const [menuOpen, setMenuOpen] = useState(false)
   const [menuStuck, setMenuStuckState] = useState(getMenuStuck)
+  const [settingsOpen, setSettingsOpen] = useState(getSettingsStuck)
+  const [settingsStuck, setSettingsStuckState] = useState(getSettingsStuck)
   const [overviewKey, setOverviewKey] = useState(0)
   const { user, signOut } = useAuth()
 
@@ -48,6 +63,12 @@ function AppShell() {
   const setMenuStuck = (value: boolean) => {
     setMenuStuckState(value)
     persistMenuStuck(value)
+  }
+
+  const setSettingsStuck = (value: boolean) => {
+    setSettingsStuckState(value)
+    persistSettingsStuck(value)
+    if (value) setSettingsOpen(true)
   }
 
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -70,12 +91,17 @@ function AppShell() {
   useEffect(() => {
     if (menuStuck) setMenuOpen(true)
   }, [])
+  useEffect(() => {
+    if (settingsStuck) setSettingsOpen(true)
+  }, [])
 
   const T = (key: string) => t(key, language)
 
+  const settingsVisible = settingsOpen || settingsStuck
+
   return (
     <LanguageProvider language={language}>
-    <div className="app">
+    <div className={`app ${settingsVisible ? 'app-settings-visible' : ''}`}>
       <header className="app-header">
         <button
           type="button"
@@ -93,8 +119,41 @@ function AppShell() {
         <h1 className="app-title" style={{ margin: 0, flex: '1 1 auto', minWidth: 0 }}>
           <NavLink to="/" onClick={() => !menuStuck && setMenuOpen(false)}>My Budget</NavLink>
         </h1>
+        <button
+          type="button"
+          className="btn btn-icon sidebar-settings-toggle"
+          onClick={() => setSettingsOpen((o) => !o)}
+          aria-label={settingsOpen ? T('nav.closeSettings') : T('nav.settings')}
+          aria-expanded={settingsOpen}
+          title={settingsOpen ? T('nav.closeSettings') : T('nav.settings')}
+        >
+          <span aria-hidden>⚙️</span>
+        </button>
       </header>
-      <aside className="sidebar-settings" aria-label="Settings">
+      <div
+        className={`sidebar-overlay sidebar-overlay-right ${settingsOpen && !settingsStuck ? 'sidebar-overlay-open' : ''}`}
+        aria-hidden
+        onClick={() => setSettingsOpen(false)}
+      />
+      <aside
+        className={`sidebar-settings ${settingsOpen || settingsStuck ? 'sidebar-settings-open' : ''}`}
+        aria-label="Settings"
+      >
+        <div className="sidebar-settings-stick">
+          <button
+            type="button"
+            className={`btn btn-ghost ${settingsStuck ? 'active' : ''}`}
+            onClick={() => {
+              const next = !settingsStuck
+              setSettingsStuck(next)
+              if (!next) setSettingsOpen(false)
+            }}
+            aria-pressed={settingsStuck}
+            aria-label={settingsStuck ? T('nav.keepOpenOn') : T('nav.keepOpenOff')}
+          >
+            {settingsStuck ? `📌 ${T('nav.keepOpen')} ✓` : `📌 ${T('nav.keepOpen')}`}
+          </button>
+        </div>
         <label className="theme-dropdown-label">
           <span className="theme-dropdown-visual">{T('nav.theme')}</span>
           <select
@@ -199,9 +258,23 @@ function AppShell() {
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/savings" element={<Savings />} />
       </Routes>
+      <ContactChat />
     </div>
     </LanguageProvider>
   )
+}
+
+function HomeOrApp() {
+  const { user, loading } = useAuth()
+  if (loading) {
+    return (
+      <div className="auth-page">
+        <div className="auth-loading">Loading…</div>
+      </div>
+    )
+  }
+  if (!user) return <HomePage />
+  return <AppShell />
 }
 
 function App() {
@@ -211,6 +284,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/" element={<HomeOrApp />} />
         <Route
           path="/*"
           element={

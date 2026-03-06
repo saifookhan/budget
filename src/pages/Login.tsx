@@ -1,31 +1,16 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { supabase } from '../supabase'
+import { LoginForm } from '../LoginForm'
 
 export default function Login() {
-  const { signIn, error, clearError } = useAuth()
   const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
   const [showForgotPassword, setShowForgotPassword] = useState(false)
   const [resetEmail, setResetEmail] = useState('')
   const [resetSent, setResetSent] = useState(false)
   const [resetError, setResetError] = useState<string | null>(null)
   const [resetLoading, setResetLoading] = useState(false)
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    clearError()
-    setLoading(true)
-    try {
-      await signIn(email, password)
-      navigate('/', { replace: true })
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const handleForgotSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -113,76 +98,7 @@ export default function Login() {
   return (
     <div className="auth-page">
       <div className="auth-card card">
-        <h1 className="auth-title">Log in</h1>
-        <p className="muted">
-          Use your email and password to access your budget.
-        </p>
-
-        {notConfigured && (
-          <div className="auth-alert" role="alert">
-            Supabase is not configured. Add <code>VITE_SUPABASE_URL</code> and{' '}
-            <code>VITE_SUPABASE_ANON_KEY</code> to <code>.env.local</code> (see{' '}
-            <code>.env.example</code> and the setup guide in the README).
-          </div>
-        )}
-
-        {error && !notConfigured && (
-          <div className="auth-alert auth-alert-error" role="alert">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
-            <label htmlFor="login-email">Email</label>
-            <input
-              id="login-email"
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-              disabled={notConfigured}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="login-password">Password</label>
-            <input
-              id="login-password"
-              type="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              disabled={notConfigured}
-            />
-            <p style={{ marginTop: '0.35rem', marginBottom: 0 }}>
-              <button
-                type="button"
-                className="btn-link"
-                onClick={() => {
-                  clearError()
-                  setShowForgotPassword(true)
-                }}
-              >
-                Forgot password?
-              </button>
-            </p>
-          </div>
-          <button
-            type="submit"
-            className="btn btn-primary"
-            style={{ width: '100%', marginTop: '0.25rem' }}
-            disabled={loading || notConfigured}
-          >
-            {loading ? 'Signing in…' : 'Log in'}
-          </button>
-        </form>
-
-        <p className="auth-footer">
-          Don’t have an account? <Link to="/signup">Sign up</Link>
-        </p>
+        <LoginForm onForgotClick={() => setShowForgotPassword(true)} />
       </div>
     </div>
   )
