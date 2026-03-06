@@ -4,19 +4,18 @@ export default function HomePage() {
   return (
     <div className="home-page">
       <div className="home-hero">
-        <h1 className="home-title">My Budget</h1>
-        <p className="home-tagline">
-          Track income, expenses, and subscriptions in one place. Stay on top of your money.
-        </p>
-        <ul className="home-features">
-          <li>Overview and charts</li>
-          <li>Income & spending by category</li>
-          <li>Subscriptions & recurring items</li>
-          <li>Accounts and savings</li>
-        </ul>
+        <div className="home-hero-inner">
+          <p className="home-eyebrow">Your money, your chance to change</p>
+          <h1 className="home-title">My Budget</h1>
+          <div className="home-title-rule" aria-hidden />
+          <p className="home-tagline">
+            Track income, spending, and subscriptions in one place—simple, clear, and yours.
+          </p>
+        </div>
+        <div className="home-hero-pattern" aria-hidden />
       </div>
       <aside className="home-login-wrap">
-        <div className="auth-card card home-login-card">
+        <div className="home-login-card auth-card card">
           <LoginForm embedded />
         </div>
       </aside>
