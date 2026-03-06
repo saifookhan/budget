@@ -1,51 +1,105 @@
 import { useState, useEffect } from 'react'
 import { getState, updateState, id } from '../store'
+import { useTranslation } from '../LanguageContext'
 import { formatCurrency } from '../utils'
 import type { Transaction } from '../types'
 
 export default function Expenses() {
+  const { t } = useTranslation()
   const state = getState()
   const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [editingId, setEditingId] = useState<string | null>(null)
   const [amount, setAmount] = useState('')
+  const [date, setDate] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [accountId, setAccountId] = useState('')
   const [memo, setMemo] = useState('')
 
   useEffect(() => {
-    setTransactions(getState().transactions.filter((t) => t.type === 'expense'))
+    setTransactions(getState().transactions.filter((tx) => tx.type === 'expense'))
   }, [])
 
-  const add = (e: React.FormEvent) => {
-    e.preventDefault()
-    const num = Math.round(parseFloat(amount) * 100) / 100
-    if (!(num > 0)) return
-    const date = new Date().toISOString().slice(0, 10)
-    const next = updateState((s) => ({
-      ...s,
-      transactions: [
-        ...s.transactions,
-        {
-          id: id(),
-          type: 'expense',
-          amount: num,
-          categoryId: categoryId || undefined,
-          accountId: accountId || undefined,
-          date,
-          memo: memo.trim() || undefined,
-        },
-      ],
-    }))
-    setTransactions(next.transactions.filter((t) => t.type === 'expense'))
+  const startEdit = (tx: Transaction) => {
+    setEditingId(tx.id)
+    setAmount(String(tx.amount))
+    setDate(tx.date)
+    setCategoryId(tx.categoryId ?? '')
+    setAccountId(tx.accountId ?? '')
+    setMemo(tx.memo ?? '')
+  }
+
+  const cancelEdit = () => {
+    setEditingId(null)
     setAmount('')
+    setDate(new Date().toISOString().slice(0, 10))
+    setCategoryId('')
+    setAccountId('')
     setMemo('')
   }
 
+  const save = (e: React.FormEvent) => {
+    e.preventDefault()
+    const num = Math.round(parseFloat(amount) * 100) / 100
+    if (!(num > 0)) return
+    const dateStr = date || new Date().toISOString().slice(0, 10)
+    if (editingId) {
+      const next = updateState((s) => ({
+        ...s,
+        transactions: s.transactions.map((tx) =>
+          tx.id === editingId
+            ? {
+                ...tx,
+                amount: num,
+                categoryId: categoryId || undefined,
+                accountId: accountId || undefined,
+                date: dateStr,
+                memo: memo.trim() || undefined,
+              }
+            : tx
+        ),
+      }))
+      setTransactions(next.transactions.filter((tx) => tx.type === 'expense'))
+      cancelEdit()
+    } else {
+      const next = updateState((s) => ({
+        ...s,
+        transactions: [
+          ...s.transactions,
+          {
+            id: id(),
+            type: 'expense',
+            amount: num,
+            categoryId: categoryId || undefined,
+            accountId: accountId || undefined,
+            date: dateStr,
+            memo: memo.trim() || undefined,
+          },
+        ],
+      }))
+      setTransactions(next.transactions.filter((tx) => tx.type === 'expense'))
+      setAmount('')
+      setDate(new Date().toISOString().slice(0, 10))
+      setMemo('')
+    }
+  }
+
   const remove = (txId: string) => {
-    if (!confirm('Delete this expense?')) return
-    const next = updateState((s) => ({
-      ...s,
-      transactions: s.transactions.filter((t) => t.id !== txId),
-    }))
+    if (!confirm(t('expenses.deleteConfirm'))) return
+    if (editingId === txId) cancelEdit()
+    const next = updateState((s) => {
+      const deleted = s.transactions.find((t) => t.id === txId)
+      const skippedRecurring = [...(s.skippedRecurring ?? [])]
+      if (deleted?.recurringId && deleted?.date) {
+        const [y, m] = deleted.date.split('-').map(Number)
+        const key = `${deleted.recurringId}:${y}-${String(m).padStart(2, '0')}`
+        if (!skippedRecurring.includes(key)) skippedRecurring.push(key)
+      }
+      return {
+        ...s,
+        transactions: s.transactions.filter((t) => t.id !== txId),
+        skippedRecurring,
+      }
+    })
     setTransactions(next.transactions.filter((t) => t.type === 'expense'))
   }
 
@@ -60,15 +114,17 @@ export default function Expenses() {
 
   return (
     <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Expenses</h1>
+      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('expenses.title')}</h1>
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        Add one-off expenses. For monthly subscriptions, use the Subscriptions page so they're added automatically each month.
+        {t('expenses.subtitle')}
       </p>
 
-      <form onSubmit={add} className="card" style={{ marginBottom: '1rem' }}>
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Add expense</h2>
+      <form onSubmit={save} className="card" style={{ marginBottom: '1rem' }}>
+        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>
+          {editingId ? t('expenses.editExpense') : t('expenses.addExpense')}
+        </h2>
         <div className="form-group">
-          <label htmlFor="sp-amount">Amount (€)</label>
+          <label htmlFor="sp-amount">{t('expenses.amount')}</label>
           <input
             id="sp-amount"
             type="number"
@@ -76,38 +132,48 @@ export default function Expenses() {
             step="0.01"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            placeholder="e.g. 45.50"
+            placeholder={t('expenses.amountPlaceholder')}
             required
           />
         </div>
         <div className="form-group">
-          <label htmlFor="sp-category">Category</label>
+          <label htmlFor="sp-date">{t('expenses.date')}</label>
+          <input
+            id="sp-date"
+            type="date"
+            value={date || new Date().toISOString().slice(0, 10)}
+            onChange={(e) => setDate(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="sp-category">{t('expenses.category')}</label>
           <select
             id="sp-category"
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
           >
-            <option value="">— Select —</option>
+            <option value="">{t('common.select')}</option>
             {categories.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="sp-account">Account</label>
+          <label htmlFor="sp-account">{t('expenses.account')}</label>
           <select
             id="sp-account"
             value={accountId}
             onChange={(e) => setAccountId(e.target.value)}
           >
-            <option value="">— Select —</option>
+            <option value="">{t('common.select')}</option>
             {accounts.map((a) => (
               <option key={a.id} value={a.id}>{a.name}</option>
             ))}
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="sp-memo">Note (optional)</label>
+          <label htmlFor="sp-memo">{t('expenses.memo')}</label>
           <input
             id="sp-memo"
             value={memo}
@@ -115,20 +181,27 @@ export default function Expenses() {
             placeholder="e.g. Weekly shop"
           />
         </div>
-        <button type="submit" className="btn btn-primary">
-          Add expense
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <button type="submit" className="btn btn-primary">
+            {editingId ? t('expenses.updateButton') : t('expenses.addButton')}
+          </button>
+          {editingId && (
+            <button type="button" className="btn btn-ghost" onClick={cancelEdit}>
+              {t('common.cancel')}
+            </button>
+          )}
+        </div>
       </form>
 
       <div className="card">
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Recent expenses</h2>
+        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('expenses.recent')}</h2>
         {sorted.length === 0 ? (
-          <p className="muted">No expenses yet. Add one above.</p>
+          <p className="muted">{t('expenses.noExpenses')}</p>
         ) : (
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-            {sorted.slice(0, 50).map((t) => (
+            {sorted.slice(0, 50).map((tx) => (
               <li
-                key={t.id}
+                key={tx.id}
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -138,17 +211,25 @@ export default function Expenses() {
                 }}
               >
                 <div>
-                  <span>{t.memo || categoryNames[t.categoryId ?? ''] || 'Expense'}</span>
+                  <span>{tx.memo || categoryNames[tx.categoryId ?? ''] || 'Expense'}</span>
                   <span className="muted" style={{ marginLeft: '0.5rem' }}>
-                    {t.date} {accountNames[t.accountId ?? ''] && `· ${accountNames[t.accountId!]}`}
+                    {tx.date} {accountNames[tx.accountId ?? ''] && `· ${accountNames[tx.accountId!]}`}
                   </span>
                 </div>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span className="amount-negative">{formatCurrency(t.amount)}</span>
+                  <span className="amount-negative">{formatCurrency(tx.amount)}</span>
                   <button
                     type="button"
                     className="btn btn-ghost"
-                    onClick={() => remove(t.id)}
+                    onClick={() => startEdit(tx)}
+                    aria-label={t('common.edit')}
+                  >
+                    {t('common.edit')}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-ghost"
+                    onClick={() => remove(tx.id)}
                     aria-label="Delete"
                   >
                     ✕

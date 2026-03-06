@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { getState, updateState, id } from '../store'
+import { useTranslation } from '../LanguageContext'
 import type { Category } from '../types'
 
 export default function Categories() {
+  const { t } = useTranslation()
   const [categories, setCategories] = useState<Category[]>([])
   const [name, setName] = useState('')
   const [editing, setEditing] = useState<string | null>(null)
@@ -24,7 +26,7 @@ export default function Categories() {
   }
 
   const remove = (categoryId: string) => {
-    if (!confirm('Remove this category? Transactions will show as "Uncategorized".')) return
+    if (!confirm(t('categories.removeConfirm'))) return
     const next = updateState((s) => ({
       ...s,
       categories: s.categories.filter((c) => c.id !== categoryId),
@@ -53,30 +55,30 @@ export default function Categories() {
 
   return (
     <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Categories</h1>
+      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('categories.title')}</h1>
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        Create categories for your spending (groceries, rent, fun, subscriptions, etc.). You can assign each expense to a category.
+        {t('categories.subtitle')}
       </p>
 
       <form onSubmit={add} className="card" style={{ marginBottom: '1rem' }}>
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Add category</h2>
+        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('categories.addCategory')}</h2>
         <div className="form-group">
-          <label htmlFor="cat-name">Name</label>
+          <label htmlFor="cat-name">{t('categories.name')}</label>
           <input
             id="cat-name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="e.g. Groceries, Rent, Subscriptions"
+            placeholder={t('categories.namePlaceholder')}
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          Add category
+          {t('categories.addButton')}
         </button>
       </form>
 
       {categories.length > 0 && (
         <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Your categories</h2>
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('categories.yourCategories')}</h2>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {categories.map((c) => (
               <li
@@ -97,15 +99,15 @@ export default function Categories() {
                       placeholder="Category name"
                       style={{ flex: 1, padding: '0.4rem' }}
                     />
-                    <button type="submit" className="btn btn-primary">Save</button>
-                    <button type="button" className="btn btn-ghost" onClick={() => setEditing(null)}>Cancel</button>
+                    <button type="submit" className="btn btn-primary">{t('common.save')}</button>
+                    <button type="button" className="btn btn-ghost" onClick={() => setEditing(null)}>{t('common.cancel')}</button>
                   </form>
                 ) : (
                   <>
                     <span>{c.name}</span>
                     <span style={{ display: 'flex', gap: '0.5rem' }}>
-                      <button type="button" className="btn btn-ghost" onClick={() => startEdit(c)}>Edit</button>
-                      <button type="button" className="btn btn-ghost" onClick={() => remove(c.id)}>Remove</button>
+                      <button type="button" className="btn btn-ghost" onClick={() => startEdit(c)}>{t('common.edit')}</button>
+                      <button type="button" className="btn btn-ghost" onClick={() => remove(c.id)}>{t('common.remove')}</button>
                     </span>
                   </>
                 )}

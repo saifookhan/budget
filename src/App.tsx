@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route, NavLink, Navigate } from 'react-router-dom'
+import { Routes, Route, NavLink, Navigate, useLocation } from 'react-router-dom'
 import Overview from './pages/Overview'
 import Income from './pages/Income'
 import Accounts from './pages/Accounts'
@@ -16,6 +16,8 @@ import { ProtectedRoute } from './auth/ProtectedRoute'
 import { THEMES, getStoredTheme, setStoredTheme, applyTheme, type ThemeId } from './theme'
 import { getState, updateState } from './store'
 import { CURRENCIES, LANGUAGES } from './constants'
+import { t } from './i18n'
+import { LanguageProvider } from './LanguageContext'
 import type { CurrencyCode, LanguageCode } from './types'
 
 const MENU_STUCK_KEY = 'budget-menu-stuck'
@@ -29,13 +31,19 @@ function persistMenuStuck(value: boolean): void {
 }
 
 function AppShell() {
+  const location = useLocation()
   const [theme, setTheme] = useState<ThemeId>(getStoredTheme())
   const initial = getState()
   const [currency, setCurrency] = useState<CurrencyCode>(initial.currency)
   const [language, setLanguage] = useState<LanguageCode>(initial.language ?? 'en')
   const [menuOpen, setMenuOpen] = useState(false)
   const [menuStuck, setMenuStuckState] = useState(getMenuStuck)
+  const [overviewKey, setOverviewKey] = useState(0)
   const { user, signOut } = useAuth()
+
+  useEffect(() => {
+    if (location.pathname === '/') setOverviewKey((k) => k + 1)
+  }, [location.pathname])
 
   const setMenuStuck = (value: boolean) => {
     setMenuStuckState(value)
@@ -63,7 +71,10 @@ function AppShell() {
     if (menuStuck) setMenuOpen(true)
   }, [])
 
+  const T = (key: string) => t(key, language)
+
   return (
+    <LanguageProvider language={language}>
     <div className="app">
       <header className="app-header">
         <button
@@ -85,7 +96,7 @@ function AppShell() {
       </header>
       <aside className="sidebar-settings" aria-label="Settings">
         <label className="theme-dropdown-label">
-          <span className="theme-dropdown-visual">Theme</span>
+          <span className="theme-dropdown-visual">{T('nav.theme')}</span>
           <select
             className="theme-dropdown"
             value={theme}
@@ -98,7 +109,7 @@ function AppShell() {
           </select>
         </label>
         <label className="theme-dropdown-label">
-          <span className="theme-dropdown-visual">Currency</span>
+          <span className="theme-dropdown-visual">{T('nav.currency')}</span>
           <select
             className="theme-dropdown"
             value={currency}
@@ -111,7 +122,7 @@ function AppShell() {
           </select>
         </label>
         <label className="theme-dropdown-label">
-          <span className="theme-dropdown-visual">Language</span>
+          <span className="theme-dropdown-visual">{T('nav.language')}</span>
           <select
             className="theme-dropdown"
             value={language}
@@ -130,7 +141,7 @@ function AppShell() {
             onClick={() => signOut()}
             style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}
           >
-            Log out
+            {T('nav.logOut')}
           </button>
         )}
       </aside>
@@ -150,36 +161,36 @@ function AppShell() {
             aria-pressed={menuStuck}
             aria-label={menuStuck ? 'Keep menu open (on)' : 'Keep menu open (off)'}
           >
-            {menuStuck ? '📌 Keep open ✓' : '📌 Keep open'}
+            {menuStuck ? `📌 ${T('nav.keepOpen')} ✓` : `📌 ${T('nav.keepOpen')}`}
           </button>
         </div>
         <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
-          <span aria-hidden>📊</span> Overview
+          <span aria-hidden>📊</span> {T('nav.overview')}
         </NavLink>
         <NavLink to="/income" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
-          <span aria-hidden>💰</span> Income
+          <span aria-hidden>💰</span> {T('nav.income')}
         </NavLink>
         <NavLink to="/categories" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
-          <span aria-hidden>📁</span> Categories
+          <span aria-hidden>📁</span> {T('nav.categories')}
         </NavLink>
         <NavLink to="/spending" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
-          <span aria-hidden>🛒</span> Expenses
+          <span aria-hidden>🛒</span> {T('nav.expenses')}
         </NavLink>
         <NavLink to="/subscriptions" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
-          <span aria-hidden>🔄</span> Subscriptions
+          <span aria-hidden>🔄</span> {T('nav.subscriptions')}
         </NavLink>
         <NavLink to="/savings" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
-          <span aria-hidden>📈</span> Savings
+          <span aria-hidden>📈</span> {T('nav.savings')}
         </NavLink>
         <NavLink to="/accounts" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
-          <span aria-hidden>🏦</span> Wallet
+          <span aria-hidden>🏦</span> {T('nav.wallet')}
         </NavLink>
         <NavLink to="/past" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
-          <span aria-hidden>📅</span> Past
+          <span aria-hidden>📅</span> {T('nav.past')}
         </NavLink>
       </aside>
       <Routes>
-        <Route path="/" element={<Overview theme={theme} />} />
+        <Route path="/" element={<Overview key={overviewKey} theme={theme} />} />
         <Route path="/income" element={<Income />} />
         <Route path="/past" element={<PastOverviews />} />
         <Route path="/accounts" element={<Accounts />} />
@@ -189,6 +200,7 @@ function AppShell() {
         <Route path="/savings" element={<Savings />} />
       </Routes>
     </div>
+    </LanguageProvider>
   )
 }
 

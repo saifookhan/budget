@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { getState, updateState, getIncomeForMonth } from '../store'
+import { useTranslation } from '../LanguageContext'
 import {
   formatCurrency,
   getPastMonthKeys,
@@ -11,6 +12,7 @@ import {
 const MONTHS_TO_SHOW = 24
 
 export default function PastOverviews() {
+  const { t } = useTranslation()
   const state = getState()
   const currency = state.currency
   const [editingIncome, setEditingIncome] = useState<string | null>(null)
@@ -65,9 +67,9 @@ export default function PastOverviews() {
 
   return (
     <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Past overviews</h1>
+      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('past.title')}</h1>
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        Income, expenses, savings and what was left for each month. For now, income is only shown for the current month; other months are 0 and can be filled over time.
+        {t('past.subtitle')}
       </p>
 
       <div className="card">

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getState, updateState, id } from '../store'
+import { useTranslation } from '../LanguageContext'
 import { formatCurrency, getCurrentMonthKey } from '../utils'
 import type { SavingsGoal, RecurringItem } from '../types'
 
@@ -10,6 +11,7 @@ function monthsBetween(start: string, endKey: string): number {
 }
 
 export default function Savings() {
+  const { t } = useTranslation()
   const state = getState()
   const [goals, setGoals] = useState<SavingsGoal[]>([])
   const [name, setName] = useState('')
@@ -59,7 +61,7 @@ export default function Savings() {
 
   const remove = (goalId: string) => {
     const goal = goals.find((g) => g.id === goalId)
-    if (!goal || !confirm('Remove this savings goal? Recurring monthly amount will stop.')) return
+    if (!goal || !confirm(t('savings.removeConfirm'))) return
     const next = updateState((s) => ({
       ...s,
       savingsGoals: s.savingsGoals.filter((g) => g.id !== goalId),
@@ -72,15 +74,15 @@ export default function Savings() {
 
   return (
     <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Savings & investments</h1>
+      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('savings.title')}</h1>
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        Set a monthly amount (e.g. 100€). It will be added automatically at the beginning of each month so you see how much you've saved since you started.
+        {t('savings.subtitle')}
       </p>
 
       <form onSubmit={add} className="card" style={{ marginBottom: '1rem' }}>
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Add savings goal</h2>
+        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('savings.addGoal')}</h2>
         <div className="form-group">
-          <label htmlFor="sav-name">Name</label>
+          <label htmlFor="sav-name">{t('savings.goalName')}</label>
           <input
             id="sav-name"
             value={name}
@@ -90,7 +92,7 @@ export default function Savings() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="sav-amount">Amount (€/month)</label>
+          <label htmlFor="sav-amount">{t('savings.monthlyAmount')}</label>
           <input
             id="sav-amount"
             type="number"
@@ -109,20 +111,20 @@ export default function Savings() {
             value={accountId}
             onChange={(e) => setAccountId(e.target.value)}
           >
-            <option value="">— Select —</option>
+            <option value="">{t('common.select')}</option>
             {state.accounts.map((a) => (
               <option key={a.id} value={a.id}>{a.name}</option>
             ))}
           </select>
         </div>
         <button type="submit" className="btn btn-primary">
-          Add savings goal
+          {t('savings.addButton')}
         </button>
       </form>
 
       {goals.length > 0 && (
         <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Your savings</h2>
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('savings.goals')}</h2>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {goals.map((g) => {
               const startKey = g.startDate.slice(0, 7)
@@ -150,12 +152,12 @@ export default function Savings() {
                       <div className="amount-positive" style={{ fontSize: '1.25rem', fontWeight: 700 }}>
                         {formatCurrency(totalSaved)}
                       </div>
-                      <span className="muted">saved so far</span>
+                      <span className="muted">{t('savings.savedSoFar')}</span>
                     </div>
                   </div>
                   <div style={{ marginTop: '0.5rem' }}>
                     <button type="button" className="btn btn-ghost" onClick={() => remove(g.id)}>
-                      Remove goal
+                      {t('common.remove')}
                     </button>
                   </div>
                 </li>

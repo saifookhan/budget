@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { getState, setState } from '../store'
+import { useTranslation } from '../LanguageContext'
 import { formatCurrency } from '../utils'
 
 export default function Income() {
+  const { t } = useTranslation()
   const state = getState()
   const [income, setIncome] = useState(state.monthlyIncome)
   const [saved, setSaved] = useState(false)
@@ -20,14 +22,14 @@ export default function Income() {
 
   return (
     <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Monthly income</h1>
+      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('income.monthlyTitle')}</h1>
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        Enter your total take-home income per month. You can edit this anytime and click Save to update.
+        {t('income.subtitleLong')}
       </p>
 
       <form onSubmit={handleSubmit} className="card">
         <div className="form-group">
-          <label htmlFor="income">Income ({state.currency}/month)</label>
+          <label htmlFor="income">{t('income.amount')} ({state.currency}/{t('income.perMonth')})</label>
           <input
             id="income"
             type="number"
@@ -39,13 +41,13 @@ export default function Income() {
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          {saved ? 'Saved ✓' : 'Save income'}
+          {saved ? t('income.saved') : t('income.saveIncome')}
         </button>
       </form>
 
       {income > 0 && (
         <p className="muted" style={{ marginTop: '1rem' }}>
-          Your budget is based on {formatCurrency(income, state.currency)} per month.
+          {t('income.basedOn')} {formatCurrency(income, state.currency)} {t('income.perMonth')}.
         </p>
       )}
     </>

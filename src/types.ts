@@ -69,4 +69,6 @@ export interface BudgetState {
   transactions: Transaction[]
   recurring: RecurringItem[]
   savingsGoals: SavingsGoal[]
+  /** Recurring applications user has deleted; don't re-add. Keys "recurringId:YYYY-MM". */
+  skippedRecurring?: string[]
 }

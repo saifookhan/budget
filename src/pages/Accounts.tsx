@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { getState, updateState, id } from '../store'
+import { useTranslation } from '../LanguageContext'
 import type { Account } from '../types'
 
 export default function Accounts() {
+  const { t } = useTranslation()
   const [accounts, setAccounts] = useState<Account[]>([])
   const [editing, setEditing] = useState<string | null>(null)
   const [name, setName] = useState('')
@@ -25,7 +27,7 @@ export default function Accounts() {
   }
 
   const remove = (accountId: string) => {
-    if (!confirm('Remove this account? Transactions linked to it will keep the link but show "Unknown account".')) return
+    if (!confirm(t('accounts.removeConfirm'))) return
     const next = updateState((s) => ({
       ...s,
       accounts: s.accounts.filter((a) => a.id !== accountId),
@@ -67,39 +69,39 @@ export default function Accounts() {
 
   return (
     <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Wallet</h1>
+      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('accounts.title')}</h1>
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        Add wallets like Revolut (for groceries), your bank (for rent), etc. You can assign transactions and recurring items to each.
+        {t('accounts.subtitle')}
       </p>
 
       <form onSubmit={add} className="card" style={{ marginBottom: '1rem' }}>
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Add wallet</h2>
+        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.addAccount')}</h2>
         <div className="form-group">
-          <label htmlFor="acc-name">Name</label>
+          <label htmlFor="acc-name">{t('accounts.name')}</label>
           <input
             id="acc-name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="e.g. Revolut, N26, Main bank"
+            placeholder={t('accounts.namePlaceholder')}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="acc-purpose">Purpose (optional)</label>
+          <label htmlFor="acc-purpose">{t('accounts.purpose')}</label>
           <input
             id="acc-purpose"
             value={purpose}
             onChange={(e) => setPurpose(e.target.value)}
-            placeholder="e.g. Groceries, Rent"
+            placeholder={t('accounts.purposePlaceholder')}
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          Add wallet
+          {t('accounts.addButton')}
         </button>
       </form>
 
       {accounts.length > 0 && (
         <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Your wallets</h2>
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.title')}</h2>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {accounts.map((a) => (
               <li
@@ -128,8 +130,8 @@ export default function Accounts() {
                       placeholder="Purpose"
                       style={{ flex: '1 1 120px', padding: '0.4rem' }}
                     />
-                    <button type="submit" className="btn btn-primary">Save</button>
-                    <button type="button" className="btn btn-ghost" onClick={() => setEditing(null)}>Cancel</button>
+                    <button type="submit" className="btn btn-primary">{t('common.save')}</button>
+                    <button type="button" className="btn btn-ghost" onClick={() => setEditing(null)}>{t('common.cancel')}</button>
                   </form>
                 ) : (
                   <>
@@ -137,7 +139,7 @@ export default function Accounts() {
                       <strong>{a.name}</strong>
                       {a.purpose && <span className="muted"> — {a.purpose}</span>}
                       <div className="muted" style={{ marginTop: '0.35rem', fontSize: '0.9rem' }}>
-                        Money available:{' '}
+                        {t('accounts.balance')}:{' '}
                         <input
                           type="number"
                           min="0"
@@ -150,8 +152,8 @@ export default function Accounts() {
                       </div>
                     </div>
                     <span style={{ display: 'flex', gap: '0.5rem' }}>
-                      <button type="button" className="btn btn-ghost" onClick={() => startEdit(a)}>Edit</button>
-                      <button type="button" className="btn btn-ghost" onClick={() => remove(a.id)}>Remove</button>
+                      <button type="button" className="btn btn-ghost" onClick={() => startEdit(a)}>{t('common.edit')}</button>
+                      <button type="button" className="btn btn-ghost" onClick={() => remove(a.id)}>{t('common.remove')}</button>
                     </span>
                   </>
                 )}

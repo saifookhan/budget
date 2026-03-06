@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import { getState, updateState, id } from '../store'
+import { useTranslation } from '../LanguageContext'
 import { formatCurrency } from '../utils'
 import type { RecurringItem } from '../types'
 
 export default function Subscriptions() {
+  const { t } = useTranslation()
   const state = getState()
   const [recurring, setRecurring] = useState<RecurringItem[]>([])
+  const [editingId, setEditingId] = useState<string | null>(null)
   const [label, setLabel] = useState('')
   const [amount, setAmount] = useState('')
   const [categoryId, setCategoryId] = useState('')
@@ -16,34 +19,73 @@ export default function Subscriptions() {
     setRecurring(getState().recurring.filter((r) => r.type === 'subscription'))
   }, [])
 
-  const add = (e: React.FormEvent) => {
+  const startEdit = (r: RecurringItem) => {
+    setEditingId(r.id)
+    setLabel(r.label)
+    setAmount(String(r.amount))
+    setCategoryId(r.categoryId ?? '')
+    setAccountId(r.accountId ?? '')
+    setDayOfMonth(String(r.dayOfMonth))
+  }
+
+  const cancelEdit = () => {
+    setEditingId(null)
+    setLabel('')
+    setAmount('')
+    setCategoryId('')
+    setAccountId('')
+    setDayOfMonth('1')
+  }
+
+  const save = (e: React.FormEvent) => {
     e.preventDefault()
     const num = Math.round(parseFloat(amount) * 100) / 100
     if (!(num > 0) || !label.trim()) return
     const day = Math.min(31, Math.max(1, parseInt(dayOfMonth, 10) || 1))
-    const next = updateState((s) => ({
-      ...s,
-      recurring: [
-        ...s.recurring,
-        {
-          id: id(),
-          label: label.trim(),
-          amount: num,
-          categoryId: categoryId || undefined,
-          accountId: accountId || undefined,
-          dayOfMonth: day,
-          type: 'subscription',
-        },
-      ],
-    }))
-    setRecurring(next.recurring.filter((r) => r.type === 'subscription'))
-    setLabel('')
-    setAmount('')
-    setDayOfMonth('1')
+    if (editingId) {
+      const next = updateState((s) => ({
+        ...s,
+        recurring: s.recurring.map((r) =>
+          r.id === editingId
+            ? {
+                ...r,
+                label: label.trim(),
+                amount: num,
+                categoryId: categoryId || undefined,
+                accountId: accountId || undefined,
+                dayOfMonth: day,
+              }
+            : r
+        ),
+      }))
+      setRecurring(next.recurring.filter((r) => r.type === 'subscription'))
+      cancelEdit()
+    } else {
+      const next = updateState((s) => ({
+        ...s,
+        recurring: [
+          ...s.recurring,
+          {
+            id: id(),
+            label: label.trim(),
+            amount: num,
+            categoryId: categoryId || undefined,
+            accountId: accountId || undefined,
+            dayOfMonth: day,
+            type: 'subscription',
+          },
+        ],
+      }))
+      setRecurring(next.recurring.filter((r) => r.type === 'subscription'))
+      setLabel('')
+      setAmount('')
+      setDayOfMonth('1')
+    }
   }
 
   const remove = (recId: string) => {
-    if (!confirm('Remove this subscription? It will stop being added each month.')) return
+    if (!confirm(t('subscriptions.removeConfirm'))) return
+    if (editingId === recId) cancelEdit()
     const next = updateState((s) => ({
       ...s,
       recurring: s.recurring.filter((r) => r.id !== recId),
@@ -57,25 +99,27 @@ export default function Subscriptions() {
 
   return (
     <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Subscriptions</h1>
+      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('subscriptions.title')}</h1>
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        Add monthly subscriptions (Netflix, gym, etc.). They are automatically added at the start of each month so you always see how much you spend per category.
+        {t('subscriptions.subtitle')}
       </p>
 
-      <form onSubmit={add} className="card" style={{ marginBottom: '1rem' }}>
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Add subscription</h2>
+      <form onSubmit={save} className="card" style={{ marginBottom: '1rem' }}>
+        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>
+          {editingId ? t('subscriptions.editSubscription') : t('subscriptions.addSubscription')}
+        </h2>
         <div className="form-group">
-          <label htmlFor="sub-label">Name</label>
+          <label htmlFor="sub-label">{t('subscriptions.name')}</label>
           <input
             id="sub-label"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            placeholder="e.g. Netflix, Gym"
+            placeholder={t('subscriptions.namePlaceholder')}
             required
           />
         </div>
         <div className="form-group">
-          <label htmlFor="sub-amount">Amount (€/month)</label>
+          <label htmlFor="sub-amount">{t('subscriptions.amount')}</label>
           <input
             id="sub-amount"
             type="number"
@@ -83,12 +127,12 @@ export default function Subscriptions() {
             step="0.01"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            placeholder="e.g. 12.99"
+            placeholder={t('subscriptions.amountPlaceholder')}
             required
           />
         </div>
         <div className="form-group">
-          <label htmlFor="sub-day">Day of month (1–31)</label>
+          <label htmlFor="sub-day">{t('subscriptions.dayOfMonth')}</label>
           <input
             id="sub-day"
             type="number"
@@ -99,41 +143,48 @@ export default function Subscriptions() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="sub-category">Category</label>
+          <label htmlFor="sub-category">{t('subscriptions.category')}</label>
           <select
             id="sub-category"
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
           >
-            <option value="">— Select —</option>
+            <option value="">{t('common.select')}</option>
             {state.categories.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="sub-account">Account</label>
+          <label htmlFor="sub-account">{t('subscriptions.account')}</label>
           <select
             id="sub-account"
             value={accountId}
             onChange={(e) => setAccountId(e.target.value)}
           >
-            <option value="">— Select —</option>
+            <option value="">{t('common.select')}</option>
             {state.accounts.map((a) => (
               <option key={a.id} value={a.id}>{a.name}</option>
             ))}
           </select>
         </div>
-        <button type="submit" className="btn btn-primary">
-          Add subscription
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <button type="submit" className="btn btn-primary">
+            {editingId ? t('subscriptions.updateButton') : t('subscriptions.addButton')}
+          </button>
+          {editingId && (
+            <button type="button" className="btn btn-ghost" onClick={cancelEdit}>
+              {t('common.cancel')}
+            </button>
+          )}
+        </div>
       </form>
 
       {recurring.length > 0 && (
         <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Monthly subscriptions</h2>
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('subscriptions.monthlyList')}</h2>
           <p className="muted" style={{ marginBottom: '0.75rem' }}>
-            Total: <strong>{formatCurrency(totalPerMonth)}</strong> per month
+            {t('subscriptions.totalPerMonth')}: <strong>{formatCurrency(totalPerMonth)}</strong> {t('subscriptions.perMonth')}
           </p>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {recurring.map((r) => (
@@ -152,11 +203,12 @@ export default function Subscriptions() {
                   <span className="muted" style={{ marginLeft: '0.5rem' }}>
                     {categoryNames[r.categoryId ?? ''] && `· ${categoryNames[r.categoryId!]}`}
                     {accountNames[r.accountId ?? ''] && ` · ${accountNames[r.accountId!]}`}
-                    {' · day '}{r.dayOfMonth}
+                    {' · '}{t('subscriptions.day')} {r.dayOfMonth}
                   </span>
                 </div>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <span className="amount-negative">{formatCurrency(r.amount)}/mo</span>
+                  <button type="button" className="btn btn-ghost" onClick={() => startEdit(r)} aria-label={t('common.edit')}>{t('common.edit')}</button>
                   <button type="button" className="btn btn-ghost" onClick={() => remove(r.id)} aria-label="Remove">✕</button>
                 </span>
               </li>

@@ -12,6 +12,7 @@ const defaultState: BudgetState = {
   transactions: [],
   recurring: [],
   savingsGoals: [],
+  skippedRecurring: [],
 }
 
 function loadState(): BudgetState {
@@ -29,22 +30,37 @@ function loadState(): BudgetState {
       transactions: parsed.transactions ?? [],
       recurring: parsed.recurring ?? [],
       savingsGoals: parsed.savingsGoals ?? [],
+      skippedRecurring: parsed.skippedRecurring ?? [],
     }
   } catch {
     return { ...defaultState }
   }
 }
 
+const listeners: Array<() => void> = []
+
 function saveState(state: BudgetState): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+  listeners.forEach((l) => l())
 }
 
-// Ensure recurring items have been "applied" for the current month (and catch-up past months)
+/** Subscribe to store updates (e.g. after add/delete). Returns unsubscribe. */
+export function subscribe(fn: () => void): () => void {
+  listeners.push(fn)
+  return () => {
+    const i = listeners.indexOf(fn)
+    if (i !== -1) listeners.splice(i, 1)
+  }
+}
+
+// Ensure recurring items have been "applied" for the current month (and catch-up past months).
+// Does not re-add recurring applications the user has deleted (skippedRecurring).
 function ensureRecurringApplied(state: BudgetState): BudgetState {
   const now = new Date()
   const thisYear = now.getFullYear()
   const thisMonth = now.getMonth()
   const today = now.getDate()
+  const skipped = new Set(state.skippedRecurring ?? [])
 
   const applied = new Set<string>() // "recurringId:YYYY-MM"
   state.transactions.forEach((t) => {
@@ -61,7 +77,7 @@ function ensureRecurringApplied(state: BudgetState): BudgetState {
     const day = Math.min(r.dayOfMonth, lastDayOfMonth) // e.g. day 31 in Feb → 28
     if (today >= day) {
       const key = `${r.id}:${thisYear}-${String(thisMonth + 1).padStart(2, '0')}`
-      if (!applied.has(key)) {
+      if (!applied.has(key) && !skipped.has(key)) {
         const dateStr = `${thisYear}-${String(thisMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
         newTransactions.push({
           id: crypto.randomUUID(),
@@ -100,8 +116,9 @@ export function setState(update: Partial<BudgetState>): BudgetState {
 export function updateState(fn: (state: BudgetState) => BudgetState): BudgetState {
   const current = getState()
   const next = fn(current)
-  saveState(next)
-  return next
+  const normalized = ensureRecurringApplied(next)
+  saveState(normalized)
+  return normalized
 }
 
 export function id(): string {

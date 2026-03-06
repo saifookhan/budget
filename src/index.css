@@ -36,6 +36,20 @@
   --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
+/* Right sidebar: readable text inside Theme / Currency / Language boxes in black theme */
+[data-theme="black"] .sidebar-settings select,
+[data-theme="black"] .sidebar-settings .theme-dropdown {
+  color: #1a1a1a;
+  background: #f0f0f0;
+}
+[data-theme="black"] .sidebar-settings select option {
+  color: #1a1a1a;
+  background: #f0f0f0;
+}
+[data-theme="black"] .sidebar-settings .theme-dropdown-label .theme-dropdown-visual {
+  color: var(--text);
+}
+
 /* Pink theme */
 [data-theme="pink"] {
   --bg: #fdf2f8;

@@ -1,5 +1,8 @@
-import { useMemo } from 'react'
-import { getState } from '../store'
+import { useMemo, useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import { getState, subscribe } from '../store'
+import type { BudgetState } from '../types'
+import { useTranslation } from '../LanguageContext'
 import { getStoredTheme, getChartColorsForTheme } from '../theme'
 import type { ThemeId } from '../theme'
 import {
@@ -9,8 +12,32 @@ import {
   isMonthKey,
 } from '../utils'
 
+const CHART_TYPE_KEY = 'overview-chart-type'
+export type OverviewChartType = 'pie' | 'bar' | 'line' | 'list'
+
+function getStoredChartType(): OverviewChartType {
+  try {
+    const v = localStorage.getItem(CHART_TYPE_KEY) as OverviewChartType | null
+    if (v === 'pie' || v === 'bar' || v === 'line' || v === 'list') return v
+  } catch {}
+  return 'pie'
+}
+
+function setStoredChartType(type: OverviewChartType): void {
+  try {
+    localStorage.setItem(CHART_TYPE_KEY, type)
+  } catch {}
+}
+
 function useOverview() {
-  const state = getState()
+  const location = useLocation()
+  const [state, setState] = useState<BudgetState>(() => getState())
+  useEffect(() => {
+    setState(getState())
+  }, [location.pathname])
+  useEffect(() => {
+    return subscribe(() => setState(getState()))
+  }, [])
   const monthKey = getCurrentMonthKey()
   const prevMonthKey = getPreviousMonthKey(monthKey)
 
@@ -32,9 +59,8 @@ function useOverview() {
     const totalExpenses = expenses.reduce((s, t) => s + t.amount, 0)
     const totalSavings = savings.reduce((s, t) => s + t.amount, 0)
 
-    const totalSubscriptionAmount = state.recurring
-      .filter((r) => r.type === 'subscription')
-      .reduce((s, r) => s + r.amount, 0)
+    const subscriptions = state.recurring.filter((r) => r.type === 'subscription')
+    const totalSubscriptionAmount = subscriptions.reduce((s, r) => s + r.amount, 0)
     const appliedSubscriptionAmount = state.transactions
       .filter(
         (t) =>
@@ -43,7 +69,6 @@ function useOverview() {
           isMonthKey(t.date, monthKey)
       )
       .reduce((s, t) => s + t.amount, 0)
-
     const prevExpenses = state.transactions
       .filter((t) => t.type === 'expense' && isMonthKey(t.date, prevMonthKey))
       .reduce((s, t) => s + t.amount, 0)
@@ -82,11 +107,8 @@ function useOverview() {
   const currency = state.currency
   const availableThisMonth = income + carryOverFromLastMonth
   const left = availableThisMonth - totalExpenses - totalSavings
-  const subscriptionNotYetApplied = Math.max(
-    0,
-    totalSubscriptionAmount - appliedSubscriptionAmount
-  )
-  const leftAfterAllSubscriptions = left - subscriptionNotYetApplied
+  // Money left after all subscriptions (all treated as cut for the month)
+  const leftReal = left - totalSubscriptionAmount + appliedSubscriptionAmount
 
   const categoryNames = Object.fromEntries(
     state.categories.map((c) => [c.id, c.name])
@@ -120,7 +142,7 @@ function useOverview() {
     totalExpenses,
     totalSavings,
     left,
-    leftAfterAllSubscriptions,
+    leftReal,
     totalSubscriptionAmount,
     totalInAccounts,
     byCategory,
@@ -136,14 +158,22 @@ function useOverview() {
 type OverviewProps = { theme?: ThemeId }
 
 export default function Overview({ theme }: OverviewProps) {
+  const { t } = useTranslation()
   const data = useOverview()
   const chartTheme = theme ?? getStoredTheme()
+  const [chartType, setChartType] = useState<OverviewChartType>(getStoredChartType)
+
+  const handleChartTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as OverviewChartType
+    setChartType(value)
+    setStoredChartType(value)
+  }
 
   return (
     <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>Overview</h1>
+      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('overview.title')}</h1>
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        This month at a glance
+        {t('overview.subtitle')}
       </p>
 
       {data.accounts.length > 0 && (
@@ -173,7 +203,7 @@ export default function Overview({ theme }: OverviewProps) {
                 </p>
                 {(spent > 0 || saved > 0 || start) && (
                   <p className="muted" style={{ marginTop: '0.5rem', fontSize: '0.85rem' }}>
-                    Starting {formatCurrency(start, data.currency)} · Spent {formatCurrency(spent, data.currency)} · Saved {formatCurrency(saved, data.currency)}
+                    {t('overview.starting')} {formatCurrency(start, data.currency)} · {t('overview.spent')} {formatCurrency(spent, data.currency)} · {t('overview.saved')} {formatCurrency(saved, data.currency)}
                   </p>
                 )}
               </div>
@@ -184,45 +214,45 @@ export default function Overview({ theme }: OverviewProps) {
 
       <div className="overview-three-boxes">
         <div className="card overview-box">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Available this month</h2>
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('overview.availableThisMonth')}</h2>
           <p style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0 }}>
             {formatCurrency(data.availableThisMonth, data.currency)}
           </p>
           <p className="muted" style={{ marginTop: '0.5rem' }}>
-            Income: {formatCurrency(data.income, data.currency)}
+            {t('overview.income')}: {formatCurrency(data.income, data.currency)}
             {data.carryOverFromLastMonth !== 0 && (
-              <> · Carry-over: {formatCurrency(data.carryOverFromLastMonth, data.currency)}</>
+              <> · {t('overview.carryOver')}: {formatCurrency(data.carryOverFromLastMonth, data.currency)}</>
             )}
           </p>
           {data.income === 0 && (
             <p className="muted" style={{ marginTop: '0.5rem' }}>
-              Set your income in the Income page.
+              {t('overview.setIncomeHint')}
             </p>
           )}
         </div>
 
         <div className="card overview-box">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Money left this month</h2>
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('overview.moneyLeft')}</h2>
           <p
             style={{
               fontSize: '1.5rem',
               fontWeight: 700,
               margin: 0,
-              color: data.leftAfterAllSubscriptions >= 0 ? 'var(--success)' : 'var(--danger)',
+              color: data.leftReal >= 0 ? 'var(--success)' : 'var(--danger)',
             }}
           >
-            {formatCurrency(data.leftAfterAllSubscriptions, data.currency)}
+            {formatCurrency(data.leftReal, data.currency)}
           </p>
           <p className="muted" style={{ marginTop: '0.5rem' }}>
-            Spent: {formatCurrency(data.totalExpenses, data.currency)} · Saved: {formatCurrency(data.totalSavings, data.currency)}
+            {t('overview.spent')}: {formatCurrency(data.totalExpenses, data.currency)} · {t('overview.saved')}: {formatCurrency(data.totalSavings, data.currency)}
             {data.totalSubscriptionAmount > 0 && (
-              <> · Subscriptions (this month): {formatCurrency(data.totalSubscriptionAmount, data.currency)}</>
+              <> · {t('overview.subscriptionsThisMonth')}: {formatCurrency(data.totalSubscriptionAmount, data.currency)}</>
             )}
           </p>
         </div>
 
         <div className="card overview-box">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Money in wallets</h2>
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('overview.moneyInWallets')}</h2>
           <p
             style={{
               fontSize: '1.5rem',
@@ -234,7 +264,7 @@ export default function Overview({ theme }: OverviewProps) {
             {formatCurrency(data.totalInAccounts, data.currency)}
           </p>
           <p className="muted" style={{ marginTop: '0.5rem' }}>
-            Total available across all wallets (set in Wallet, minus this month&apos;s spending).
+            {t('overview.moneyInWalletsHint')}
           </p>
         </div>
       </div>
@@ -243,6 +273,7 @@ export default function Overview({ theme }: OverviewProps) {
         const chartColors = getChartColorsForTheme(chartTheme)
         const sorted = Object.entries(data.byCategory).sort((a, b) => b[1] - a[1])
         const total = sorted.reduce((s, [, amt]) => s + amt, 0)
+        const maxAmount = Math.max(...sorted.map(([, amt]) => amt), 1)
         let acc = 0
         const segments = sorted.map(([catId, amount], i) => {
           const pct = total > 0 ? (amount / total) * 100 : 0
@@ -251,6 +282,7 @@ export default function Overview({ theme }: OverviewProps) {
           return {
             catId,
             amount,
+            pct,
             color: chartColors[i % chartColors.length],
             start: start.toFixed(2),
             end: acc.toFixed(2),
@@ -259,31 +291,117 @@ export default function Overview({ theme }: OverviewProps) {
         const conic = total > 0
           ? segments.map((s) => `${s.color} ${s.start}% ${s.end}%`).join(', ')
           : 'var(--border) 0% 100%'
+
+        const chartTypeOptions: { value: OverviewChartType; labelKey: string }[] = [
+          { value: 'pie', labelKey: 'overview.chartPie' },
+          { value: 'bar', labelKey: 'overview.chartBar' },
+          { value: 'line', labelKey: 'overview.chartLine' },
+          { value: 'list', labelKey: 'overview.chartList' },
+        ]
+
         return (
           <div className="card">
-            <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>Spending by category</h2>
-            <div className="overview-category-chart">
-              <div
-                className="overview-category-chart-pie"
-                style={{ background: `conic-gradient(${conic})` }}
-                aria-hidden
-              />
-              <ul className="overview-category-chart-legend" aria-label="Spending by category">
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+              <h2 style={{ margin: 0, fontSize: '1.1rem', flex: '1 1 auto' }}>{t('overview.spendingByCategory')}</h2>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.9rem' }}>
+                <span className="muted">{t('overview.chartType')}</span>
+                <select
+                  value={chartType}
+                  onChange={handleChartTypeChange}
+                  aria-label={t('overview.chartType')}
+                  style={{ padding: '0.35rem 0.6rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)' }}
+                >
+                  {chartTypeOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>{t(opt.labelKey)}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            {chartType === 'pie' && (
+              <div className="overview-category-chart">
+                <div
+                  className="overview-category-chart-pie"
+                  style={{ background: `conic-gradient(${conic})` }}
+                  aria-hidden
+                />
+                <ul className="overview-category-chart-legend" aria-label="Spending by category">
+                  {segments.map(({ catId, amount, color }) => (
+                    <li key={catId} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                      <span className="overview-category-chart-swatch" style={{ background: color }} aria-hidden />
+                      <span>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
+                      <span className="amount-negative" style={{ marginLeft: 'auto' }}>{formatCurrency(amount, data.currency)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {chartType === 'bar' && (
+              <div style={{ marginBottom: '0.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  {segments.map(({ catId, amount, color, pct }) => (
+                    <div key={catId} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <span style={{ width: '100px', flexShrink: 0, fontSize: '0.9rem' }}>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
+                      <div style={{ flex: 1, minWidth: 80, height: 24, background: 'var(--border)', borderRadius: 4, overflow: 'hidden', display: 'flex' }}>
+                        <div style={{ width: `${pct}%`, background: color, borderRadius: 4 }} aria-hidden />
+                      </div>
+                      <span className="amount-negative" style={{ flexShrink: 0, fontSize: '0.9rem' }}>{formatCurrency(amount, data.currency)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {chartType === 'line' && (() => {
+              const w = 320
+              const h = 140
+              const pad = { top: 8, right: 8, bottom: 8, left: 8 }
+              const innerW = w - pad.left - pad.right
+              const innerH = h - pad.top - pad.bottom
+              const n = segments.length
+              const step = n > 1 ? innerW / (n - 1) : innerW
+              const pts = segments.map(({ amount }, i) => {
+                const x = pad.left + (n > 1 ? i * step : innerW / 2)
+                const y = pad.top + innerH - (maxAmount > 0 ? (amount / maxAmount) * innerH : 0)
+                return `${x},${y}`
+              })
+              const pathD = pts.length > 0 ? `M ${pts.join(' L ')}` : ''
+              return (
+                <div style={{ marginBottom: '0.5rem' }}>
+                  <svg width="100%" height={h} viewBox={`0 0 ${w} ${h}`} style={{ maxWidth: w, display: 'block' }} aria-hidden>
+                    <path d={pathD} fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    {segments.map(({ catId, amount, color }, i) => {
+                      const x = pad.left + (n > 1 ? i * step : innerW / 2)
+                      const y = pad.top + innerH - (maxAmount > 0 ? (amount / maxAmount) * innerH : 0)
+                      return <circle key={catId} cx={x} cy={y} r={5} fill={color} /> 
+                    })}
+                  </svg>
+                  <ul className="overview-category-chart-legend" style={{ marginTop: '0.5rem' }} aria-label="Spending by category">
+                    {segments.map(({ catId, amount, color }) => (
+                      <li key={catId} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                        <span className="overview-category-chart-swatch" style={{ background: color }} aria-hidden />
+                        <span>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
+                        <span className="amount-negative" style={{ marginLeft: 'auto' }}>{formatCurrency(amount, data.currency)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            })()}
+
+            {chartType === 'list' && (
+              <ul className="overview-category-chart-legend" style={{ marginBottom: 0 }} aria-label="Spending by category">
                 {segments.map(({ catId, amount, color }) => (
                   <li key={catId} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
-                    <span
-                      className="overview-category-chart-swatch"
-                      style={{ background: color }}
-                      aria-hidden
-                    />
-                    <span>{data.categoryNames[catId] ?? 'Uncategorized'}</span>
-                    <span className="amount-negative" style={{ marginLeft: 'auto' }}>
-                      {formatCurrency(amount, data.currency)}
-                    </span>
+                    <span className="overview-category-chart-swatch" style={{ background: color }} aria-hidden />
+                    <span>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
+                    <span className="amount-negative" style={{ marginLeft: 'auto' }}>{formatCurrency(amount, data.currency)}</span>
                   </li>
                 ))}
               </ul>
-            </div>
+            )}
+
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
               {sorted.map(([catId, amount]) => (
                 <li
@@ -295,7 +413,7 @@ export default function Overview({ theme }: OverviewProps) {
                     borderBottom: '1px solid var(--border)',
                   }}
                 >
-                  <span>{data.categoryNames[catId] ?? 'Uncategorized'}</span>
+                  <span>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
                   <span className="amount-negative">{formatCurrency(amount, data.currency)}</span>
                 </li>
               ))}
@@ -306,9 +424,9 @@ export default function Overview({ theme }: OverviewProps) {
 
       {Object.keys(data.byAccount).length > 0 && (
         <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>By account</h2>
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('overview.byAccount')}</h2>
           <p className="muted" style={{ marginBottom: '0.75rem' }}>
-            Where your money goes (e.g. Revolut for groceries, bank for rent)
+            {t('overview.byAccountHint')}
           </p>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {Object.entries(data.byAccount).map(([accId, totals]) => (
@@ -319,9 +437,9 @@ export default function Overview({ theme }: OverviewProps) {
                   borderBottom: '1px solid var(--border)',
                 }}
               >
-                <strong>{data.accountNames[accId] ?? 'No account'}</strong>
+                <strong>{data.accountNames[accId] ?? t('overview.noAccount')}</strong>
                 <div className="muted" style={{ marginTop: '0.25rem' }}>
-                  Expenses: {formatCurrency(totals.expense, data.currency)} · Savings: {formatCurrency(totals.saving, data.currency)}
+                  {t('nav.expenses')}: {formatCurrency(totals.expense, data.currency)} · {t('nav.savings')}: {formatCurrency(totals.saving, data.currency)}
                 </div>
               </li>
             ))}
