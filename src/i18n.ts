@@ -152,7 +152,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'contact.botOverview': 'On **Overview**, use the "Chart type" dropdown to switch between Pie, Bar, Line, or List for spending by category. Money left includes all subscriptions for the month.',
     'contact.botDelete': 'Deleted expenses stay deleted. If something still appears, try refreshing the page. Recurring (subscription) items you delete are not re-added.',
     'contact.botLanguage': 'Use the **Language** dropdown in the right sidebar (or open it with the ⚙️ button). Your choice is saved.',
-    'contact.botTheme': 'Use the **Theme** dropdown in the right sidebar. For the black theme, the sidebar dropdowns use light boxes so text is readable.',
+    'contact.botTheme': 'Use the **Theme** dropdown in the right sidebar. You can pick **Neon black**, **Neon rainbow**, or **Neon clear**.',
     'contact.botWallet': 'Go to **Wallet**. Add wallets (e.g. Revolut, bank), set a balance, and assign them to expenses and subscriptions.',
     'contact.botSavings': 'Go to **Savings**. Add a goal with a monthly amount; it\'s added automatically each month so you can track progress.',
     'contact.botPassword': 'Use "Forgot password?" on the login page. Set **Site URL** and **Redirect URLs** in Supabase (Auth → URL Configuration) to your app URL (e.g. your Vercel URL).',
