@@ -23,16 +23,16 @@
   --shadow: 0 2px 12px rgba(0, 0, 0, 0.3), 0 0 24px rgba(255, 43, 109, 0.08);
   --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 32px rgba(255, 43, 109, 0.12);
 }
-[data-theme="neonBlack"] .sidebar-settings select,
-[data-theme="neonBlack"] .sidebar-settings .theme-dropdown {
+[data-theme="neonBlack"] .sidebar-nav .sidebar-nav-options select,
+[data-theme="neonBlack"] .sidebar-nav .sidebar-nav-options .theme-dropdown {
   color: #1a0a14;
   background: #fce7f3;
 }
-[data-theme="neonBlack"] .sidebar-settings select option {
+[data-theme="neonBlack"] .sidebar-nav .sidebar-nav-options select option {
   color: #1a0a14;
   background: #fce7f3;
 }
-[data-theme="neonBlack"] .sidebar-settings .theme-dropdown-label .theme-dropdown-visual {
+[data-theme="neonBlack"] .sidebar-nav .sidebar-nav-options .theme-dropdown-label .theme-dropdown-visual {
   color: var(--text);
 }
 
@@ -54,16 +54,16 @@
   --shadow: 0 2px 12px rgba(0, 0, 0, 0.4), 0 0 24px rgba(0, 245, 212, 0.06);
   --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 32px rgba(155, 93, 229, 0.1);
 }
-[data-theme="neonRainbow"] .sidebar-settings select,
-[data-theme="neonRainbow"] .sidebar-settings .theme-dropdown {
+[data-theme="neonRainbow"] .sidebar-nav .sidebar-nav-options select,
+[data-theme="neonRainbow"] .sidebar-nav .sidebar-nav-options .theme-dropdown {
   color: #0d0a12;
   background: #e0f7f4;
 }
-[data-theme="neonRainbow"] .sidebar-settings select option {
+[data-theme="neonRainbow"] .sidebar-nav .sidebar-nav-options select option {
   color: #0d0a12;
   background: #e0f7f4;
 }
-[data-theme="neonRainbow"] .sidebar-settings .theme-dropdown-label .theme-dropdown-visual {
+[data-theme="neonRainbow"] .sidebar-nav .sidebar-nav-options .theme-dropdown-label .theme-dropdown-visual {
   color: var(--text);
 }
 
@@ -85,17 +85,17 @@
   --shadow: 0 2px 12px rgba(255, 43, 109, 0.08);
   --shadow-hover: 0 4px 20px rgba(255, 43, 109, 0.12);
 }
-[data-theme="neonClear"] .sidebar-settings select,
-[data-theme="neonClear"] .sidebar-settings .theme-dropdown {
+[data-theme="neonClear"] .sidebar-nav .sidebar-nav-options select,
+[data-theme="neonClear"] .sidebar-nav .sidebar-nav-options .theme-dropdown {
   color: #2d1f28;
   background: #fff;
   border: 1px solid var(--border);
 }
-[data-theme="neonClear"] .sidebar-settings select option {
+[data-theme="neonClear"] .sidebar-nav .sidebar-nav-options select option {
   color: #2d1f28;
   background: #fff;
 }
-[data-theme="neonClear"] .sidebar-settings .theme-dropdown-label .theme-dropdown-visual {
+[data-theme="neonClear"] .sidebar-nav .sidebar-nav-options .theme-dropdown-label .theme-dropdown-visual {
   color: var(--text);
 }
 
@@ -154,44 +154,6 @@ button {
   transition: margin-right 0.25s ease;
 }
 
-.app.app-settings-visible {
-  margin-right: calc(200px + 1.25rem);
-}
-
-.sidebar-settings {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 200px;
-  height: 100vh;
-  background: var(--surface);
-  border-left: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  padding: 1rem 1rem 1rem 1rem;
-  gap: 0.75rem;
-  z-index: 100;
-  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.06);
-  transform: translateX(100%);
-  transition: transform 0.25s ease;
-}
-
-.sidebar-settings-open {
-  transform: translateX(0);
-}
-
-.sidebar-settings-stick {
-  margin: -0.25rem 0 0.35rem 0;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.sidebar-settings-stick .btn {
-  width: 100%;
-  justify-content: flex-start;
-}
-
-.sidebar-settings-stick .sidebar-pin-btn,
 .sidebar-nav-stick .sidebar-pin-btn {
   width: auto;
   padding: 0.35rem 0.6rem;
@@ -199,17 +161,22 @@ button {
   min-height: auto;
 }
 
-.sidebar-overlay-right {
-  z-index: 99;
+.sidebar-nav-options {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.sidebar-settings .theme-dropdown-label {
+.sidebar-nav-options .theme-dropdown-label {
   flex-direction: column;
   align-items: stretch;
   gap: 0.35rem;
 }
 
-.sidebar-settings .theme-dropdown {
+.sidebar-nav-options .theme-dropdown {
   width: 100%;
 }
 
@@ -238,17 +205,9 @@ button {
 }
 
 @media (max-width: 1100px) {
-  .app,
-  .app.app-settings-visible {
+  .app {
     margin-left: 0;
     margin-right: 0;
-  }
-  .sidebar-settings,
-  .sidebar-settings-open {
-    display: none;
-  }
-  .sidebar-settings-toggle {
-    display: none;
   }
 }
 

@@ -5,6 +5,7 @@ import Income from './pages/Income'
 import Accounts from './pages/Accounts'
 import Categories from './pages/Categories'
 import Expenses from './pages/Spending'
+import AllExpenses from './pages/AllExpenses'
 import Subscriptions from './pages/Subscriptions'
 import Savings from './pages/Savings'
 import PastOverviews from './pages/PastOverviews'
@@ -27,11 +28,12 @@ import type { CurrencyCode, LanguageCode } from './types'
 const SIDEBARS_PINNED_KEY = 'budget-sidebars-pinned'
 
 function getSidebarsPinned(): boolean {
-  if (typeof localStorage === 'undefined') return true
+  if (typeof localStorage === 'undefined') return false
   const v = localStorage.getItem(SIDEBARS_PINNED_KEY)
   if (v !== null) return v === '1'
   const menu = localStorage.getItem('budget-menu-stuck')
   const settings = localStorage.getItem('budget-settings-stuck')
+  if (menu === null && settings === null) return false
   return menu === '1' || settings !== '0'
 }
 
@@ -47,7 +49,6 @@ function AppShell() {
   const [language, setLanguage] = useState<LanguageCode>(initial.language ?? 'en')
   const [menuOpen, setMenuOpen] = useState(false)
   const [sidebarsPinned, setSidebarsPinnedState] = useState(getSidebarsPinned)
-  const [settingsOpen, setSettingsOpen] = useState(getSidebarsPinned)
   const [overviewKey, setOverviewKey] = useState(0)
   const [syncDone, setSyncDone] = useState(false)
   const [syncError, setSyncError] = useState<string | null>(null)
@@ -106,10 +107,8 @@ function AppShell() {
     persistSidebarsPinned(value)
     if (value) {
       setMenuOpen(true)
-      setSettingsOpen(true)
     } else {
       setMenuOpen(false)
-      setSettingsOpen(false)
     }
   }
 
@@ -133,7 +132,6 @@ function AppShell() {
   useEffect(() => {
     if (sidebarsPinned) {
       setMenuOpen(true)
-      setSettingsOpen(true)
     }
   }, [])
 
@@ -147,8 +145,6 @@ function AppShell() {
 
   const T = (key: string) => t(key, language)
 
-  const settingsVisible = settingsOpen || sidebarsPinned
-
   const waitingForSync = user && !localHasData && !syncDone
 
   if (waitingForSync) {
@@ -161,7 +157,7 @@ function AppShell() {
 
   return (
     <LanguageProvider language={language}>
-    <div className={`app ${settingsVisible ? 'app-settings-visible' : ''}`}>
+    <div className="app">
       {syncError && (
         <div className="sync-error-banner" role="alert">
           Could not load your budget from the cloud. {syncError.includes('exist') || syncError.includes('relation') ? 'Run the SQL in supabase_budget_table.sql in Supabase to enable sync.' : syncError}
@@ -219,76 +215,7 @@ function AppShell() {
         >
           <span aria-hidden>💬</span>
         </button>
-        <button
-          type="button"
-          className="btn btn-icon sidebar-settings-toggle"
-          onClick={() => setSettingsOpen((o) => !o)}
-          aria-label={settingsOpen ? T('nav.closeSettings') : T('nav.settings')}
-          aria-expanded={settingsOpen}
-          title={settingsOpen ? T('nav.closeSettings') : T('nav.settings')}
-        >
-          <span aria-hidden>⚙️</span>
-        </button>
-      </header>
-      <div
-        className={`sidebar-overlay sidebar-overlay-right ${settingsOpen && !sidebarsPinned ? 'sidebar-overlay-open' : ''}`}
-        aria-hidden
-        onClick={() => setSettingsOpen(false)}
-      />
-      <aside
-        className={`sidebar-settings ${settingsOpen || sidebarsPinned ? 'sidebar-settings-open' : ''}`}
-        aria-label="Settings"
-      >
-        <label className="theme-dropdown-label">
-          <span className="theme-dropdown-visual">{T('nav.theme')}</span>
-          <select
-            className="theme-dropdown"
-            value={theme}
-            onChange={(e) => setTheme(e.target.value as ThemeId)}
-            aria-label="Change color scheme"
-          >
-            {THEMES.map((t) => (
-              <option key={t.id} value={t.id}>{t.label}</option>
-            ))}
-          </select>
-        </label>
-        <label className="theme-dropdown-label">
-          <span className="theme-dropdown-visual">{T('nav.currency')}</span>
-          <select
-            className="theme-dropdown"
-            value={currency}
-            onChange={handleCurrencyChange}
-            aria-label="Change currency"
-          >
-            {CURRENCIES.map((c) => (
-              <option key={c.code} value={c.code}>{c.label}</option>
-            ))}
-          </select>
-        </label>
-        <label className="theme-dropdown-label">
-          <span className="theme-dropdown-visual">{T('nav.language')}</span>
-          <select
-            className="theme-dropdown"
-            value={language}
-            onChange={handleLanguageChange}
-            aria-label="Change language"
-          >
-            {LANGUAGES.map((l) => (
-              <option key={l.code} value={l.code}>{l.flag} {l.label}</option>
-            ))}
-          </select>
-        </label>
-        {user && (
-          <button
-            type="button"
-            className="btn btn-ghost"
-            onClick={() => signOut()}
-            style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}
-          >
-            {T('nav.logOut')}
-          </button>
-        )}
-      </aside>
+        </header>
       <div
         className={`sidebar-overlay ${menuOpen && !sidebarsPinned ? 'sidebar-overlay-open' : ''}`}
         aria-hidden
@@ -309,6 +236,9 @@ function AppShell() {
         <NavLink to="/spending" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
           <span aria-hidden>🛒</span> {T('nav.expenses')}
         </NavLink>
+        <NavLink to="/expenses-report" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+          <span aria-hidden>📋</span> {T('nav.allExpenses')}
+        </NavLink>
         <NavLink to="/subscriptions" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
           <span aria-hidden>🔄</span> {T('nav.subscriptions')}
         </NavLink>
@@ -321,6 +251,57 @@ function AppShell() {
         <NavLink to="/past" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
           <span aria-hidden>📅</span> {T('nav.past')}
         </NavLink>
+        <div className="sidebar-nav-options">
+          <label className="theme-dropdown-label">
+            <span className="theme-dropdown-visual">{T('nav.theme')}</span>
+            <select
+              className="theme-dropdown"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value as ThemeId)}
+              aria-label="Change color scheme"
+            >
+              {THEMES.map((t) => (
+                <option key={t.id} value={t.id}>{t.label}</option>
+              ))}
+            </select>
+          </label>
+          <label className="theme-dropdown-label">
+            <span className="theme-dropdown-visual">{T('nav.currency')}</span>
+            <select
+              className="theme-dropdown"
+              value={currency}
+              onChange={handleCurrencyChange}
+              aria-label="Change currency"
+            >
+              {CURRENCIES.map((c) => (
+                <option key={c.code} value={c.code}>{c.label}</option>
+              ))}
+            </select>
+          </label>
+          <label className="theme-dropdown-label">
+            <span className="theme-dropdown-visual">{T('nav.language')}</span>
+            <select
+              className="theme-dropdown"
+              value={language}
+              onChange={handleLanguageChange}
+              aria-label="Change language"
+            >
+              {LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code}>{l.flag} {l.label}</option>
+              ))}
+            </select>
+          </label>
+          {user && (
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={() => signOut()}
+              style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}
+            >
+              {T('nav.logOut')}
+            </button>
+          )}
+        </div>
       </aside>
       <Routes>
         <Route path="/" element={<Overview key={overviewKey} theme={theme} />} />
@@ -329,6 +310,7 @@ function AppShell() {
         <Route path="/accounts" element={<Accounts />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/spending" element={<Expenses />} />
+        <Route path="/expenses-report" element={<AllExpenses />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/savings" element={<Savings />} />
       </Routes>
