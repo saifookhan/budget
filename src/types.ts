@@ -11,7 +11,7 @@ export interface Category {
   name: string
 }
 
-export type TransactionType = 'expense' | 'income' | 'saving'
+export type TransactionType = 'expense' | 'income' | 'saving' | 'transfer'
 
 export interface Transaction {
   id: string
@@ -19,6 +19,8 @@ export interface Transaction {
   amount: number
   categoryId?: string
   accountId?: string
+  /** For type 'transfer': account to transfer money to (accountId = from) */
+  toAccountId?: string
   date: string // YYYY-MM-DD
   memo?: string
   recurringId?: string
