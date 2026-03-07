@@ -24,25 +24,19 @@ import { t } from './i18n'
 import { LanguageProvider } from './LanguageContext'
 import type { CurrencyCode, LanguageCode } from './types'
 
-const MENU_STUCK_KEY = 'budget-menu-stuck'
-const SETTINGS_STUCK_KEY = 'budget-settings-stuck'
+const SIDEBARS_PINNED_KEY = 'budget-sidebars-pinned'
 
-function getMenuStuck(): boolean {
-  return typeof localStorage !== 'undefined' && localStorage.getItem(MENU_STUCK_KEY) === '1'
-}
-
-function persistMenuStuck(value: boolean): void {
-  localStorage.setItem(MENU_STUCK_KEY, value ? '1' : '0')
-}
-
-function getSettingsStuck(): boolean {
+function getSidebarsPinned(): boolean {
   if (typeof localStorage === 'undefined') return true
-  const v = localStorage.getItem(SETTINGS_STUCK_KEY)
-  return v !== '0'
+  const v = localStorage.getItem(SIDEBARS_PINNED_KEY)
+  if (v !== null) return v === '1'
+  const menu = localStorage.getItem('budget-menu-stuck')
+  const settings = localStorage.getItem('budget-settings-stuck')
+  return menu === '1' || settings !== '0'
 }
 
-function persistSettingsStuck(value: boolean): void {
-  localStorage.setItem(SETTINGS_STUCK_KEY, value ? '1' : '0')
+function persistSidebarsPinned(value: boolean): void {
+  localStorage.setItem(SIDEBARS_PINNED_KEY, value ? '1' : '0')
 }
 
 function AppShell() {
@@ -52,9 +46,8 @@ function AppShell() {
   const [currency, setCurrency] = useState<CurrencyCode>(initial.currency)
   const [language, setLanguage] = useState<LanguageCode>(initial.language ?? 'en')
   const [menuOpen, setMenuOpen] = useState(false)
-  const [menuStuck, setMenuStuckState] = useState(getMenuStuck)
-  const [settingsOpen, setSettingsOpen] = useState(getSettingsStuck)
-  const [settingsStuck, setSettingsStuckState] = useState(getSettingsStuck)
+  const [sidebarsPinned, setSidebarsPinnedState] = useState(getSidebarsPinned)
+  const [settingsOpen, setSettingsOpen] = useState(getSidebarsPinned)
   const [overviewKey, setOverviewKey] = useState(0)
   const [syncDone, setSyncDone] = useState(false)
   const [syncError, setSyncError] = useState<string | null>(null)
@@ -93,15 +86,16 @@ function AppShell() {
     if (location.pathname === '/') setOverviewKey((k) => k + 1)
   }, [location.pathname])
 
-  const setMenuStuck = (value: boolean) => {
-    setMenuStuckState(value)
-    persistMenuStuck(value)
-  }
-
-  const setSettingsStuck = (value: boolean) => {
-    setSettingsStuckState(value)
-    persistSettingsStuck(value)
-    if (value) setSettingsOpen(true)
+  const setSidebarsPinned = (value: boolean) => {
+    setSidebarsPinnedState(value)
+    persistSidebarsPinned(value)
+    if (value) {
+      setMenuOpen(true)
+      setSettingsOpen(true)
+    } else {
+      setMenuOpen(false)
+      setSettingsOpen(false)
+    }
   }
 
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -122,10 +116,10 @@ function AppShell() {
   }, [theme])
 
   useEffect(() => {
-    if (menuStuck) setMenuOpen(true)
-  }, [])
-  useEffect(() => {
-    if (settingsStuck) setSettingsOpen(true)
+    if (sidebarsPinned) {
+      setMenuOpen(true)
+      setSettingsOpen(true)
+    }
   }, [])
 
   useEffect(() => {
@@ -138,7 +132,7 @@ function AppShell() {
 
   const T = (key: string) => t(key, language)
 
-  const settingsVisible = settingsOpen || settingsStuck
+  const settingsVisible = settingsOpen || sidebarsPinned
 
   const waitingForSync = user && !localHasData && !syncDone
 
@@ -174,8 +168,18 @@ function AppShell() {
           </span>
         </button>
         <h1 className="app-title" style={{ margin: 0, flex: '1 1 auto', minWidth: 0 }}>
-          <NavLink to="/" onClick={() => !menuStuck && setMenuOpen(false)}>My Budget</NavLink>
+          <NavLink to="/" onClick={() => !sidebarsPinned && setMenuOpen(false)}>My Budget</NavLink>
         </h1>
+        <button
+          type="button"
+          className={`btn btn-icon sidebar-pin-btn ${sidebarsPinned ? 'active' : ''}`}
+          onClick={() => setSidebarsPinned(!sidebarsPinned)}
+          aria-pressed={sidebarsPinned}
+          aria-label={sidebarsPinned ? T('nav.keepOpenOn') : T('nav.keepOpenOff')}
+          title={sidebarsPinned ? T('nav.keepOpenOn') : T('nav.keepOpenOff')}
+        >
+          <span aria-hidden>{sidebarsPinned ? '📌✓' : '📌'}</span>
+        </button>
         <button
           type="button"
           className="btn btn-icon sidebar-settings-toggle"
@@ -188,29 +192,14 @@ function AppShell() {
         </button>
       </header>
       <div
-        className={`sidebar-overlay sidebar-overlay-right ${settingsOpen && !settingsStuck ? 'sidebar-overlay-open' : ''}`}
+        className={`sidebar-overlay sidebar-overlay-right ${settingsOpen && !sidebarsPinned ? 'sidebar-overlay-open' : ''}`}
         aria-hidden
         onClick={() => setSettingsOpen(false)}
       />
       <aside
-        className={`sidebar-settings ${settingsOpen || settingsStuck ? 'sidebar-settings-open' : ''}`}
+        className={`sidebar-settings ${settingsOpen || sidebarsPinned ? 'sidebar-settings-open' : ''}`}
         aria-label="Settings"
       >
-        <div className="sidebar-settings-stick">
-          <button
-            type="button"
-            className={`btn btn-ghost ${settingsStuck ? 'active' : ''}`}
-            onClick={() => {
-              const next = !settingsStuck
-              setSettingsStuck(next)
-              if (!next) setSettingsOpen(false)
-            }}
-            aria-pressed={settingsStuck}
-            aria-label={settingsStuck ? T('nav.keepOpenOn') : T('nav.keepOpenOff')}
-          >
-            {settingsStuck ? `📌 ${T('nav.keepOpen')} ✓` : `📌 ${T('nav.keepOpen')}`}
-          </button>
-        </div>
         <label className="theme-dropdown-label">
           <span className="theme-dropdown-visual">{T('nav.theme')}</span>
           <select
@@ -262,46 +251,35 @@ function AppShell() {
         )}
       </aside>
       <div
-        className={`sidebar-overlay ${menuOpen && !menuStuck ? 'sidebar-overlay-open' : ''}`}
+        className={`sidebar-overlay ${menuOpen && !sidebarsPinned ? 'sidebar-overlay-open' : ''}`}
         aria-hidden
       />
       <aside
         className={`sidebar-nav ${menuOpen ? 'sidebar-nav-open' : ''}`}
         aria-label="Main navigation"
       >
-        <div className="sidebar-nav-stick">
-          <button
-            type="button"
-            className={`btn btn-ghost ${menuStuck ? 'active' : ''}`}
-            onClick={() => setMenuStuck(!menuStuck)}
-            aria-pressed={menuStuck}
-            aria-label={menuStuck ? 'Keep menu open (on)' : 'Keep menu open (off)'}
-          >
-            {menuStuck ? `📌 ${T('nav.keepOpen')} ✓` : `📌 ${T('nav.keepOpen')}`}
-          </button>
-        </div>
-        <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
+        <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
           <span aria-hidden>📊</span> {T('nav.overview')}
         </NavLink>
-        <NavLink to="/income" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
+        <NavLink to="/income" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
           <span aria-hidden>💰</span> {T('nav.income')}
         </NavLink>
-        <NavLink to="/categories" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
+        <NavLink to="/categories" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
           <span aria-hidden>📁</span> {T('nav.categories')}
         </NavLink>
-        <NavLink to="/spending" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
+        <NavLink to="/spending" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
           <span aria-hidden>🛒</span> {T('nav.expenses')}
         </NavLink>
-        <NavLink to="/subscriptions" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
+        <NavLink to="/subscriptions" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
           <span aria-hidden>🔄</span> {T('nav.subscriptions')}
         </NavLink>
-        <NavLink to="/savings" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
+        <NavLink to="/savings" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
           <span aria-hidden>📈</span> {T('nav.savings')}
         </NavLink>
-        <NavLink to="/accounts" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
+        <NavLink to="/accounts" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
           <span aria-hidden>🏦</span> {T('nav.wallet')}
         </NavLink>
-        <NavLink to="/past" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !menuStuck && setMenuOpen(false)}>
+        <NavLink to="/past" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
           <span aria-hidden>📅</span> {T('nav.past')}
         </NavLink>
       </aside>

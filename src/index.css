@@ -191,6 +191,14 @@ button {
   justify-content: flex-start;
 }
 
+.sidebar-settings-stick .sidebar-pin-btn,
+.sidebar-nav-stick .sidebar-pin-btn {
+  width: auto;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  min-height: auto;
+}
+
 .sidebar-overlay-right {
   z-index: 99;
 }
@@ -340,6 +348,12 @@ button {
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   color: var(--text-muted);
+}
+
+.sidebar-nav-stick .sidebar-pin-btn {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  width: auto;
 }
 
 .sidebar-nav-stick .btn:hover {
