@@ -170,55 +170,63 @@ function AppShell() {
         </div>
       )}
       <header className="app-header">
-        <button
-          type="button"
-          className="btn btn-icon hamburger"
-          onClick={() => setMenuOpen((o) => !o)}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={menuOpen}
-        >
-          <span className="hamburger-lines" aria-hidden>
-            <span />
-            <span />
-            <span />
-          </span>
-        </button>
-        <h1 className="app-title" style={{ margin: 0, flex: '1 1 auto', minWidth: 0 }}>
+        <div className="hamburger-wrap">
+          <button
+            type="button"
+            className="btn btn-icon hamburger"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            <span className="hamburger-lines" aria-hidden>
+              <span />
+              <span />
+              <span />
+            </span>
+          </button>
+        </div>
+        <h1 className="app-title" style={{ margin: 0 }}>
           <NavLink to="/" onClick={() => !sidebarsPinned && setMenuOpen(false)}>My Budget</NavLink>
         </h1>
-        <button
-          type="button"
-          className={`btn btn-icon sidebar-pin-btn ${sidebarsPinned ? 'active' : ''}`}
-          onClick={() => setSidebarsPinned(!sidebarsPinned)}
-          aria-pressed={sidebarsPinned}
-          aria-label={sidebarsPinned ? T('nav.keepOpenOn') : T('nav.keepOpenOff')}
-          title={sidebarsPinned ? T('nav.keepOpenOn') : T('nav.keepOpenOff')}
-        >
-          <span aria-hidden>{sidebarsPinned ? '📌✓' : '📌'}</span>
-        </button>
-        <NavLink
-          to="/spending"
-          state={{ focusAdd: true }}
-          className="btn btn-icon header-add-expense-btn"
-          aria-label={T('expenses.addExpense')}
-          title={T('expenses.addExpense')}
-        >
-          <span aria-hidden>+</span>
-        </NavLink>
-        <button
-          type="button"
-          className={`btn btn-icon header-chat-btn ${contactOpen ? 'active' : ''}`}
-          onClick={() => setContactOpen((o) => !o)}
-          aria-label={T('contact.open')}
-          aria-expanded={contactOpen}
-          title={T('contact.open')}
-        >
-          <span aria-hidden>💬</span>
-        </button>
-        </header>
+        <div className="header-actions">
+          <button
+            type="button"
+            className={`btn btn-icon sidebar-pin-btn ${sidebarsPinned ? 'active' : ''}`}
+            onClick={() => setSidebarsPinned(!sidebarsPinned)}
+            aria-pressed={sidebarsPinned}
+            aria-label={sidebarsPinned ? T('nav.keepOpenOn') : T('nav.keepOpenOff')}
+            title={sidebarsPinned ? T('nav.keepOpenOn') : T('nav.keepOpenOff')}
+          >
+            <span aria-hidden>{sidebarsPinned ? '📌✓' : '📌'}</span>
+          </button>
+          <NavLink
+            to="/spending"
+            state={{ focusAdd: true }}
+            className="btn btn-icon header-add-expense-btn"
+            aria-label={T('expenses.addExpense')}
+            title={T('expenses.addExpense')}
+          >
+            <span aria-hidden>+</span>
+          </NavLink>
+          <button
+            type="button"
+            className={`btn btn-icon header-chat-btn ${contactOpen ? 'active' : ''}`}
+            onClick={() => setContactOpen((o) => !o)}
+            aria-label={T('contact.open')}
+            aria-expanded={contactOpen}
+            title={T('contact.open')}
+          >
+            <span aria-hidden>💬</span>
+          </button>
+        </div>
+      </header>
       <div
         className={`sidebar-overlay ${menuOpen && !sidebarsPinned ? 'sidebar-overlay-open' : ''}`}
         aria-hidden
+        onClick={() => !sidebarsPinned && setMenuOpen(false)}
+        aria-label="Close menu"
+        role="button"
+        tabIndex={-1}
       />
       <aside
         className={`sidebar-nav ${menuOpen ? 'sidebar-nav-open' : ''}`}
