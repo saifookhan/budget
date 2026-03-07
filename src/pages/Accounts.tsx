@@ -129,9 +129,81 @@ export default function Accounts() {
   return (
     <>
       <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('accounts.title')}</h1>
-      <p className="muted" style={{ marginBottom: '1.5rem' }}>
+      <p className="muted" style={{ marginBottom: '1rem' }}>
         {t('accounts.subtitle')}
       </p>
+
+      <div className="card" style={{ marginBottom: '1rem' }}>
+        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.transferTitle')}</h2>
+        {accounts.length >= 2 ? (
+          <form onSubmit={addTransfer}>
+            <p className="muted" style={{ marginBottom: '1rem', fontSize: '0.9rem' }}>{t('accounts.transferSubtitle')}</p>
+            <div className="form-group">
+              <label htmlFor="transfer-from">{t('accounts.transferFrom')}</label>
+              <select
+                id="transfer-from"
+                value={transferFrom}
+                onChange={(e) => setTransferFrom(e.target.value)}
+                required
+              >
+                <option value="">{t('common.select')}</option>
+                {state.accounts.map((a) => (
+                  <option key={a.id} value={a.id}>{a.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="transfer-to">{t('accounts.transferTo')}</label>
+              <select
+                id="transfer-to"
+                value={transferTo}
+                onChange={(e) => setTransferTo(e.target.value)}
+                required
+              >
+                <option value="">{t('common.select')}</option>
+                {state.accounts.map((a) => (
+                  <option key={a.id} value={a.id} disabled={a.id === transferFrom}>{a.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="transfer-amount">{t('accounts.transferAmount')}</label>
+              <input
+                id="transfer-amount"
+                type="number"
+                min="0.01"
+                step="any"
+                value={transferAmount}
+                onChange={(e) => setTransferAmount(e.target.value)}
+                placeholder="0"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="transfer-date">{t('expenses.date')}</label>
+              <input
+                id="transfer-date"
+                type="date"
+                value={transferDate}
+                onChange={(e) => setTransferDate(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="transfer-memo">{t('accounts.transferMemo')}</label>
+              <input
+                id="transfer-memo"
+                value={transferMemo}
+                onChange={(e) => setTransferMemo(e.target.value)}
+                placeholder={t('accounts.transferMemoPlaceholder')}
+              />
+            </div>
+            <button type="submit" className="btn btn-primary">{t('accounts.transferButton')}</button>
+          </form>
+        ) : (
+          <p className="muted" style={{ margin: 0, fontSize: '0.9rem' }}>{t('accounts.transferNeedTwo')}</p>
+        )}
+      </div>
 
       <form onSubmit={add} className="card" style={{ marginBottom: '1rem' }}>
         <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.addAccount')}</h2>
@@ -157,74 +229,6 @@ export default function Accounts() {
           {t('accounts.addButton')}
         </button>
       </form>
-
-      {accounts.length >= 2 && (
-        <form onSubmit={addTransfer} className="card" style={{ marginBottom: '1rem' }}>
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.transferTitle')}</h2>
-          <p className="muted" style={{ marginBottom: '1rem', fontSize: '0.9rem' }}>{t('accounts.transferSubtitle')}</p>
-          <div className="form-group">
-            <label htmlFor="transfer-from">{t('accounts.transferFrom')}</label>
-            <select
-              id="transfer-from"
-              value={transferFrom}
-              onChange={(e) => setTransferFrom(e.target.value)}
-              required
-            >
-              <option value="">{t('common.select')}</option>
-              {state.accounts.map((a) => (
-                <option key={a.id} value={a.id}>{a.name}</option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="transfer-to">{t('accounts.transferTo')}</label>
-            <select
-              id="transfer-to"
-              value={transferTo}
-              onChange={(e) => setTransferTo(e.target.value)}
-              required
-            >
-              <option value="">{t('common.select')}</option>
-              {state.accounts.map((a) => (
-                <option key={a.id} value={a.id} disabled={a.id === transferFrom}>{a.name}</option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="transfer-amount">{t('accounts.transferAmount')}</label>
-            <input
-              id="transfer-amount"
-              type="number"
-              min="0.01"
-              step="any"
-              value={transferAmount}
-              onChange={(e) => setTransferAmount(e.target.value)}
-              placeholder="0"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="transfer-date">{t('expenses.date')}</label>
-            <input
-              id="transfer-date"
-              type="date"
-              value={transferDate}
-              onChange={(e) => setTransferDate(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="transfer-memo">{t('accounts.transferMemo')}</label>
-            <input
-              id="transfer-memo"
-              value={transferMemo}
-              onChange={(e) => setTransferMemo(e.target.value)}
-              placeholder={t('accounts.transferMemoPlaceholder')}
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">{t('accounts.transferButton')}</button>
-        </form>
-      )}
 
       {transfers.length > 0 && (
         <div className="card" style={{ marginBottom: '1rem' }}>
