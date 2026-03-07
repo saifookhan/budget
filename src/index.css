@@ -189,6 +189,8 @@ button {
   gap: 0.75rem;
   margin-bottom: 2rem;
   flex-wrap: nowrap;
+  padding-left: 0.25rem;
+  min-height: 44px;
 }
 
 .theme-dropdown-label {
@@ -213,7 +215,23 @@ button {
 
 .btn-icon.hamburger {
   padding: 0.5rem;
-  margin: -0.5rem 0.25rem -0.5rem -1rem;
+  margin: -0.5rem 0.25rem -0.5rem -0.5rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    padding-left: 0;
+    gap: 0.5rem;
+  }
+  .btn-icon.hamburger {
+    margin-left: 0;
+  }
+  .app-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .header-add-expense-btn {
