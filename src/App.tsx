@@ -16,7 +16,7 @@ import ContactChat from './ContactChat'
 import { AuthProvider, useAuth } from './auth/AuthContext'
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { THEMES, getStoredTheme, setStoredTheme, applyTheme, type ThemeId } from './theme'
-import { getState, updateState, subscribe } from './store'
+import { getState, updateState, subscribe, subscribeToSave } from './store'
 import { fetchBudgetState, pushBudgetState, replaceLocalState, hasBudgetData } from './budgetSync'
 import debounce from 'lodash.debounce'
 import { CURRENCIES, LANGUAGES } from './constants'
@@ -51,7 +51,22 @@ function AppShell() {
   const [overviewKey, setOverviewKey] = useState(0)
   const [syncDone, setSyncDone] = useState(false)
   const [syncError, setSyncError] = useState<string | null>(null)
+  const [savedBannerVisible, setSavedBannerVisible] = useState(false)
+  const [contactOpen, setContactOpen] = useState(false)
   const { user, signOut } = useAuth()
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>
+    const unsub = subscribeToSave(() => {
+      setSavedBannerVisible(true)
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => setSavedBannerVisible(false), 2500)
+    })
+    return () => {
+      unsub()
+      clearTimeout(timeoutId)
+    }
+  }, [])
 
   const localHasData = hasBudgetData(getState())
 
@@ -153,6 +168,11 @@ function AppShell() {
           <button type="button" className="btn-link" onClick={() => setSyncError(null)} aria-label="Dismiss">Dismiss</button>
         </div>
       )}
+      {savedBannerVisible && (
+        <div className="saved-banner" role="status" aria-live="polite">
+          {T('nav.saved')}
+        </div>
+      )}
       <header className="app-header">
         <button
           type="button"
@@ -179,6 +199,25 @@ function AppShell() {
           title={sidebarsPinned ? T('nav.keepOpenOn') : T('nav.keepOpenOff')}
         >
           <span aria-hidden>{sidebarsPinned ? '📌✓' : '📌'}</span>
+        </button>
+        <NavLink
+          to="/spending"
+          state={{ focusAdd: true }}
+          className="btn btn-icon header-add-expense-btn"
+          aria-label={T('expenses.addExpense')}
+          title={T('expenses.addExpense')}
+        >
+          <span aria-hidden>+</span>
+        </NavLink>
+        <button
+          type="button"
+          className={`btn btn-icon header-chat-btn ${contactOpen ? 'active' : ''}`}
+          onClick={() => setContactOpen((o) => !o)}
+          aria-label={T('contact.open')}
+          aria-expanded={contactOpen}
+          title={T('contact.open')}
+        >
+          <span aria-hidden>💬</span>
         </button>
         <button
           type="button"
@@ -293,7 +332,7 @@ function AppShell() {
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/savings" element={<Savings />} />
       </Routes>
-      <ContactChat />
+      <ContactChat open={contactOpen} onOpenChange={setContactOpen} />
     </div>
     </LanguageProvider>
   )

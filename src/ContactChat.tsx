@@ -39,9 +39,18 @@ function getBotReply(userText: string, lang: LanguageCode): string {
   return T('contact.botFallback')
 }
 
-export default function ContactChat() {
+type ContactChatProps = {
+  /** When provided, open state is controlled by parent (no FAB rendered). */
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+}
+
+export default function ContactChat({ open: controlledOpen, onOpenChange }: ContactChatProps = {}) {
   const { t: T, language } = useTranslation()
-  const [open, setOpen] = useState(false)
+  const [internalOpen, setInternalOpen] = useState(false)
+  const isControlled = onOpenChange != null
+  const open = isControlled ? (controlledOpen ?? false) : internalOpen
+  const setOpen = isControlled ? onOpenChange! : setInternalOpen
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -70,19 +79,21 @@ export default function ContactChat() {
 
   return (
     <>
-      <button
-        type="button"
-        className="contact-fab"
-        onClick={() => setOpen((o) => !o)}
-        aria-label={T('contact.open')}
-        aria-expanded={open}
-        title={T('contact.open')}
-      >
-        <span aria-hidden>{open ? '✕' : '💬'}</span>
-      </button>
+      {!isControlled && (
+        <button
+          type="button"
+          className="contact-fab"
+          onClick={() => setOpen(!open)}
+          aria-label={T('contact.open')}
+          aria-expanded={open}
+          title={T('contact.open')}
+        >
+          <span aria-hidden>{open ? '✕' : '💬'}</span>
+        </button>
+      )}
 
       {open && (
-        <div className="contact-panel" role="dialog" aria-label={T('contact.title')}>
+        <div className={`contact-panel ${isControlled ? 'contact-panel-from-header' : ''}`} role="dialog" aria-label={T('contact.title')}>
           <div className="contact-panel-header">
             <h2 style={{ margin: 0, fontSize: '1.1rem' }}>{T('contact.title')}</h2>
             <button

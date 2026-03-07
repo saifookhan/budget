@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { getState, updateState, id } from '../store'
 import { useTranslation } from '../LanguageContext'
 import { formatCurrency } from '../utils'
@@ -6,6 +7,8 @@ import type { Transaction } from '../types'
 
 export default function Expenses() {
   const { t } = useTranslation()
+  const location = useLocation()
+  const navigate = useNavigate()
   const state = getState()
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -18,6 +21,16 @@ export default function Expenses() {
   useEffect(() => {
     setTransactions(getState().transactions.filter((tx) => tx.type === 'expense'))
   }, [])
+
+  useEffect(() => {
+    if ((location.state as { focusAdd?: boolean })?.focusAdd) {
+      navigate('.', { replace: true, state: {} })
+      const form = document.getElementById('expenses-add-form')
+      const input = document.getElementById('sp-amount') as HTMLInputElement | null
+      form?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      setTimeout(() => input?.focus(), 350)
+    }
+  }, [location.state, navigate])
 
   const startEdit = (tx: Transaction) => {
     setEditingId(tx.id)
@@ -112,6 +125,14 @@ export default function Expenses() {
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   )
 
+  const focusAddForm = () => {
+    if (editingId) cancelEdit()
+    const form = document.getElementById('expenses-add-form')
+    const input = document.getElementById('sp-amount') as HTMLInputElement | null
+    form?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    setTimeout(() => input?.focus(), 300)
+  }
+
   return (
     <>
       <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('expenses.title')}</h1>
@@ -119,7 +140,7 @@ export default function Expenses() {
         {t('expenses.subtitle')}
       </p>
 
-      <form onSubmit={save} className="card" style={{ marginBottom: '1rem' }}>
+      <form id="expenses-add-form" onSubmit={save} className="card" style={{ marginBottom: '1rem' }}>
         <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>
           {editingId ? t('expenses.editExpense') : t('expenses.addExpense')}
         </h2>
@@ -240,6 +261,16 @@ export default function Expenses() {
           </ul>
         )}
       </div>
+
+      <button
+        type="button"
+        className="expenses-fab"
+        onClick={focusAddForm}
+        aria-label={t('expenses.addExpense')}
+        title={t('expenses.addExpense')}
+      >
+        +
+      </button>
     </>
   )
 }

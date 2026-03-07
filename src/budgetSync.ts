@@ -53,5 +53,5 @@ export function hasBudgetData(state: BudgetState): boolean {
 
 /** Replace local state with remote state (e.g. after login). Notifies subscribers. */
 export function replaceLocalState(state: BudgetState): void {
-  updateState(() => state)
+  updateState(() => state, { silent: true })
 }

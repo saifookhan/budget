@@ -38,10 +38,21 @@ function loadState(): BudgetState {
 }
 
 const listeners: Array<() => void> = []
+const onSaveCallbacks: Array<() => void> = []
 
-function saveState(state: BudgetState): void {
+function saveState(state: BudgetState, opts?: { silent?: boolean }): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
   listeners.forEach((l) => l())
+  if (!opts?.silent) onSaveCallbacks.forEach((cb) => cb())
+}
+
+/** Subscribe to "saved" events (user-triggered saves). Use for e.g. a "Saved" banner. */
+export function subscribeToSave(cb: () => void): () => void {
+  onSaveCallbacks.push(cb)
+  return () => {
+    const i = onSaveCallbacks.indexOf(cb)
+    if (i !== -1) onSaveCallbacks.splice(i, 1)
+  }
 }
 
 /** Subscribe to store updates (e.g. after add/delete). Returns unsubscribe. */
@@ -101,7 +112,7 @@ export function getState(): BudgetState {
   const state = loadState()
   const applied = ensureRecurringApplied(state)
   if (applied.transactions.length !== state.transactions.length) {
-    saveState(applied)
+    saveState(applied, { silent: true })
   }
   return applied
 }
@@ -113,11 +124,11 @@ export function setState(update: Partial<BudgetState>): BudgetState {
   return next
 }
 
-export function updateState(fn: (state: BudgetState) => BudgetState): BudgetState {
+export function updateState(fn: (state: BudgetState) => BudgetState, opts?: { silent?: boolean }): BudgetState {
   const current = getState()
   const next = fn(current)
   const normalized = ensureRecurringApplied(next)
-  saveState(normalized)
+  saveState(normalized, opts)
   return normalized
 }
 

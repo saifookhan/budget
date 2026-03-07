@@ -257,6 +257,15 @@ button {
   margin: -0.5rem 0.25rem -0.5rem -1rem;
 }
 
+.header-add-expense-btn {
+  font-size: 1.4rem;
+  font-weight: 300;
+  line-height: 1;
+  text-decoration: none;
+  color: inherit;
+}
+.header-add-expense-btn:hover { color: var(--accent); }
+
 .hamburger-lines {
   display: flex;
   flex-direction: column;
@@ -583,6 +592,33 @@ button {
 }
 .sync-error-banner .btn-link { margin-left: 0.25rem; }
 
+.saved-banner {
+  position: fixed;
+  top: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 110;
+  padding: 0.5rem 1rem;
+  background: var(--success);
+  color: var(--bg);
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  animation: saved-banner-in 0.25s ease-out;
+}
+
+@keyframes saved-banner-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
 .auth-card.card {
   border-radius: 0;
   padding: 1rem 1.25rem;
@@ -817,6 +853,32 @@ button {
 }
 
 /* Contact FAB & Chat panel */
+.expenses-fab {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 89;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.expenses-fab:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
 .contact-fab {
   position: fixed;
   bottom: 1rem;
@@ -856,6 +918,12 @@ button {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+.contact-panel-from-header {
+  bottom: auto;
+  top: 3.75rem;
+  max-height: min(70vh, 420px);
 }
 
 .contact-panel-header {
