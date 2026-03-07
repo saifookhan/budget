@@ -17,7 +17,7 @@ import { AuthProvider, useAuth } from './auth/AuthContext'
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { THEMES, getStoredTheme, setStoredTheme, applyTheme, type ThemeId } from './theme'
 import { getState, updateState, subscribe } from './store'
-import { fetchBudgetState, pushBudgetState, replaceLocalState } from './budgetSync'
+import { fetchBudgetState, pushBudgetState, replaceLocalState, hasBudgetData } from './budgetSync'
 import debounce from 'lodash.debounce'
 import { CURRENCIES, LANGUAGES } from './constants'
 import { t } from './i18n'
@@ -56,15 +56,28 @@ function AppShell() {
   const [settingsOpen, setSettingsOpen] = useState(getSettingsStuck)
   const [settingsStuck, setSettingsStuckState] = useState(getSettingsStuck)
   const [overviewKey, setOverviewKey] = useState(0)
+  const [syncDone, setSyncDone] = useState(false)
+  const [syncError, setSyncError] = useState<string | null>(null)
   const { user, signOut } = useAuth()
 
-  // Sync budget to Supabase when logged in: load once on mount, then push on every change
+  const localHasData = hasBudgetData(getState())
+
+  // Sync: when logged in, fetch remote; if local is empty we replace with remote so you don't see 0
   useEffect(() => {
-    if (!user?.id) return
-    fetchBudgetState(user.id).then((remote) => {
-      if (remote && (remote.transactions?.length > 0 || remote.monthlyIncome !== 0 || (remote.accounts?.length ?? 0) > 0 || (remote.categories?.length ?? 0) > 0)) {
-        replaceLocalState(remote)
+    if (!user?.id) {
+      setSyncDone(true)
+      setSyncError(null)
+      return
+    }
+    setSyncDone(false)
+    setSyncError(null)
+    fetchBudgetState(user.id).then(({ data: remote, error }) => {
+      if (error) setSyncError(error)
+      if (remote && hasBudgetData(remote)) {
+        const local = getState()
+        if (!hasBudgetData(local)) replaceLocalState(remote)
       }
+      setSyncDone(true)
     })
     const push = debounce(() => {
       pushBudgetState(user.id, getState())
@@ -115,13 +128,37 @@ function AppShell() {
     if (settingsStuck) setSettingsOpen(true)
   }, [])
 
+  useEffect(() => {
+    if (syncDone) {
+      const s = getState()
+      setCurrency(s.currency)
+      setLanguage(s.language ?? 'en')
+    }
+  }, [syncDone])
+
   const T = (key: string) => t(key, language)
 
   const settingsVisible = settingsOpen || settingsStuck
 
+  const waitingForSync = user && !localHasData && !syncDone
+
+  if (waitingForSync) {
+    return (
+      <div className="auth-page">
+        <div className="auth-loading">Loading your budget…</div>
+      </div>
+    )
+  }
+
   return (
     <LanguageProvider language={language}>
     <div className={`app ${settingsVisible ? 'app-settings-visible' : ''}`}>
+      {syncError && (
+        <div className="sync-error-banner" role="alert">
+          Could not load your budget from the cloud. {syncError.includes('exist') || syncError.includes('relation') ? 'Run the SQL in supabase_budget_table.sql in Supabase to enable sync.' : syncError}
+          <button type="button" className="btn-link" onClick={() => setSyncError(null)} aria-label="Dismiss">Dismiss</button>
+        </div>
+      )}
       <header className="app-header">
         <button
           type="button"

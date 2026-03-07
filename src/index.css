@@ -638,6 +638,24 @@ button {
   display: flex;
 }
 
+.auth-loading {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.sync-error-banner {
+  padding: 0.5rem 1rem;
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.sync-error-banner .btn-link { margin-left: 0.25rem; }
+
 .auth-card.card {
   border-radius: 0;
   padding: 1rem 1.25rem;
