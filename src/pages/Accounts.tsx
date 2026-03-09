@@ -16,19 +16,49 @@ export default function Accounts() {
   const [transferAmount, setTransferAmount] = useState('')
   const [transferDate, setTransferDate] = useState(() => new Date().toISOString().slice(0, 10))
   const [transferMemo, setTransferMemo] = useState('')
+  const [income, setIncome] = useState(() => getState().monthlyIncome)
+  const [incomeSaved, setIncomeSaved] = useState(false)
+
+  const WALLET_SHOW_TRANSFER_KEY = 'budget-wallet-show-transfer'
+  const WALLET_SHOW_ACCOUNTS_KEY = 'budget-wallet-show-accounts'
+  const [showTransfer, setShowTransfer] = useState(() => {
+    if (typeof localStorage === 'undefined') return false
+    return localStorage.getItem(WALLET_SHOW_TRANSFER_KEY) === '1'
+  })
+  const [showMultipleAccounts, setShowMultipleAccounts] = useState(() => {
+    if (typeof localStorage === 'undefined') return false
+    return localStorage.getItem(WALLET_SHOW_ACCOUNTS_KEY) === '1'
+  })
+  const setShowTransferAndSave = (value: boolean) => {
+    setShowTransfer(value)
+    localStorage.setItem(WALLET_SHOW_TRANSFER_KEY, value ? '1' : '0')
+  }
+  const setShowMultipleAccountsAndSave = (value: boolean) => {
+    setShowMultipleAccounts(value)
+    localStorage.setItem(WALLET_SHOW_ACCOUNTS_KEY, value ? '1' : '0')
+  }
 
   useEffect(() => {
     const s = getState()
     setState(s)
     setAccounts(s.accounts)
+    setIncome(s.monthlyIncome)
   }, [])
   useEffect(() => {
     return subscribe(() => {
       const s = getState()
       setState(s)
       setAccounts(s.accounts)
+      setIncome(s.monthlyIncome)
     })
   }, [])
+
+  const saveIncome = (e: React.FormEvent) => {
+    e.preventDefault()
+    updateState((s) => ({ ...s, monthlyIncome: income }))
+    setIncomeSaved(true)
+    setTimeout(() => setIncomeSaved(false), 2000)
+  }
 
   const add = (e: React.FormEvent) => {
     e.preventDefault()
@@ -127,14 +157,93 @@ export default function Accounts() {
   const accountNames = Object.fromEntries(state.accounts.map((a) => [a.id, a.name]))
 
   return (
-    <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('accounts.title')}</h1>
+    <div className="wallet-page">
+      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('accounts.pageTitle')}</h1>
       <p className="muted" style={{ marginBottom: '1rem' }}>
         {t('accounts.subtitle')}
       </p>
 
-      <div className="card" style={{ marginBottom: '1rem' }}>
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.transferTitle')}</h2>
+      <div className="wallet-grid">
+        <div className="card">
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('income.monthlyTitle')}</h2>
+        <p className="muted" style={{ marginBottom: '1rem', fontSize: '0.9rem' }}>{t('income.subtitleLong')}</p>
+        <form onSubmit={saveIncome}>
+          <div className="form-group">
+            <label htmlFor="income-amount">{t('income.amount')} ({state.currency}/{t('income.perMonth')})</label>
+            <input
+              id="income-amount"
+              type="number"
+              min="0"
+              step="0.01"
+              value={income === 0 ? '' : income}
+              onChange={(e) => setIncome(parseFloat(e.target.value) || 0)}
+              placeholder="e.g. 2500"
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">
+            {incomeSaved ? t('income.saved') : t('income.saveIncome')}
+          </button>
+        </form>
+        {income > 0 && (
+          <p className="muted" style={{ marginTop: '1rem', marginBottom: 0 }}>
+            {t('income.basedOn')} {formatCurrency(income, state.currency)} {t('income.perMonth')}.
+          </p>
+        )}
+        </div>
+
+        {showMultipleAccounts && (
+        <form onSubmit={add} className="card">
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.addAccount')}</h2>
+          <div className="form-group">
+            <label htmlFor="acc-name">{t('accounts.name')}</label>
+            <input
+              id="acc-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder={t('accounts.namePlaceholder')}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="acc-purpose">{t('accounts.purpose')}</label>
+            <input
+              id="acc-purpose"
+              value={purpose}
+              onChange={(e) => setPurpose(e.target.value)}
+              placeholder={t('accounts.purposePlaceholder')}
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">
+            {t('accounts.addButton')}
+          </button>
+        </form>
+        )}
+      </div>
+
+      <div className="wallet-options-toggles" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem' }}>
+        <label className="wallet-transfer-toggle" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+          <input
+            type="checkbox"
+            checked={showMultipleAccounts}
+            onChange={(e) => setShowMultipleAccountsAndSave(e.target.checked)}
+            aria-describedby="wallet-accounts-toggle-desc"
+          />
+          <span id="wallet-accounts-toggle-desc">{t('accounts.showMultipleAccounts')}</span>
+        </label>
+        <label className="wallet-transfer-toggle" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+          <input
+            type="checkbox"
+            checked={showTransfer}
+            onChange={(e) => setShowTransferAndSave(e.target.checked)}
+            aria-describedby="wallet-transfer-toggle-desc"
+          />
+          <span id="wallet-transfer-toggle-desc">{t('accounts.showTransferOption')}</span>
+        </label>
+      </div>
+
+      {showTransfer && (
+      <div className="wallet-grid">
+        <div className="card">
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.transferTitle')}</h2>
         {accounts.length >= 2 ? (
           <form onSubmit={addTransfer}>
             <p className="muted" style={{ marginBottom: '1rem', fontSize: '0.9rem' }}>{t('accounts.transferSubtitle')}</p>
@@ -203,36 +312,11 @@ export default function Accounts() {
         ) : (
           <p className="muted" style={{ margin: 0, fontSize: '0.9rem' }}>{t('accounts.transferNeedTwo')}</p>
         )}
-      </div>
-
-      <form onSubmit={add} className="card" style={{ marginBottom: '1rem' }}>
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.addAccount')}</h2>
-        <div className="form-group">
-          <label htmlFor="acc-name">{t('accounts.name')}</label>
-          <input
-            id="acc-name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder={t('accounts.namePlaceholder')}
-          />
         </div>
-        <div className="form-group">
-          <label htmlFor="acc-purpose">{t('accounts.purpose')}</label>
-          <input
-            id="acc-purpose"
-            value={purpose}
-            onChange={(e) => setPurpose(e.target.value)}
-            placeholder={t('accounts.purposePlaceholder')}
-          />
-        </div>
-        <button type="submit" className="btn btn-primary">
-          {t('accounts.addButton')}
-        </button>
-      </form>
 
-      {transfers.length > 0 && (
-        <div className="card" style={{ marginBottom: '1rem' }}>
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.recentTransfers')}</h2>
+        {transfers.length > 0 && (
+          <div className="card">
+            <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.recentTransfers')}</h2>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {transfers.map((tx) => (
               <li
@@ -267,10 +351,12 @@ export default function Accounts() {
               </li>
             ))}
           </ul>
-        </div>
+          </div>
+        )}
+      </div>
       )}
 
-      {accounts.length > 0 && (
+      {showMultipleAccounts && accounts.length > 0 && (
         <div className="card">
           <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.title')}</h2>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -333,6 +419,6 @@ export default function Accounts() {
           </ul>
         </div>
       )}
-    </>
+    </div>
   )
 }

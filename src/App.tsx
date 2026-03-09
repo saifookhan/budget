@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, NavLink, Navigate, useLocation } from 'react-router-dom'
 import Overview from './pages/Overview'
-import Income from './pages/Income'
 import Accounts from './pages/Accounts'
-import Categories from './pages/Categories'
 import Expenses from './pages/Spending'
 import AllExpenses from './pages/AllExpenses'
 import Subscriptions from './pages/Subscriptions'
 import Savings from './pages/Savings'
 import PastOverviews from './pages/PastOverviews'
+import Settings from './pages/Settings'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import ResetPassword from './pages/ResetPassword'
@@ -130,12 +129,6 @@ function AppShell() {
   }, [theme])
 
   useEffect(() => {
-    if (sidebarsPinned) {
-      setMenuOpen(true)
-    }
-  }, [])
-
-  useEffect(() => {
     if (syncDone) {
       const s = getState()
       setCurrency(s.currency)
@@ -218,6 +211,14 @@ function AppShell() {
           >
             <span aria-hidden>💬</span>
           </button>
+          <NavLink
+            to="/settings"
+            className={({ isActive }) => `btn btn-icon header-settings-btn ${isActive ? 'active' : ''}`}
+            aria-label={T('nav.settings')}
+            title={T('nav.settings')}
+          >
+            <span aria-hidden>⚙️</span>
+          </NavLink>
         </div>
       </header>
       <div
@@ -232,95 +233,56 @@ function AppShell() {
         className={`sidebar-nav ${menuOpen ? 'sidebar-nav-open' : ''}`}
         aria-label="Main navigation"
       >
-        <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-          <span aria-hidden>📊</span> {T('nav.overview')}
-        </NavLink>
-        <NavLink to="/income" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-          <span aria-hidden>💰</span> {T('nav.income')}
-        </NavLink>
-        <NavLink to="/categories" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-          <span aria-hidden>📁</span> {T('nav.categories')}
-        </NavLink>
-        <NavLink to="/spending" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-          <span aria-hidden>🛒</span> {T('nav.expenses')}
-        </NavLink>
-        <NavLink to="/expenses-report" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-          <span aria-hidden>📋</span> {T('nav.allExpenses')}
-        </NavLink>
-        <NavLink to="/subscriptions" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-          <span aria-hidden>🔄</span> {T('nav.subscriptions')}
-        </NavLink>
-        <NavLink to="/savings" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-          <span aria-hidden>📈</span> {T('nav.savings')}
-        </NavLink>
-        <NavLink to="/accounts" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-          <span aria-hidden>🏦</span> {T('nav.wallet')}
-        </NavLink>
-        <NavLink to="/past" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-          <span aria-hidden>📅</span> {T('nav.past')}
-        </NavLink>
-        <div className="sidebar-nav-options">
-          <label className="theme-dropdown-label">
-            <span className="theme-dropdown-visual">{T('nav.theme')}</span>
-            <select
-              className="theme-dropdown"
-              value={theme}
-              onChange={(e) => setTheme(e.target.value as ThemeId)}
-              aria-label="Change color scheme"
-            >
-              {THEMES.map((t) => (
-                <option key={t.id} value={t.id}>{t.label}</option>
-              ))}
-            </select>
-          </label>
-          <label className="theme-dropdown-label">
-            <span className="theme-dropdown-visual">{T('nav.currency')}</span>
-            <select
-              className="theme-dropdown"
-              value={currency}
-              onChange={handleCurrencyChange}
-              aria-label="Change currency"
-            >
-              {CURRENCIES.map((c) => (
-                <option key={c.code} value={c.code}>{c.label}</option>
-              ))}
-            </select>
-          </label>
-          <label className="theme-dropdown-label">
-            <span className="theme-dropdown-visual">{T('nav.language')}</span>
-            <select
-              className="theme-dropdown"
-              value={language}
-              onChange={handleLanguageChange}
-              aria-label="Change language"
-            >
-              {LANGUAGES.map((l) => (
-                <option key={l.code} value={l.code}>{l.flag} {l.label}</option>
-              ))}
-            </select>
-          </label>
-          {user && (
-            <button
-              type="button"
-              className="btn btn-ghost"
-              onClick={() => signOut()}
-              style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}
-            >
-              {T('nav.logOut')}
-            </button>
-          )}
+        <div className="sidebar-nav-links">
+          <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+            <span aria-hidden>📊</span> {T('nav.overview')}
+          </NavLink>
+          <NavLink to="/accounts" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+            <span aria-hidden>💰</span> {T('income.monthlyTitle')}
+          </NavLink>
+          <NavLink to="/spending" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+            <span aria-hidden>🛒</span> {T('nav.expenses')}
+          </NavLink>
+          <NavLink to="/expenses-report" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+            <span aria-hidden>📋</span> {T('nav.allExpenses')}
+          </NavLink>
+          <NavLink to="/subscriptions" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+            <span aria-hidden>🔄</span> {T('nav.subscriptions')}
+          </NavLink>
+          <NavLink to="/savings" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+            <span aria-hidden>📈</span> {T('nav.savings')}
+          </NavLink>
+          <NavLink to="/past" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+            <span aria-hidden>📅</span> {T('nav.past')}
+          </NavLink>
         </div>
       </aside>
       <Routes>
         <Route path="/" element={<Overview key={overviewKey} theme={theme} />} />
-        <Route path="/income" element={<Income />} />
+        <Route path="/income" element={<Navigate to="/accounts" replace />} />
         <Route path="/past" element={<PastOverviews />} />
         <Route path="/accounts" element={<Accounts />} />
-        <Route path="/categories" element={<Categories />} />
+        <Route path="/categories" element={<Navigate to="/spending" replace />} />
         <Route path="/spending" element={<Expenses />} />
         <Route path="/expenses-report" element={<AllExpenses />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/savings" element={<Savings />} />
+        <Route
+          path="/settings"
+          element={
+            <Settings
+              theme={theme}
+              setTheme={setTheme}
+              currency={currency}
+              onCurrencyChange={handleCurrencyChange}
+              language={language}
+              onLanguageChange={handleLanguageChange}
+              user={user}
+              onLogOut={() => signOut()}
+              T={T}
+            />
+          }
+        />
       </Routes>
       <ContactChat open={contactOpen} onOpenChange={setContactOpen} />
     </div>

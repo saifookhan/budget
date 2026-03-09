@@ -24,11 +24,14 @@
   --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 32px rgba(255, 43, 109, 0.12);
 }
 [data-theme="neonBlack"] .sidebar-nav .sidebar-nav-options select,
-[data-theme="neonBlack"] .sidebar-nav .sidebar-nav-options .theme-dropdown {
+[data-theme="neonBlack"] .sidebar-nav .sidebar-nav-options .theme-dropdown,
+[data-theme="neonBlack"] .settings-page-card select,
+[data-theme="neonBlack"] .settings-page-card .theme-dropdown {
   color: #1a0a14;
   background: #fce7f3;
 }
-[data-theme="neonBlack"] .sidebar-nav .sidebar-nav-options select option {
+[data-theme="neonBlack"] .sidebar-nav .sidebar-nav-options select option,
+[data-theme="neonBlack"] .settings-page-card select option {
   color: #1a0a14;
   background: #fce7f3;
 }
@@ -55,11 +58,14 @@
   --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 32px rgba(155, 93, 229, 0.1);
 }
 [data-theme="neonRainbow"] .sidebar-nav .sidebar-nav-options select,
-[data-theme="neonRainbow"] .sidebar-nav .sidebar-nav-options .theme-dropdown {
+[data-theme="neonRainbow"] .sidebar-nav .sidebar-nav-options .theme-dropdown,
+[data-theme="neonRainbow"] .settings-page-card select,
+[data-theme="neonRainbow"] .settings-page-card .theme-dropdown {
   color: #0d0a12;
   background: #e0f7f4;
 }
-[data-theme="neonRainbow"] .sidebar-nav .sidebar-nav-options select option {
+[data-theme="neonRainbow"] .sidebar-nav .sidebar-nav-options select option,
+[data-theme="neonRainbow"] .settings-page-card select option {
   color: #0d0a12;
   background: #e0f7f4;
 }
@@ -86,12 +92,15 @@
   --shadow-hover: 0 4px 20px rgba(255, 43, 109, 0.12);
 }
 [data-theme="neonClear"] .sidebar-nav .sidebar-nav-options select,
-[data-theme="neonClear"] .sidebar-nav .sidebar-nav-options .theme-dropdown {
+[data-theme="neonClear"] .sidebar-nav .sidebar-nav-options .theme-dropdown,
+[data-theme="neonClear"] .settings-page-card select,
+[data-theme="neonClear"] .settings-page-card .theme-dropdown {
   color: #2d1f28;
   background: #fff;
   border: 1px solid var(--border);
 }
-[data-theme="neonClear"] .sidebar-nav .sidebar-nav-options select option {
+[data-theme="neonClear"] .sidebar-nav .sidebar-nav-options select option,
+[data-theme="neonClear"] .settings-page-card select option {
   color: #2d1f28;
   background: #fff;
 }
@@ -183,33 +192,33 @@ button {
 .app-header {
   position: relative;
   z-index: 101;
-  display: grid;
-  grid-template-columns: 52px minmax(0, 1fr) auto;
+  display: flex;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 0 8px;
+  gap: 0;
+  margin-top: 1.5rem;
   margin-bottom: 2rem;
   min-height: 44px;
-  padding: 0;
+  padding: 0 0 0 1rem;
 }
 
 .app-header .hamburger-wrap {
-  grid-column: 1;
+  flex: 0 0 52px;
   width: 52px;
-  min-width: 52px;
-  max-width: 52px;
   height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .app-header .app-title {
-  grid-column: 2;
+  flex: 1 1 0;
   min-width: 0;
   overflow: hidden;
-  padding: 0 4px;
-  justify-self: start;
+  margin: 0 0 0 16px;
+  padding: 0 8px 0 0;
+  box-sizing: border-box;
 }
 
 .app-header .app-title a {
@@ -218,16 +227,16 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding: 0;
 }
 
 .app-header .header-actions {
-  grid-column: 3;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 2px;
-  flex-shrink: 0;
-  min-width: 0;
+  margin-left: 4px;
 }
 
 .theme-dropdown-label {
@@ -237,9 +246,17 @@ button {
   flex-shrink: 0;
 }
 
-@media (max-width: 880px) {
+@media (max-width: 480px) {
   .app-header {
-    gap: 0.5rem;
+    padding-left: 1.25rem;
+  }
+  .app-header .hamburger-wrap {
+    flex: 0 0 48px;
+    width: 48px;
+  }
+  .app-header .app-title {
+    margin-left: 12px;
+    font-size: 1.1rem;
   }
 }
 
@@ -269,6 +286,14 @@ button {
   color: inherit;
 }
 .header-add-expense-btn:hover { color: var(--accent); }
+
+.header-settings-btn {
+  font-size: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+}
+.header-settings-btn:hover { color: var(--accent); }
+.header-settings-btn.active { color: var(--accent); }
 
 .hamburger-lines {
   display: flex;
@@ -330,9 +355,16 @@ button {
   display: flex;
   flex-direction: column;
   padding: 1.25rem 0.75rem 1rem 0.75rem;
-  gap: 1rem;
   z-index: 100;
 }
+
+.sidebar-nav-links {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 .sidebar-nav a {
   padding: 0.6rem 0.9rem;
   border-radius: var(--radius-sm);
@@ -425,6 +457,27 @@ button {
   padding: 1.25rem;
   box-shadow: var(--shadow);
   margin-bottom: 1rem;
+}
+
+.wallet-page .wallet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.wallet-page .wallet-grid .card {
+  margin-bottom: 0;
+}
+
+.wallet-page .wallet-grid .card:only-child {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+  .wallet-page .wallet-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .overview-accounts-grid {

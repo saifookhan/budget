@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { getState, updateState, id } from '../store'
+import { getState, updateState, subscribe, id } from '../store'
 import { useTranslation } from '../LanguageContext'
 import { formatCurrency } from '../utils'
 import type { Transaction } from '../types'
@@ -9,8 +9,10 @@ export default function Expenses() {
   const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
-  const state = getState()
+  const [state, setState] = useState(() => getState())
   const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [showAddCategory, setShowAddCategory] = useState(false)
+  const [newCategoryName, setNewCategoryName] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [amount, setAmount] = useState('')
   const [date, setDate] = useState('')
@@ -19,7 +21,15 @@ export default function Expenses() {
   const [memo, setMemo] = useState('')
 
   useEffect(() => {
+    setState(getState())
     setTransactions(getState().transactions.filter((tx) => tx.type === 'expense'))
+  }, [])
+  useEffect(() => {
+    return subscribe(() => {
+      const s = getState()
+      setState(s)
+      setTransactions(s.transactions.filter((tx) => tx.type === 'expense'))
+    })
   }, [])
 
   useEffect(() => {
@@ -116,6 +126,21 @@ export default function Expenses() {
     setTransactions(next.transactions.filter((t) => t.type === 'expense'))
   }
 
+  const addCategoryInline = (e: React.FormEvent) => {
+    e.preventDefault()
+    const name = newCategoryName.trim()
+    if (!name) return
+    const newId = id()
+    updateState((s) => ({
+      ...s,
+      categories: [...s.categories, { id: newId, name }],
+    }))
+    setCategoryId(newId)
+    setNewCategoryName('')
+    setShowAddCategory(false)
+    setState(getState())
+  }
+
   const categories = state.categories
   const accounts = state.accounts
   const categoryNames = Object.fromEntries(categories.map((c) => [c.id, c.name]))
@@ -169,16 +194,44 @@ export default function Expenses() {
         </div>
         <div className="form-group">
           <label htmlFor="sp-category">{t('expenses.category')}</label>
-          <select
-            id="sp-category"
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-          >
-            <option value="">{t('common.select')}</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
-            ))}
-          </select>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'flex-start' }}>
+            <select
+              id="sp-category"
+              value={categoryId}
+              onChange={(e) => setCategoryId(e.target.value)}
+              style={{ flex: '1 1 200px', minWidth: 0 }}
+            >
+              <option value="">{t('common.select')}</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+            {!showAddCategory ? (
+              <button
+                type="button"
+                className="btn btn-ghost"
+                style={{ whiteSpace: 'nowrap' }}
+                onClick={() => setShowAddCategory(true)}
+              >
+                + {t('expenses.addCategoryInline')}
+              </button>
+            ) : (
+              <form onSubmit={addCategoryInline} style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', alignItems: 'center' }}>
+                <input
+                  type="text"
+                  value={newCategoryName}
+                  onChange={(e) => setNewCategoryName(e.target.value)}
+                  placeholder={t('categories.namePlaceholder')}
+                  autoFocus
+                  style={{ width: '10rem', padding: '0.35rem 0.5rem' }}
+                />
+                <button type="submit" className="btn btn-primary">{t('common.add')}</button>
+                <button type="button" className="btn btn-ghost" onClick={() => { setShowAddCategory(false); setNewCategoryName('') }}>
+                  {t('common.cancel')}
+                </button>
+              </form>
+            )}
+          </div>
         </div>
         <div className="form-group">
           <label htmlFor="sp-account">{t('expenses.account')}</label>
@@ -238,7 +291,7 @@ export default function Expenses() {
                   </span>
                 </div>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span className="amount-negative">{formatCurrency(tx.amount)}</span>
+                  <span className="amount-negative">{formatCurrency(tx.amount, state.currency)}</span>
                   <button
                     type="button"
                     className="btn btn-ghost"
