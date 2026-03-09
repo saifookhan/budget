@@ -404,11 +404,11 @@ export default function Accounts() {
       </div>
       )}
 
-      {showMultipleAccounts && accounts.length > 0 && (
+      {showMultipleAccounts && state.accounts.length > 0 && (
         <div className="card">
           <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.title')}</h2>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-            {accounts.map((a) => (
+            {state.accounts.map((a) => (
               <li
                 key={a.id}
                 style={{
@@ -447,9 +447,8 @@ export default function Accounts() {
                         {t('accounts.balance')}:{' '}
                         <input
                           type="number"
-                          min="0"
                           step="1"
-                          value={a.balance ?? ''}
+                          value={a.balance !== undefined && a.balance !== null ? a.balance : ''}
                           onChange={(e) => setBalance(a.id, Number(e.target.value) || 0)}
                           placeholder="0"
                           className="accounts-balance-input"
