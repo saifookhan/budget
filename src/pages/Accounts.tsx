@@ -55,7 +55,16 @@ export default function Accounts() {
 
   const saveIncome = (e: React.FormEvent) => {
     e.preventDefault()
-    updateState((s) => ({ ...s, monthlyIncome: income }))
+    const next = updateState((s) => {
+      const nextState = { ...s, monthlyIncome: income }
+      // If user has exactly one account and no balance set, use income as that account's balance
+      if (s.accounts.length === 1 && (s.accounts[0].balance === undefined || s.accounts[0].balance === 0)) {
+        nextState.accounts = s.accounts.map((a) => ({ ...a, balance: income }))
+      }
+      return nextState
+    })
+    setState(next)
+    setAccounts(next.accounts)
     setIncomeSaved(true)
     setTimeout(() => setIncomeSaved(false), 2000)
   }
@@ -67,6 +76,7 @@ export default function Accounts() {
       ...s,
       accounts: [...s.accounts, { id: id(), name: name.trim(), purpose: purpose.trim() || undefined }],
     }))
+    setState(next)
     setAccounts(next.accounts)
     setName('')
     setPurpose('')
@@ -78,6 +88,7 @@ export default function Accounts() {
       ...s,
       accounts: s.accounts.filter((a) => a.id !== accountId),
     }))
+    setState(next)
     setAccounts(next.accounts)
     setEditing(null)
   }
@@ -97,6 +108,7 @@ export default function Accounts() {
         a.id === editing ? { ...a, name: name.trim(), purpose: purpose.trim() || undefined } : a
       ),
     }))
+    setState(next)
     setAccounts(next.accounts)
     setEditing(null)
     setName('')
@@ -110,6 +122,7 @@ export default function Accounts() {
         a.id === accountId ? { ...a, balance: value === 0 ? undefined : value } : a
       ),
     }))
+    setState(next)
     setAccounts(next.accounts)
   }
 
