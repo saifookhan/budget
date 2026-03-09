@@ -119,7 +119,6 @@ export default function Accounts() {
     const toId = transferTo.trim()
     const amount = Number(transferAmount)
     if (!fromId || !toId || fromId === toId || !Number.isFinite(amount) || amount <= 0) return
-    const accountNames = Object.fromEntries(state.accounts.map((a) => [a.id, a.name]))
     updateState((s) => ({
       ...s,
       transactions: [
