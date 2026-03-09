@@ -325,6 +325,26 @@ button {
   cursor: pointer;
 }
 
+.past-expenses-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  z-index: 1000;
+  overflow-y: auto;
+}
+.past-expenses-modal {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 480px;
+}
+
 .sidebar-nav {
   transform: translate3d(-100%, 0, 0);
   transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
@@ -693,6 +713,19 @@ button {
 
 .amount-positive { color: var(--success); }
 .amount-negative { color: var(--danger); }
+
+/* Balance input: always readable (black text on light box) */
+.accounts-balance-input {
+  color: #1a1a1a;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+[data-theme="neonBlack"] .accounts-balance-input,
+[data-theme="neonRainbow"] .accounts-balance-input {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
 
 .muted { color: var(--text-muted); font-size: 0.9rem; }
 

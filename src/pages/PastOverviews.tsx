@@ -8,6 +8,7 @@ import {
   isMonthKey,
   getCurrentMonthKey,
 } from '../utils'
+import type { Transaction } from '../types'
 
 const MONTHS_TO_SHOW = 24
 
@@ -17,6 +18,7 @@ export default function PastOverviews() {
   const currency = state.currency
   const [editingIncome, setEditingIncome] = useState<string | null>(null)
   const [editValue, setEditValue] = useState('')
+  const [expensesMonthKey, setExpensesMonthKey] = useState<string | null>(null)
 
   const monthKeys = useMemo(() => getPastMonthKeys(MONTHS_TO_SHOW), [])
   const currentMonthKey = getCurrentMonthKey()
@@ -64,6 +66,15 @@ export default function PastOverviews() {
     setEditingIncome(monthKey)
     setEditValue(String(current))
   }
+
+  const categoryNames = Object.fromEntries(state.categories.map((c) => [c.id, c.name]))
+  const accountNames = Object.fromEntries(state.accounts.map((a) => [a.id, a.name]))
+  const expensesForSelectedMonth = useMemo((): Transaction[] => {
+    if (!expensesMonthKey) return []
+    return state.transactions
+      .filter((tx) => tx.type === 'expense' && isMonthKey(tx.date, expensesMonthKey))
+      .sort((a, b) => b.date.localeCompare(a.date))
+  }, [state.transactions, expensesMonthKey])
 
   return (
     <>
@@ -116,8 +127,16 @@ export default function PastOverviews() {
                       </button>
                     )}
                   </td>
-                  <td style={{ padding: '0.6rem 0.75rem', textAlign: 'right' }} className="amount-negative">
-                    {formatCurrency(row.expenses, currency)}
+                  <td style={{ padding: '0.6rem 0.75rem', textAlign: 'right' }}>
+                    <button
+                      type="button"
+                      className="btn-link amount-negative"
+                      onClick={() => setExpensesMonthKey(row.monthKey)}
+                      style={{ padding: 0, cursor: 'pointer' }}
+                      title={t('past.expensesClickHint')}
+                    >
+                      {formatCurrency(row.expenses, currency)}
+                    </button>
                   </td>
                   <td style={{ padding: '0.6rem 0.75rem', textAlign: 'right' }} className="amount-positive">
                     {formatCurrency(row.savings, currency)}
@@ -138,6 +157,66 @@ export default function PastOverviews() {
           </table>
         </div>
       </div>
+
+      {expensesMonthKey && (
+        <div
+          className="past-expenses-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${t('past.expensesForMonthTitle')} ${monthYearLabel(expensesMonthKey)}`}
+          onClick={() => setExpensesMonthKey(null)}
+        >
+          <div
+            className="past-expenses-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <h2 style={{ margin: 0, fontSize: '1.1rem' }}>
+                {t('past.expensesForMonthTitle')} {monthYearLabel(expensesMonthKey)}
+              </h2>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => setExpensesMonthKey(null)}
+                aria-label={t('past.close')}
+              >
+                ×
+              </button>
+            </div>
+            {expensesForSelectedMonth.length === 0 ? (
+              <p className="muted">{t('past.noExpensesForMonth')}</p>
+            ) : (
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, maxHeight: '60vh', overflowY: 'auto' }}>
+                {expensesForSelectedMonth.map((tx) => (
+                  <li
+                    key={tx.id}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      flexWrap: 'wrap',
+                      gap: '0.35rem',
+                      padding: '0.6rem 0',
+                      borderBottom: '1px solid var(--border)',
+                    }}
+                  >
+                    <div style={{ flex: '1 1 200px' }}>
+                      <span>{tx.memo || (categoryNames[tx.categoryId ?? ''] ?? t('overview.uncategorized'))}</span>
+                      <span className="muted" style={{ marginLeft: '0.5rem', fontSize: '0.9rem' }}>
+                        {tx.date}
+                        {accountNames[tx.accountId ?? ''] && ` · ${accountNames[tx.accountId!]}`}
+                      </span>
+                    </div>
+                    <span className="amount-negative" style={{ fontWeight: 600 }}>
+                      {formatCurrency(tx.amount, currency)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      )}
     </>
   )
 }

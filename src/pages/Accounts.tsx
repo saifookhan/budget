@@ -119,21 +119,32 @@ export default function Accounts() {
     const toId = transferTo.trim()
     const amount = Number(transferAmount)
     if (!fromId || !toId || fromId === toId || !Number.isFinite(amount) || amount <= 0) return
-    updateState((s) => ({
-      ...s,
-      transactions: [
-        ...s.transactions,
-        {
-          id: id(),
-          type: 'transfer',
-          amount,
-          accountId: fromId,
-          toAccountId: toId,
-          date: transferDate,
-          memo: transferMemo.trim() || undefined,
-        },
-      ],
-    }))
+    updateState((s) => {
+      const fromAccount = s.accounts.find((a) => a.id === fromId)
+      const toAccount = s.accounts.find((a) => a.id === toId)
+      const fromBalance = (fromAccount?.balance ?? 0) - amount
+      const toBalance = (toAccount?.balance ?? 0) + amount
+      return {
+        ...s,
+        accounts: s.accounts.map((a) => {
+          if (a.id === fromId) return { ...a, balance: fromBalance }
+          if (a.id === toId) return { ...a, balance: toBalance }
+          return a
+        }),
+        transactions: [
+          ...s.transactions,
+          {
+            id: id(),
+            type: 'transfer',
+            amount,
+            accountId: fromId,
+            toAccountId: toId,
+            date: transferDate,
+            memo: transferMemo.trim() || undefined,
+          },
+        ],
+      }
+    })
     setTransferFrom('')
     setTransferTo('')
     setTransferAmount('')
@@ -143,10 +154,29 @@ export default function Accounts() {
 
   const removeTransfer = (txId: string) => {
     if (!confirm(t('accounts.transferDeleteConfirm'))) return
-    updateState((s) => ({
-      ...s,
-      transactions: s.transactions.filter((t) => t.id !== txId),
-    }))
+    const tx = state.transactions.find((t) => t.id === txId)
+    if (tx?.type !== 'transfer' || !tx.toAccountId) {
+      updateState((s) => ({ ...s, transactions: s.transactions.filter((t) => t.id !== txId) }))
+      return
+    }
+    const amount = tx.amount
+    const fromId = tx.accountId ?? ''
+    const toId = tx.toAccountId
+    updateState((s) => {
+      const fromAccount = s.accounts.find((a) => a.id === fromId)
+      const toAccount = s.accounts.find((a) => a.id === toId)
+      const fromBalance = (fromAccount?.balance ?? 0) + amount
+      const toBalance = (toAccount?.balance ?? 0) - amount
+      return {
+        ...s,
+        accounts: s.accounts.map((a) => {
+          if (a.id === fromId) return { ...a, balance: fromBalance }
+          if (a.id === toId) return { ...a, balance: toBalance }
+          return a
+        }),
+        transactions: s.transactions.filter((t) => t.id !== txId),
+      }
+    })
   }
 
   const transfers = [...state.transactions]
@@ -403,6 +433,7 @@ export default function Accounts() {
                           value={a.balance ?? ''}
                           onChange={(e) => setBalance(a.id, Number(e.target.value) || 0)}
                           placeholder="0"
+                          className="accounts-balance-input"
                           style={{ width: '6rem', padding: '0.25rem 0.4rem', marginLeft: '0.25rem' }}
                         />
                       </div>
