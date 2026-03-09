@@ -3,5 +3,19 @@
   "installCommand": "npm install",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "framework": null
+  "framework": null,
+  "rewrites": [
+    { "source": "/categories", "destination": "/index.html" },
+    { "source": "/income", "destination": "/index.html" },
+    { "source": "/past", "destination": "/index.html" },
+    { "source": "/accounts", "destination": "/index.html" },
+    { "source": "/spending", "destination": "/index.html" },
+    { "source": "/expenses-report", "destination": "/index.html" },
+    { "source": "/subscriptions", "destination": "/index.html" },
+    { "source": "/savings", "destination": "/index.html" },
+    { "source": "/settings", "destination": "/index.html" },
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/signup", "destination": "/index.html" },
+    { "source": "/reset-password", "destination": "/index.html" }
+  ]
 }
