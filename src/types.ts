@@ -36,6 +36,8 @@ export interface RecurringItem {
   type: 'subscription' | 'saving'
 }
 
+export type SavingsGoalType = 'savings' | 'investment'
+
 export interface SavingsGoal {
   id: string
   name: string
@@ -43,6 +45,8 @@ export interface SavingsGoal {
   startDate: string // YYYY-MM-DD
   accountId?: string
   recurringId?: string // links to RecurringItem that auto-adds each month
+  /** Default 'savings' for backward compatibility */
+  goalType?: SavingsGoalType
 }
 
 export type CurrencyCode =

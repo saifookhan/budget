@@ -13,6 +13,8 @@ import {
 } from '../utils'
 
 const CHART_TYPE_KEY = 'overview-chart-type'
+const SHOW_MONEY_IN_WALLETS_KEY = 'overview-show-money-in-wallets'
+
 export type OverviewChartType = 'pie' | 'bar' | 'line' | 'list'
 
 function getStoredChartType(): OverviewChartType {
@@ -26,6 +28,19 @@ function getStoredChartType(): OverviewChartType {
 function setStoredChartType(type: OverviewChartType): void {
   try {
     localStorage.setItem(CHART_TYPE_KEY, type)
+  } catch {}
+}
+
+function getStoredShowMoneyInWallets(): boolean {
+  try {
+    return localStorage.getItem(SHOW_MONEY_IN_WALLETS_KEY) === '1'
+  } catch {}
+  return false
+}
+
+function setStoredShowMoneyInWallets(value: boolean): void {
+  try {
+    localStorage.setItem(SHOW_MONEY_IN_WALLETS_KEY, value ? '1' : '0')
   } catch {}
 }
 
@@ -162,11 +177,18 @@ export default function Overview({ theme }: OverviewProps) {
   const data = useOverview()
   const chartTheme = theme ?? getStoredTheme()
   const [chartType, setChartType] = useState<OverviewChartType>(getStoredChartType)
+  const [showMoneyInWallets, setShowMoneyInWallets] = useState(getStoredShowMoneyInWallets)
 
   const handleChartTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value as OverviewChartType
     setChartType(value)
     setStoredChartType(value)
+  }
+
+  const handleShowMoneyInWalletsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked
+    setShowMoneyInWallets(checked)
+    setStoredShowMoneyInWallets(checked)
   }
 
   return (
@@ -212,6 +234,18 @@ export default function Overview({ theme }: OverviewProps) {
         </div>
       )}
 
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.95rem' }}>
+          <input
+            type="checkbox"
+            checked={showMoneyInWallets}
+            onChange={handleShowMoneyInWalletsChange}
+            aria-describedby="overview-show-money-in-wallets-desc"
+          />
+          <span id="overview-show-money-in-wallets-desc">{t('overview.showMoneyInWalletsOption')}</span>
+        </label>
+      </div>
+
       <div className="overview-three-boxes">
         <div className="card overview-box">
           <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('overview.availableThisMonth')}</h2>
@@ -251,22 +285,24 @@ export default function Overview({ theme }: OverviewProps) {
           </p>
         </div>
 
-        <div className="card overview-box">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('overview.moneyInWallets')}</h2>
-          <p
-            style={{
-              fontSize: '1.5rem',
-              fontWeight: 700,
-              margin: 0,
-              color: data.totalInAccounts >= 0 ? 'var(--success)' : 'var(--danger)',
-            }}
-          >
-            {formatCurrency(data.totalInAccounts, data.currency)}
-          </p>
-          <p className="muted" style={{ marginTop: '0.5rem' }}>
-            {t('overview.moneyInWalletsHint')}
-          </p>
-        </div>
+        {showMoneyInWallets && (
+          <div className="card overview-box">
+            <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('overview.moneyInWallets')}</h2>
+            <p
+              style={{
+                fontSize: '1.5rem',
+                fontWeight: 700,
+                margin: 0,
+                color: data.totalInAccounts >= 0 ? 'var(--success)' : 'var(--danger)',
+              }}
+            >
+              {formatCurrency(data.totalInAccounts, data.currency)}
+            </p>
+            <p className="muted" style={{ marginTop: '0.5rem' }}>
+              {t('overview.moneyInWalletsHint')}
+            </p>
+          </div>
+        )}
       </div>
 
       {Object.keys(data.byCategory).length > 0 && (() => {
@@ -320,11 +356,13 @@ export default function Overview({ theme }: OverviewProps) {
 
             {chartType === 'pie' && (
               <div className="overview-category-chart">
-                <div
-                  className="overview-category-chart-pie"
-                  style={{ background: `conic-gradient(${conic})` }}
-                  aria-hidden
-                />
+                <div className="overview-category-chart-pie-wrap" aria-hidden>
+                  <div
+                    className="overview-category-chart-pie"
+                    style={{ background: `conic-gradient(${conic})` }}
+                  />
+                  <div className="overview-category-chart-pie-hole" />
+                </div>
                 <ul className="overview-category-chart-legend" aria-label="Spending by category">
                   {segments.map(({ catId, amount, color }) => (
                     <li key={catId} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
@@ -338,37 +376,27 @@ export default function Overview({ theme }: OverviewProps) {
             )}
 
             {chartType === 'bar' && (
-              <div style={{ marginBottom: '0.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: 160, padding: '0.5rem 0' }}>
-                  {segments.map(({ catId, amount, color }) => {
-                    const heightPct = maxAmount > 0 ? (amount / maxAmount) * 100 : 0
-                    return (
-                      <div
-                        key={catId}
-                        title={`${data.categoryNames[catId] ?? t('overview.uncategorized')}: ${formatCurrency(amount, data.currency)}`}
-                        style={{
-                          flex: 1,
-                          minWidth: 24,
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          gap: 4,
-                        }}
-                      >
+              <div className="overview-bar-chart-wrapper">
+                <div className="overview-bar-chart-area">
+                  <div className="overview-bar-chart-bars">
+                    {segments.map(({ catId, amount }) => {
+                      const heightPct = maxAmount > 0 ? (amount / maxAmount) * 100 : 0
+                      return (
                         <div
-                          style={{
-                            width: '100%',
-                            height: `${heightPct}%`,
-                            minHeight: heightPct > 0 ? 8 : 0,
-                            background: color,
-                            borderRadius: '4px 4px 0 0',
-                          }}
-                          aria-hidden
-                        />
-                        <span style={{ fontSize: '0.75rem', textAlign: 'center', lineHeight: 1.1 }}>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
-                      </div>
-                    )
-                  })}
+                          key={catId}
+                          className="overview-bar-chart-bar-cell"
+                          title={`${data.categoryNames[catId] ?? t('overview.uncategorized')}: ${formatCurrency(amount, data.currency)}`}
+                        >
+                          <div
+                            className="overview-bar-chart-bar"
+                            style={{ height: `${heightPct}%` }}
+                            aria-hidden
+                          />
+                          <span className="overview-bar-chart-label">{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
                 <ul className="overview-category-chart-legend" style={{ marginTop: '0.5rem' }} aria-label="Spending by category">
                   {segments.map(({ catId, amount, color }) => (

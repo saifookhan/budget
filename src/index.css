@@ -518,11 +518,29 @@ button {
   margin-bottom: 0.5rem;
 }
 
-.overview-category-chart-pie {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
+/* Cake-style pie (donut) */
+.overview-category-chart-pie-wrap {
+  position: relative;
+  width: 180px;
+  height: 180px;
   flex-shrink: 0;
+}
+
+.overview-category-chart-pie {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.overview-category-chart-pie-hole {
+  position: absolute;
+  inset: 50%;
+  width: 55%;
+  height: 55%;
+  margin: -27.5%;
+  border-radius: 50%;
+  background: var(--surface);
+  box-sizing: border-box;
 }
 
 .overview-category-chart-legend {
@@ -538,6 +556,58 @@ button {
   height: 12px;
   border-radius: 3px;
   flex-shrink: 0;
+}
+
+/* Bar chart – categorical style (option B): solid green bars, clean, no grid */
+.overview-bar-chart-wrapper {
+  margin-bottom: 0.5rem;
+}
+
+.overview-bar-chart-area {
+  background: #e8f0f5;
+  border-radius: var(--radius-sm);
+  padding: 1rem 0.75rem 0.5rem;
+  min-height: 200px;
+}
+
+.overview-bar-chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 160px;
+}
+
+.overview-bar-chart-bar-cell {
+  flex: 1;
+  min-width: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.overview-bar-chart-bar {
+  width: 100%;
+  min-height: 6px;
+  background: #2d6a4f;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.2s ease;
+}
+
+.overview-bar-chart-label {
+  font-size: 0.7rem;
+  text-align: center;
+  line-height: 1.15;
+  color: var(--text-muted, #555);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-theme="neonBlack"] .overview-bar-chart-area,
+[data-theme="neonRainbow"] .overview-bar-chart-area {
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .btn {
