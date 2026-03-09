@@ -81,6 +81,7 @@ export default function Expenses() {
             : tx
         ),
       }))
+      setState(next)
       setTransactions(next.transactions.filter((tx) => tx.type === 'expense'))
       cancelEdit()
     } else {
@@ -99,6 +100,7 @@ export default function Expenses() {
           },
         ],
       }))
+      setState(next)
       setTransactions(next.transactions.filter((tx) => tx.type === 'expense'))
       setAmount('')
       setDate(new Date().toISOString().slice(0, 10))
@@ -123,22 +125,23 @@ export default function Expenses() {
         skippedRecurring,
       }
     })
+    setState(next)
     setTransactions(next.transactions.filter((t) => t.type === 'expense'))
   }
 
-  const addCategoryInline = (e: React.FormEvent) => {
-    e.preventDefault()
+  const addCategoryInline = () => {
     const name = newCategoryName.trim()
     if (!name) return
     const newId = id()
-    updateState((s) => ({
+    const next = updateState((s) => ({
       ...s,
       categories: [...s.categories, { id: newId, name }],
     }))
+    setState(next)
+    setTransactions(next.transactions.filter((tx) => tx.type === 'expense'))
     setCategoryId(newId)
     setNewCategoryName('')
     setShowAddCategory(false)
-    setState(getState())
   }
 
   const categories = state.categories
@@ -216,7 +219,10 @@ export default function Expenses() {
                 + {t('expenses.addCategoryInline')}
               </button>
             ) : (
-              <form onSubmit={addCategoryInline} style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', alignItems: 'center' }}>
+              <div
+                style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', alignItems: 'center' }}
+                onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addCategoryInline())}
+              >
                 <input
                   type="text"
                   value={newCategoryName}
@@ -225,11 +231,13 @@ export default function Expenses() {
                   autoFocus
                   style={{ width: '10rem', padding: '0.35rem 0.5rem' }}
                 />
-                <button type="submit" className="btn btn-primary">{t('common.add')}</button>
+                <button type="button" className="btn btn-primary" onClick={addCategoryInline}>
+                  {t('common.add')}
+                </button>
                 <button type="button" className="btn btn-ghost" onClick={() => { setShowAddCategory(false); setNewCategoryName('') }}>
                   {t('common.cancel')}
                 </button>
-              </form>
+              </div>
             )}
           </div>
         </div>
