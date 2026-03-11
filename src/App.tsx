@@ -69,7 +69,7 @@ function AppShell() {
 
   const localHasData = hasBudgetData(getState())
 
-  // Sync: when logged in, fetch remote; if local is empty we replace with remote so you don't see 0
+  // Sync: when logged in, fetch remote and use it as source of truth so all devices show the same data
   useEffect(() => {
     if (!user?.id) {
       setSyncDone(true)
@@ -81,8 +81,7 @@ function AppShell() {
     fetchBudgetState(user.id).then(({ data: remote, error }) => {
       if (error) setSyncError(error)
       if (remote && hasBudgetData(remote)) {
-        const local = getState()
-        if (!hasBudgetData(local)) replaceLocalState(remote)
+        replaceLocalState(remote)
       }
       setSyncDone(true)
     })
