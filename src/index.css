@@ -569,6 +569,9 @@ button {
   margin: 0;
   flex: 1;
   min-width: 180px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 1rem;
 }
 
 .overview-category-chart-swatch {

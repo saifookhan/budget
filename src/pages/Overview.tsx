@@ -450,23 +450,6 @@ export default function Overview({ theme }: OverviewProps) {
                 </div>
               )
             })()}
-
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
-              {sorted.map(([catId, amount]) => (
-                <li
-                  key={catId}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    padding: '0.4rem 0',
-                    borderBottom: '1px solid var(--border)',
-                  }}
-                >
-                  <span>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
-                  <span className="amount-negative">{formatCurrency(amount, data.currency)}</span>
-                </li>
-              ))}
-            </ul>
           </div>
         )
       })()}
