@@ -20,3 +20,7 @@ create policy "Users can insert own budget_data"
 create policy "Users can update own budget_data"
   on public.budget_data for update
   using (auth.uid() = user_id);
+
+create policy "Users can delete own budget_data"
+  on public.budget_data for delete
+  using (auth.uid() = user_id);

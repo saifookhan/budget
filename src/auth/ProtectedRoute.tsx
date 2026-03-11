@@ -1,4 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom'
+import { t } from '../i18n'
 import { useAuth } from './AuthContext'
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -8,7 +9,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   if (loading) {
     return (
       <div className="auth-page">
-        <div className="auth-loading">Loading…</div>
+        <div className="auth-loading">{t('common.loading', 'en')}</div>
       </div>
     )
   }

@@ -571,7 +571,31 @@ button {
   min-width: 180px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.35rem 1rem;
+  gap: 0.6rem 2rem;
+}
+
+.overview-category-chart-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 0.15rem 0;
+}
+
+.overview-category-chart-legend li span:first-of-type {
+  flex-shrink: 0;
+}
+
+.overview-category-chart-legend li span:nth-child(2) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overview-category-chart-legend li span.amount-negative {
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .overview-category-chart-swatch {

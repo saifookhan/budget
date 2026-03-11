@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getState, updateState, subscribe, id } from '../store'
+import { replaceLocalState } from '../budgetSync'
 import { useTranslation } from '../LanguageContext'
+import { useUndo } from '../UndoContext'
 import { formatCurrency } from '../utils'
 import type { Transaction } from '../types'
 
 export default function Expenses() {
   const { t } = useTranslation()
+  const { showUndo } = useUndo()
   const location = useLocation()
   const navigate = useNavigate()
   const [state, setState] = useState(() => getState())
@@ -111,6 +114,7 @@ export default function Expenses() {
   const remove = (txId: string) => {
     if (!confirm(t('expenses.deleteConfirm'))) return
     if (editingId === txId) cancelEdit()
+    const snapshot = getState()
     const next = updateState((s) => {
       const deleted = s.transactions.find((t) => t.id === txId)
       const skippedRecurring = [...(s.skippedRecurring ?? [])]
@@ -127,6 +131,7 @@ export default function Expenses() {
     })
     setState(next)
     setTransactions(next.transactions.filter((t) => t.type === 'expense'))
+    showUndo(() => replaceLocalState(snapshot))
   }
 
   const addCategoryInline = () => {

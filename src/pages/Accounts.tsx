@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import { getState, updateState, subscribe, id } from '../store'
+import { replaceLocalState } from '../budgetSync'
 import { useTranslation } from '../LanguageContext'
+import { useUndo } from '../UndoContext'
 import { formatCurrency } from '../utils'
 import type { Account, Transaction } from '../types'
 
 export default function Accounts() {
   const { t } = useTranslation()
+  const { showUndo } = useUndo()
   const [state, setState] = useState(() => getState())
   const [accounts, setAccounts] = useState<Account[]>([])
   const [editing, setEditing] = useState<string | null>(null)
@@ -169,11 +172,13 @@ export default function Accounts() {
 
   const removeTransfer = (txId: string) => {
     if (!confirm(t('accounts.transferDeleteConfirm'))) return
+    const snapshot = getState()
     const tx = state.transactions.find((t) => t.id === txId)
     if (tx?.type !== 'transfer' || !tx.toAccountId) {
       const next = updateState((s) => ({ ...s, transactions: s.transactions.filter((t) => t.id !== txId) }))
       setState(next)
       setAccounts(next.accounts)
+      showUndo(() => replaceLocalState(snapshot))
       return
     }
     const amount = tx.amount
@@ -196,6 +201,7 @@ export default function Accounts() {
     })
     setState(next)
     setAccounts(next.accounts)
+    showUndo(() => replaceLocalState(snapshot))
   }
 
   const transfers = [...state.transactions]
@@ -225,7 +231,7 @@ export default function Accounts() {
               step="0.01"
               value={income === 0 ? '' : income}
               onChange={(e) => setIncome(parseFloat(e.target.value) || 0)}
-              placeholder="e.g. 2500"
+              placeholder={t('income.amountPlaceholder')}
             />
           </div>
           <button type="submit" className="btn btn-primary">
@@ -426,13 +432,13 @@ export default function Accounts() {
                     <input
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="Name"
+                      placeholder={t('accounts.editNamePlaceholder')}
                       style={{ flex: '1 1 120px', padding: '0.4rem' }}
                     />
                     <input
                       value={purpose}
                       onChange={(e) => setPurpose(e.target.value)}
-                      placeholder="Purpose"
+                      placeholder={t('accounts.editPurposePlaceholder')}
                       style={{ flex: '1 1 120px', padding: '0.4rem' }}
                     />
                     <button type="submit" className="btn btn-primary">{t('common.save')}</button>
@@ -450,7 +456,7 @@ export default function Accounts() {
                           step="1"
                           value={a.balance !== undefined && a.balance !== null ? a.balance : ''}
                           onChange={(e) => setBalance(a.id, Number(e.target.value) || 0)}
-                          placeholder="0"
+                          placeholder={t('accounts.balancePlaceholder')}
                           className="accounts-balance-input"
                           style={{ width: '6rem', padding: '0.25rem 0.4rem', marginLeft: '0.25rem' }}
                         />

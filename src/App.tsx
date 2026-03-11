@@ -21,6 +21,7 @@ import { fetchBudgetState, pushBudgetState, replaceLocalState, hasBudgetData } f
 import debounce from 'lodash.debounce'
 import { t } from './i18n'
 import { LanguageProvider } from './LanguageContext'
+import { UndoProvider } from './UndoContext'
 import type { CurrencyCode, LanguageCode } from './types'
 
 const SIDEBARS_PINNED_KEY = 'budget-sidebars-pinned'
@@ -141,18 +142,19 @@ function AppShell() {
   if (waitingForSync) {
     return (
       <div className="auth-page">
-        <div className="auth-loading">Loading your budget…</div>
+        <div className="auth-loading">{T('common.loadingBudget')}</div>
       </div>
     )
   }
 
   return (
     <LanguageProvider language={language}>
+    <UndoProvider>
     <div className="app">
       {syncError && (
         <div className="sync-error-banner" role="alert">
           Could not load your budget from the cloud. {syncError.includes('exist') || syncError.includes('relation') ? 'Run the SQL in supabase_budget_table.sql in Supabase to enable sync.' : syncError}
-          <button type="button" className="btn-link" onClick={() => setSyncError(null)} aria-label="Dismiss">Dismiss</button>
+          <button type="button" className="btn-link" onClick={() => setSyncError(null)} aria-label={T('common.dismiss')}>{T('common.dismiss')}</button>
         </div>
       )}
       {savedBannerVisible && (
@@ -284,6 +286,7 @@ function AppShell() {
       </Routes>
       <ContactChat open={contactOpen} onOpenChange={setContactOpen} />
     </div>
+    </UndoProvider>
     </LanguageProvider>
   )
 }
@@ -293,7 +296,7 @@ function HomeOrApp() {
   if (loading) {
     return (
       <div className="auth-page">
-        <div className="auth-loading">Loading…</div>
+        <div className="auth-loading">{t('common.loading', 'en')}</div>
       </div>
     )
   }

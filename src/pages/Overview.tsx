@@ -44,6 +44,18 @@ function setStoredShowMoneyInWallets(value: boolean): void {
   } catch {}
 }
 
+/** Round up to a "nice" max for Y-axis (e.g. 87 -> 100, 350 -> 500). */
+function niceAxisMax(value: number): number {
+  if (value <= 0) return 1
+  const exp = Math.floor(Math.log10(value))
+  const magnitude = 10 ** exp
+  const normalized = value / magnitude
+  if (normalized <= 1) return magnitude
+  if (normalized <= 2) return 2 * magnitude
+  if (normalized <= 5) return 5 * magnitude
+  return 10 * magnitude
+}
+
 function useOverview() {
   const location = useLocation()
   const [state, setState] = useState<BudgetState>(() => getState())
@@ -306,12 +318,18 @@ export default function Overview({ theme }: OverviewProps) {
       </div>
 
       {Object.keys(data.byCategory).length > 0 && (() => {
+        const TOP_N = 8
         const chartColors = getChartColorsForTheme(chartTheme)
         const sorted = Object.entries(data.byCategory).sort((a, b) => b[1] - a[1])
-        const total = sorted.reduce((s, [, amt]) => s + amt, 0)
-        const maxAmount = Math.max(...sorted.map(([, amt]) => amt), 1)
+        const otherAmount = sorted.length > TOP_N ? sorted.slice(TOP_N).reduce((s, [, amt]) => s + amt, 0) : 0
+        const reducedEntries: [string, number][] =
+          sorted.length > TOP_N && otherAmount > 0
+            ? [...sorted.slice(0, TOP_N), ['other', otherAmount]]
+            : sorted
+        const total = reducedEntries.reduce((s, [, amt]) => s + amt, 0)
+        const maxAmount = Math.max(...reducedEntries.map(([, amt]) => amt), 1)
         let acc = 0
-        const segments = sorted.map(([catId, amount], i) => {
+        const segments = reducedEntries.map(([catId, amount], i) => {
           const pct = total > 0 ? (amount / total) * 100 : 0
           const start = acc
           acc += pct
@@ -363,10 +381,10 @@ export default function Overview({ theme }: OverviewProps) {
                 </div>
                 <ul className="overview-category-chart-legend" aria-label="Spending by category">
                   {segments.map(({ catId, amount, color }) => (
-                    <li key={catId} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                    <li key={catId}>
                       <span className="overview-category-chart-swatch" style={{ background: color }} aria-hidden />
-                      <span>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
-                      <span className="amount-negative" style={{ marginLeft: 'auto' }}>{formatCurrency(amount, data.currency)}</span>
+                      <span>{catId === 'other' ? t('overview.other') : (data.categoryNames[catId] ?? t('overview.uncategorized'))}</span>
+                      <span className="amount-negative">{formatCurrency(amount, data.currency)}</span>
                     </li>
                   ))}
                 </ul>
@@ -383,7 +401,7 @@ export default function Overview({ theme }: OverviewProps) {
               const barGap = 8
               const barWidth = n > 0 ? Math.max(20, (innerW - barGap * (n - 1)) / n) : 0
               const yTicks = 5
-              const yMax = maxAmount > 0 ? maxAmount : 1
+              const yMax = niceAxisMax(maxAmount)
               return (
                 <div className="overview-bar-chart-svg-wrap">
                   <svg width="100%" height={chartH} viewBox={`0 0 ${chartW} ${chartH}`} className="overview-bar-chart-svg" aria-hidden>
@@ -391,7 +409,7 @@ export default function Overview({ theme }: OverviewProps) {
                     <line x1={pad.left} y1={pad.top} x2={pad.left} y2={pad.top + innerH} stroke="var(--border)" strokeWidth="1" />
                     {/* X-axis line */}
                     <line x1={pad.left} y1={pad.top + innerH} x2={pad.left + innerW} y2={pad.top + innerH} stroke="var(--border)" strokeWidth="1" />
-                    {/* Y-axis labels and grid */}
+                    {/* Y-axis labels and grid – round values */}
                     {Array.from({ length: yTicks + 1 }, (_, i) => {
                       const val = (yMax * (yTicks - i)) / yTicks
                       const y = pad.top + (innerH * i) / yTicks
@@ -406,9 +424,9 @@ export default function Overview({ theme }: OverviewProps) {
                         </g>
                       )
                     })}
-                    {/* Bars */}
+                    {/* Bars – scale by yMax so bars don't exceed axis */}
                     {segments.map(({ catId, amount, color }, i) => {
-                      const barH = maxAmount > 0 ? (amount / maxAmount) * innerH : 0
+                      const barH = yMax > 0 ? (amount / yMax) * innerH : 0
                       const x = pad.left + i * (barWidth + barGap) + barGap / 2
                       const y = pad.top + innerH - barH
                       return (
@@ -422,7 +440,7 @@ export default function Overview({ theme }: OverviewProps) {
                             rx="4"
                             ry="4"
                           />
-                          <title>{`${data.categoryNames[catId] ?? t('overview.uncategorized')}: ${formatCurrency(amount, data.currency)}`}</title>
+                          <title>{`${catId === 'other' ? t('overview.other') : (data.categoryNames[catId] ?? t('overview.uncategorized'))}: ${formatCurrency(amount, data.currency)}`}</title>
                         </g>
                       )
                     })}
@@ -430,7 +448,7 @@ export default function Overview({ theme }: OverviewProps) {
                     {segments.map(({ catId }, i) => {
                       const x = pad.left + i * (barWidth + barGap) + barGap / 2 + barWidth / 2
                       const y = pad.top + innerH + 18
-                      const label = (data.categoryNames[catId] ?? t('overview.uncategorized')).slice(0, 12)
+                      const label = (catId === 'other' ? t('overview.other') : (data.categoryNames[catId] ?? t('overview.uncategorized'))).slice(0, 12)
                       return (
                         <text key={catId} x={x} y={y} textAnchor="middle" fontSize="10" fill="var(--text-muted)" className="overview-bar-chart-axis-text">
                           {label}{label.length >= 12 ? '…' : ''}
@@ -440,10 +458,10 @@ export default function Overview({ theme }: OverviewProps) {
                   </svg>
                   <ul className="overview-category-chart-legend" style={{ marginTop: '0.5rem' }} aria-label="Spending by category">
                     {segments.map(({ catId, amount, color }) => (
-                      <li key={catId} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                      <li key={catId}>
                         <span className="overview-category-chart-swatch" style={{ background: color }} aria-hidden />
-                        <span>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
-                        <span className="amount-negative" style={{ marginLeft: 'auto' }}>{formatCurrency(amount, data.currency)}</span>
+                        <span>{catId === 'other' ? t('overview.other') : (data.categoryNames[catId] ?? t('overview.uncategorized'))}</span>
+                        <span className="amount-negative">{formatCurrency(amount, data.currency)}</span>
                       </li>
                     ))}
                   </ul>

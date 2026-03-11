@@ -159,7 +159,7 @@ export default function Savings() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="sav-account">Account (optional)</label>
+          <label htmlFor="sav-account">{t('savings.accountOptional')}</label>
           <select
             id="sav-account"
             value={accountId}
