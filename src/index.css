@@ -578,56 +578,18 @@ button {
   flex-shrink: 0;
 }
 
-/* Bar chart – categorical style (option B): solid green bars, clean, no grid */
-.overview-bar-chart-wrapper {
+/* Bar chart – real bar graph with Y-axis scale and grid */
+.overview-bar-chart-svg-wrap {
   margin-bottom: 0.5rem;
 }
 
-.overview-bar-chart-area {
-  background: #e8f0f5;
-  border-radius: var(--radius-sm);
-  padding: 1rem 0.75rem 0.5rem;
-  min-height: 200px;
-}
-
-.overview-bar-chart-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
-  height: 160px;
-}
-
-.overview-bar-chart-bar-cell {
-  flex: 1;
-  min-width: 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.overview-bar-chart-bar {
-  width: 100%;
-  min-height: 6px;
-  background: #2d6a4f;
-  border-radius: 4px 4px 0 0;
-  transition: height 0.2s ease;
-}
-
-.overview-bar-chart-label {
-  font-size: 0.7rem;
-  text-align: center;
-  line-height: 1.15;
-  color: var(--text-muted, #555);
+.overview-bar-chart-svg {
   max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: block;
 }
 
-[data-theme="neonBlack"] .overview-bar-chart-area,
-[data-theme="neonRainbow"] .overview-bar-chart-area {
-  background: rgba(255, 255, 255, 0.06);
+.overview-bar-chart-axis-text {
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
 .btn {

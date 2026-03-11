@@ -15,12 +15,12 @@ import {
 const CHART_TYPE_KEY = 'overview-chart-type'
 const SHOW_MONEY_IN_WALLETS_KEY = 'overview-show-money-in-wallets'
 
-export type OverviewChartType = 'pie' | 'bar' | 'line' | 'list'
+export type OverviewChartType = 'pie' | 'bar'
 
 function getStoredChartType(): OverviewChartType {
   try {
     const v = localStorage.getItem(CHART_TYPE_KEY) as OverviewChartType | null
-    if (v === 'pie' || v === 'bar' || v === 'line' || v === 'list') return v
+    if (v === 'pie' || v === 'bar') return v
   } catch {}
   return 'pie'
 }
@@ -331,8 +331,6 @@ export default function Overview({ theme }: OverviewProps) {
         const chartTypeOptions: { value: OverviewChartType; labelKey: string }[] = [
           { value: 'pie', labelKey: 'overview.chartPie' },
           { value: 'bar', labelKey: 'overview.chartBar' },
-          { value: 'line', labelKey: 'overview.chartLine' },
-          { value: 'list', labelKey: 'overview.chartList' },
         ]
 
         return (
@@ -375,63 +373,69 @@ export default function Overview({ theme }: OverviewProps) {
               </div>
             )}
 
-            {chartType === 'bar' && (
-              <div className="overview-bar-chart-wrapper">
-                <div className="overview-bar-chart-area">
-                  <div className="overview-bar-chart-bars">
-                    {segments.map(({ catId, amount }) => {
-                      const heightPct = maxAmount > 0 ? (amount / maxAmount) * 100 : 0
+            {chartType === 'bar' && (() => {
+              const chartW = 400
+              const chartH = 220
+              const pad = { top: 12, right: 16, bottom: 44, left: 56 }
+              const innerW = chartW - pad.left - pad.right
+              const innerH = chartH - pad.top - pad.bottom
+              const n = segments.length
+              const barGap = 8
+              const barWidth = n > 0 ? Math.max(20, (innerW - barGap * (n - 1)) / n) : 0
+              const yTicks = 5
+              const yMax = maxAmount > 0 ? maxAmount : 1
+              return (
+                <div className="overview-bar-chart-svg-wrap">
+                  <svg width="100%" height={chartH} viewBox={`0 0 ${chartW} ${chartH}`} className="overview-bar-chart-svg" aria-hidden>
+                    {/* Y-axis line */}
+                    <line x1={pad.left} y1={pad.top} x2={pad.left} y2={pad.top + innerH} stroke="var(--border)" strokeWidth="1" />
+                    {/* X-axis line */}
+                    <line x1={pad.left} y1={pad.top + innerH} x2={pad.left + innerW} y2={pad.top + innerH} stroke="var(--border)" strokeWidth="1" />
+                    {/* Y-axis labels and grid */}
+                    {Array.from({ length: yTicks + 1 }, (_, i) => {
+                      const val = (yMax * (yTicks - i)) / yTicks
+                      const y = pad.top + (innerH * i) / yTicks
                       return (
-                        <div
-                          key={catId}
-                          className="overview-bar-chart-bar-cell"
-                          title={`${data.categoryNames[catId] ?? t('overview.uncategorized')}: ${formatCurrency(amount, data.currency)}`}
-                        >
-                          <div
-                            className="overview-bar-chart-bar"
-                            style={{ height: `${heightPct}%` }}
-                            aria-hidden
-                          />
-                          <span className="overview-bar-chart-label">{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
-                        </div>
+                        <g key={i}>
+                          {i > 0 && (
+                            <line x1={pad.left} y1={y} x2={pad.left + innerW} y2={y} stroke="var(--border)" strokeWidth="1" strokeDasharray="4" opacity="0.6" />
+                          )}
+                          <text x={pad.left - 6} y={y + 4} textAnchor="end" fontSize="10" fill="var(--text-muted)" className="overview-bar-chart-axis-text">
+                            {formatCurrency(val, data.currency)}
+                          </text>
+                        </g>
                       )
                     })}
-                  </div>
-                </div>
-                <ul className="overview-category-chart-legend" style={{ marginTop: '0.5rem' }} aria-label="Spending by category">
-                  {segments.map(({ catId, amount, color }) => (
-                    <li key={catId} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
-                      <span className="overview-category-chart-swatch" style={{ background: color }} aria-hidden />
-                      <span>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
-                      <span className="amount-negative" style={{ marginLeft: 'auto' }}>{formatCurrency(amount, data.currency)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {chartType === 'line' && (() => {
-              const w = 320
-              const h = 140
-              const pad = { top: 8, right: 8, bottom: 8, left: 8 }
-              const innerW = w - pad.left - pad.right
-              const innerH = h - pad.top - pad.bottom
-              const n = segments.length
-              const step = n > 1 ? innerW / (n - 1) : innerW
-              const pts = segments.map(({ amount }, i) => {
-                const x = pad.left + (n > 1 ? i * step : innerW / 2)
-                const y = pad.top + innerH - (maxAmount > 0 ? (amount / maxAmount) * innerH : 0)
-                return `${x},${y}`
-              })
-              const pathD = pts.length > 0 ? `M ${pts.join(' L ')}` : ''
-              return (
-                <div style={{ marginBottom: '0.5rem' }}>
-                  <svg width="100%" height={h} viewBox={`0 0 ${w} ${h}`} style={{ maxWidth: w, display: 'block' }} aria-hidden>
-                    <path d={pathD} fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    {/* Bars */}
                     {segments.map(({ catId, amount, color }, i) => {
-                      const x = pad.left + (n > 1 ? i * step : innerW / 2)
-                      const y = pad.top + innerH - (maxAmount > 0 ? (amount / maxAmount) * innerH : 0)
-                      return <circle key={catId} cx={x} cy={y} r={5} fill={color} /> 
+                      const barH = maxAmount > 0 ? (amount / maxAmount) * innerH : 0
+                      const x = pad.left + i * (barWidth + barGap) + barGap / 2
+                      const y = pad.top + innerH - barH
+                      return (
+                        <g key={catId}>
+                          <rect
+                            x={x}
+                            y={y}
+                            width={barWidth}
+                            height={barH}
+                            fill={color}
+                            rx="4"
+                            ry="4"
+                          />
+                          <title>{`${data.categoryNames[catId] ?? t('overview.uncategorized')}: ${formatCurrency(amount, data.currency)}`}</title>
+                        </g>
+                      )
+                    })}
+                    {/* X-axis labels */}
+                    {segments.map(({ catId }, i) => {
+                      const x = pad.left + i * (barWidth + barGap) + barGap / 2 + barWidth / 2
+                      const y = pad.top + innerH + 18
+                      const label = (data.categoryNames[catId] ?? t('overview.uncategorized')).slice(0, 12)
+                      return (
+                        <text key={catId} x={x} y={y} textAnchor="middle" fontSize="10" fill="var(--text-muted)" className="overview-bar-chart-axis-text">
+                          {label}{label.length >= 12 ? '…' : ''}
+                        </text>
+                      )
                     })}
                   </svg>
                   <ul className="overview-category-chart-legend" style={{ marginTop: '0.5rem' }} aria-label="Spending by category">
@@ -446,18 +450,6 @@ export default function Overview({ theme }: OverviewProps) {
                 </div>
               )
             })()}
-
-            {chartType === 'list' && (
-              <ul className="overview-category-chart-legend" style={{ marginBottom: 0 }} aria-label="Spending by category">
-                {segments.map(({ catId, amount, color }) => (
-                  <li key={catId} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
-                    <span className="overview-category-chart-swatch" style={{ background: color }} aria-hidden />
-                    <span>{data.categoryNames[catId] ?? t('overview.uncategorized')}</span>
-                    <span className="amount-negative" style={{ marginLeft: 'auto' }}>{formatCurrency(amount, data.currency)}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
 
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
               {sorted.map(([catId, amount]) => (
