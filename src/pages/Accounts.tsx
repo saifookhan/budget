@@ -32,6 +32,8 @@ export default function Accounts() {
     if (typeof localStorage === 'undefined') return false
     return localStorage.getItem(WALLET_SHOW_ACCOUNTS_KEY) === '1'
   })
+  const [reconcilingId, setReconcilingId] = useState<string | null>(null)
+  const [reconcileValue, setReconcileValue] = useState('')
   const setShowTransferAndSave = (value: boolean) => {
     setShowTransfer(value)
     localStorage.setItem(WALLET_SHOW_TRANSFER_KEY, value ? '1' : '0')
@@ -461,8 +463,40 @@ export default function Accounts() {
                           style={{ width: '6rem', padding: '0.25rem 0.4rem', marginLeft: '0.25rem' }}
                         />
                       </div>
+                      <p className="muted" style={{ marginTop: '0.25rem', marginBottom: 0, fontSize: '0.85rem' }}>
+                        {t('accounts.balanceReconcileNote')}
+                      </p>
+                      {reconcilingId === a.id ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
+                          <label className="muted" style={{ fontSize: '0.9rem' }}>{t('accounts.setBalanceTo')}</label>
+                          <input
+                            type="number"
+                            step="any"
+                            value={reconcileValue}
+                            onChange={(e) => setReconcileValue(e.target.value)}
+                            placeholder={t('accounts.balancePlaceholder')}
+                            style={{ width: '6rem', padding: '0.25rem 0.4rem' }}
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={() => {
+                              const n = Number(reconcileValue)
+                              if (!Number.isNaN(n)) {
+                                setBalance(a.id, n)
+                                setReconcilingId(null)
+                                setReconcileValue('')
+                              }
+                            }}
+                          >
+                            {t('common.save')}
+                          </button>
+                          <button type="button" className="btn btn-ghost" onClick={() => { setReconcilingId(null); setReconcileValue('') }}>{t('common.cancel')}</button>
+                        </div>
+                      ) : null}
                     </div>
                     <span style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button type="button" className="btn btn-ghost" onClick={() => { setReconcilingId(a.id); setReconcileValue(String(a.balance ?? '')) }}>{t('accounts.reconcile')}</button>
                       <button type="button" className="btn btn-ghost" onClick={() => startEdit(a)}>{t('common.edit')}</button>
                       <button type="button" className="btn btn-ghost" onClick={() => remove(a.id)}>{t('common.remove')}</button>
                     </span>

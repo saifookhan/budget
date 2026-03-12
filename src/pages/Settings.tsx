@@ -12,6 +12,19 @@ type SettingsProps = {
   user: { id: string } | null
   onLogOut: () => void
   T: (key: string) => string
+  lastSyncedAt: string | null
+  onRefreshFromServer: () => void | Promise<void>
+  refreshFromServerLoading: boolean
+  refreshFromServerDone: boolean
+}
+
+function formatLastSynced(iso: string): string {
+  try {
+    const d = new Date(iso)
+    return Number.isNaN(d.getTime()) ? iso : d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
+  } catch {
+    return iso
+  }
 }
 
 export default function Settings({
@@ -24,6 +37,10 @@ export default function Settings({
   user,
   onLogOut,
   T,
+  lastSyncedAt,
+  onRefreshFromServer,
+  refreshFromServerLoading,
+  refreshFromServerDone,
 }: SettingsProps) {
   return (
     <>
@@ -32,6 +49,23 @@ export default function Settings({
         Change theme, currency, and language.
       </p>
       <div className="card settings-page-card">
+        {user && (
+          <div className="form-group" style={{ marginBottom: '1rem' }}>
+            {lastSyncedAt ? (
+              <p className="muted" style={{ marginTop: 0, marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+                {T('sync.lastSyncedAt')} {formatLastSynced(lastSyncedAt)}
+              </p>
+            ) : null}
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={() => onRefreshFromServer()}
+              disabled={refreshFromServerLoading}
+            >
+              {refreshFromServerLoading ? '…' : refreshFromServerDone ? T('sync.refreshed') : T('sync.refreshFromServer')}
+            </button>
+          </div>
+        )}
         <div className="form-group">
           <label htmlFor="settings-theme">{T('nav.theme')}</label>
           <select

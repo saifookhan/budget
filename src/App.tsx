@@ -62,6 +62,8 @@ function AppShell() {
   const [contactOpen, setContactOpen] = useState(false)
   const [serverConflictPending, setServerConflictPending] = useState<BudgetState | null>(null)
   const [serverConflictUpdatedAt, setServerConflictUpdatedAt] = useState<string | null>(null)
+  const [refreshFromServerLoading, setRefreshFromServerLoading] = useState(false)
+  const [refreshFromServerDone, setRefreshFromServerDone] = useState(false)
   const { user, signOut } = useAuth()
 
   useEffect(() => {
@@ -162,6 +164,23 @@ function AppShell() {
 
   const T = (key: string) => t(key, language)
 
+  const handleRefreshFromServer = async () => {
+    if (!user?.id) return
+    setRefreshFromServerLoading(true)
+    setRefreshFromServerDone(false)
+    try {
+      const { data: remote, updated_at: serverUpdatedAt } = await fetchBudgetState(user.id)
+      if (remote && user.id) {
+        replaceLocalState(remote)
+        if (serverUpdatedAt) setLastServerUpdatedAt(user.id, serverUpdatedAt)
+        setRefreshFromServerDone(true)
+        setTimeout(() => setRefreshFromServerDone(false), 2500)
+      }
+    } finally {
+      setRefreshFromServerLoading(false)
+    }
+  }
+
   const waitingForSync = user && !localHasData && !syncDone
 
   if (waitingForSync) {
@@ -223,9 +242,6 @@ function AppShell() {
             </span>
           </button>
         </div>
-        <h1 className="app-title" style={{ margin: 0 }}>
-          <NavLink to="/" onClick={() => !sidebarsPinned && setMenuOpen(false)}>My Budget</NavLink>
-        </h1>
         <div className="header-actions">
           <button
             type="button"
@@ -326,6 +342,10 @@ function AppShell() {
               user={user}
               onLogOut={() => signOut()}
               T={T}
+              lastSyncedAt={user ? getLastServerUpdatedAt(user.id) : null}
+              onRefreshFromServer={handleRefreshFromServer}
+              refreshFromServerLoading={refreshFromServerLoading}
+              refreshFromServerDone={refreshFromServerDone}
             />
           }
         />
