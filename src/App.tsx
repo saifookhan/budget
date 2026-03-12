@@ -97,7 +97,7 @@ function AppShell() {
   }, [user?.id])
 
   useEffect(() => {
-    if (location.pathname === '/') setOverviewKey((k) => k + 1)
+    if (location.pathname === '/overview') setOverviewKey((k) => k + 1)
   }, [location.pathname])
 
   const setSidebarsPinned = (value: boolean) => {
@@ -234,10 +234,10 @@ function AppShell() {
         aria-label="Main navigation"
       >
         <div className="sidebar-nav-links">
-          <NavLink to="/spending" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+          <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
             <span aria-hidden>🛒</span> {T('nav.expenses')}
           </NavLink>
-          <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+          <NavLink to="/overview" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
             <span aria-hidden>📊</span> {T('nav.overview')}
           </NavLink>
           <NavLink to="/accounts" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
@@ -258,12 +258,13 @@ function AppShell() {
         </div>
       </aside>
       <Routes>
-        <Route path="/" element={<Overview key={overviewKey} theme={theme} />} />
+        <Route path="/" element={<Expenses />} />
+        <Route path="/overview" element={<Overview key={overviewKey} theme={theme} />} />
         <Route path="/income" element={<Navigate to="/accounts" replace />} />
         <Route path="/past" element={<PastOverviews />} />
         <Route path="/accounts" element={<Accounts />} />
-        <Route path="/categories" element={<Navigate to="/spending" replace />} />
-        <Route path="/spending" element={<Expenses />} />
+        <Route path="/categories" element={<Navigate to="/" replace />} />
+        <Route path="/spending" element={<Navigate to="/" replace />} />
         <Route path="/expenses-report" element={<AllExpenses />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/savings" element={<Savings />} />
