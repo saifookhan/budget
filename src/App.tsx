@@ -234,14 +234,14 @@ function AppShell() {
         aria-label="Main navigation"
       >
         <div className="sidebar-nav-links">
+          <NavLink to="/spending" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+            <span aria-hidden>🛒</span> {T('nav.expenses')}
+          </NavLink>
           <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
             <span aria-hidden>📊</span> {T('nav.overview')}
           </NavLink>
           <NavLink to="/accounts" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
             <span aria-hidden>💰</span> {T('income.monthlyTitle')}
-          </NavLink>
-          <NavLink to="/spending" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-            <span aria-hidden>🛒</span> {T('nav.expenses')}
           </NavLink>
           <NavLink to="/expenses-report" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
             <span aria-hidden>📋</span> {T('nav.allExpenses')}

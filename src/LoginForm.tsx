@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from './auth/AuthContext'
-import { supabase } from './supabase'
+import { supabase, setKeepLoggedIn as persistKeepLoggedIn } from './supabase'
 
 type Props = {
   onSuccess?: () => void
@@ -16,11 +16,13 @@ export function LoginForm({ onSuccess, embedded, onForgotClick }: Props) {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [keepLoggedIn, setKeepLoggedIn] = useState(true)
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     clearError()
+    persistKeepLoggedIn(keepLoggedIn)
     setLoading(true)
     try {
       await signIn(email, password)
@@ -90,6 +92,19 @@ export function LoginForm({ onSuccess, embedded, onForgotClick }: Props) {
               </Link>
             )}
           </p>
+        </div>
+        <div className="form-group" style={{ flexDirection: 'row', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
+          <input
+            id={embedded ? 'home-keep-logged-in' : 'keep-logged-in'}
+            type="checkbox"
+            checked={keepLoggedIn}
+            onChange={(e) => setKeepLoggedIn(e.target.checked)}
+            disabled={notConfigured}
+            aria-describedby="keep-logged-in-desc"
+          />
+          <label htmlFor={embedded ? 'home-keep-logged-in' : 'keep-logged-in'} id="keep-logged-in-desc" style={{ margin: 0, cursor: 'pointer' }}>
+            Keep me logged in
+          </label>
         </div>
         <button
           type="submit"
