@@ -17,12 +17,19 @@ import { AuthProvider, useAuth } from './auth/AuthContext'
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { getStoredTheme, setStoredTheme, applyTheme, type ThemeId } from './theme'
 import { getState, updateState, subscribe, subscribeToSave } from './store'
-import { fetchBudgetState, pushBudgetState, replaceLocalState, hasBudgetData } from './budgetSync'
+import {
+  fetchBudgetState,
+  pushBudgetState,
+  replaceLocalState,
+  hasBudgetData,
+  getLastServerUpdatedAt,
+  setLastServerUpdatedAt,
+} from './budgetSync'
 import debounce from 'lodash.debounce'
 import { t } from './i18n'
 import { LanguageProvider } from './LanguageContext'
 import { UndoProvider } from './UndoContext'
-import type { CurrencyCode, LanguageCode } from './types'
+import type { BudgetState, CurrencyCode, LanguageCode } from './types'
 
 const SIDEBARS_PINNED_KEY = 'budget-sidebars-pinned'
 
@@ -53,6 +60,8 @@ function AppShell() {
   const [syncError, setSyncError] = useState<string | null>(null)
   const [savedBannerVisible, setSavedBannerVisible] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
+  const [serverConflictPending, setServerConflictPending] = useState<BudgetState | null>(null)
+  const [serverConflictUpdatedAt, setServerConflictUpdatedAt] = useState<string | null>(null)
   const { user, signOut } = useAuth()
 
   useEffect(() => {
@@ -79,10 +88,26 @@ function AppShell() {
     }
     setSyncDone(false)
     setSyncError(null)
-    fetchBudgetState(user.id).then(({ data: remote, error }) => {
+    setServerConflictPending(null)
+    setServerConflictUpdatedAt(null)
+    fetchBudgetState(user.id).then(({ data: remote, updated_at: serverUpdatedAt, error }) => {
       if (error) setSyncError(error)
       if (remote && hasBudgetData(remote)) {
-        replaceLocalState(remote)
+        const last = getLastServerUpdatedAt(user.id)
+        const localHasDataNow = hasBudgetData(getState())
+        const serverNewer =
+          serverUpdatedAt &&
+          last &&
+          new Date(serverUpdatedAt).getTime() > new Date(last).getTime()
+        if (localHasDataNow && serverNewer) {
+          setServerConflictPending(remote)
+          setServerConflictUpdatedAt(serverUpdatedAt)
+        } else {
+          replaceLocalState(remote)
+          if (serverUpdatedAt) setLastServerUpdatedAt(user.id, serverUpdatedAt)
+        }
+      } else if (remote && serverUpdatedAt) {
+        setLastServerUpdatedAt(user.id, serverUpdatedAt)
       }
       setSyncDone(true)
     })
@@ -155,6 +180,26 @@ function AppShell() {
         <div className="sync-error-banner" role="alert">
           Could not load your budget from the cloud. {syncError.includes('exist') || syncError.includes('relation') ? 'Run the SQL in supabase_budget_table.sql in Supabase to enable sync.' : syncError}
           <button type="button" className="btn-link" onClick={() => setSyncError(null)} aria-label={T('common.dismiss')}>{T('common.dismiss')}</button>
+        </div>
+      )}
+      {serverConflictPending && (
+        <div className="sync-error-banner" role="alert" style={{ backgroundColor: 'var(--warning-bg, #fff3cd)', borderColor: 'var(--warning-border, #ffc107)', color: 'var(--text)' }}>
+          {T('sync.updatedOnOtherDevice')}{' '}
+          <button
+            type="button"
+            className="btn btn-primary"
+            style={{ marginLeft: '0.5rem' }}
+            onClick={() => {
+              if (serverConflictPending && serverConflictUpdatedAt && user?.id) {
+                replaceLocalState(serverConflictPending)
+                setLastServerUpdatedAt(user.id, serverConflictUpdatedAt)
+                setServerConflictPending(null)
+                setServerConflictUpdatedAt(null)
+              }
+            }}
+          >
+            {T('sync.reload')}
+          </button>
         </div>
       )}
       {savedBannerVisible && (
