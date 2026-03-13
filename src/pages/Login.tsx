@@ -1,6 +1,21 @@
 import { useState } from 'react'
 import { supabase } from '../supabase'
 import { LoginForm } from '../LoginForm'
+import { t } from '../i18n'
+import type { LanguageCode } from '../types'
+
+const BUDGET_STORAGE_KEY = 'budget-app-data'
+function getAuthLang(): LanguageCode {
+  try {
+    if (typeof localStorage === 'undefined') return 'en'
+    const raw = localStorage.getItem(BUDGET_STORAGE_KEY)
+    if (!raw) return 'en'
+    const state = JSON.parse(raw) as { language?: string }
+    return (state?.language ?? 'en') as LanguageCode
+  } catch {
+    return 'en'
+  }
+}
 
 export default function Login() {
   const [showForgotPassword, setShowForgotPassword] = useState(false)
@@ -27,18 +42,21 @@ export default function Login() {
 
   const notConfigured = !supabase
 
+  const authLang = getAuthLang()
+  const T = (key: string) => t(key, authLang)
+
   if (showForgotPassword) {
     return (
       <div className="auth-page">
         <div className="auth-card card">
-          <h1 className="auth-title">Reset password</h1>
+          <h1 className="auth-title">{T('auth.resetPassword')}</h1>
           <p className="muted">
-            Enter your email and we’ll send you a link to reset your password.
+            {T('auth.resetPasswordSubtitle')}
           </p>
 
           {resetSent && (
             <div className="auth-alert auth-alert-success" role="status">
-              Check your email for the reset link.
+              {T('auth.checkEmail')}
             </div>
           )}
 
@@ -51,14 +69,14 @@ export default function Login() {
           {!resetSent ? (
             <form onSubmit={handleForgotSubmit} className="auth-form">
               <div className="form-group">
-                <label htmlFor="reset-email">Email</label>
+                <label htmlFor="reset-email">{T('auth.email')}</label>
                 <input
                   id="reset-email"
                   type="email"
                   autoComplete="email"
                   value={resetEmail}
                   onChange={(e) => setResetEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  placeholder={T('auth.emailPlaceholder')}
                   required
                   disabled={notConfigured}
                 />
@@ -69,7 +87,7 @@ export default function Login() {
                 style={{ width: '100%', marginTop: '0.25rem' }}
                 disabled={resetLoading || notConfigured}
               >
-                {resetLoading ? 'Sending…' : 'Send reset link'}
+                {resetLoading ? T('auth.sending') : T('auth.sendResetLink')}
               </button>
             </form>
           ) : null}
@@ -84,7 +102,7 @@ export default function Login() {
                 setResetError(null)
               }}
             >
-              Back to login
+              {T('auth.backToLogin')}
             </button>
           </p>
         </div>

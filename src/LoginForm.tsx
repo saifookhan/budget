@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from './auth/AuthContext'
 import { supabase, setKeepLoggedIn as persistKeepLoggedIn } from './supabase'
+import { t } from './i18n'
+import type { LanguageCode } from './types'
 
 type Props = {
   onSuccess?: () => void
@@ -11,6 +13,20 @@ type Props = {
   onForgotClick?: () => void
 }
 
+const BUDGET_STORAGE_KEY = 'budget-app-data'
+
+function getAuthLanguage(): LanguageCode {
+  try {
+    if (typeof localStorage === 'undefined') return 'en'
+    const raw = localStorage.getItem(BUDGET_STORAGE_KEY)
+    if (!raw) return 'en'
+    const state = JSON.parse(raw) as { language?: string }
+    return (state?.language ?? 'en') as LanguageCode
+  } catch {
+    return 'en'
+  }
+}
+
 export function LoginForm({ onSuccess, embedded, onForgotClick }: Props) {
   const { signIn, error, clearError } = useAuth()
   const navigate = useNavigate()
@@ -18,6 +34,8 @@ export function LoginForm({ onSuccess, embedded, onForgotClick }: Props) {
   const [password, setPassword] = useState('')
   const [keepLoggedIn, setKeepLoggedIn] = useState(true)
   const [loading, setLoading] = useState(false)
+  const authLang = getAuthLanguage()
+  const T = (key: string) => t(key, authLang)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,9 +55,9 @@ export function LoginForm({ onSuccess, embedded, onForgotClick }: Props) {
 
   return (
     <div className={embedded ? 'login-form-embedded' : undefined}>
-      <h1 className="auth-title">Log in</h1>
+      <h1 className="auth-title">{T('auth.logIn')}</h1>
       <p className="muted">
-        Use your email and password to access your budget.
+        {T('auth.logInSubtitle')}
       </p>
 
       {notConfigured && (
@@ -58,20 +76,20 @@ export function LoginForm({ onSuccess, embedded, onForgotClick }: Props) {
 
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="form-group">
-          <label htmlFor={embedded ? 'home-login-email' : 'login-email'}>Email</label>
+          <label htmlFor={embedded ? 'home-login-email' : 'login-email'}>{T('auth.email')}</label>
           <input
             id={embedded ? 'home-login-email' : 'login-email'}
             type="email"
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
+            placeholder={T('auth.emailPlaceholder')}
             required
             disabled={notConfigured}
           />
         </div>
         <div className="form-group">
-          <label htmlFor={embedded ? 'home-login-password' : 'login-password'}>Password</label>
+          <label htmlFor={embedded ? 'home-login-password' : 'login-password'}>{T('auth.password')}</label>
           <input
             id={embedded ? 'home-login-password' : 'login-password'}
             type="password"
@@ -84,11 +102,11 @@ export function LoginForm({ onSuccess, embedded, onForgotClick }: Props) {
           <p style={{ marginTop: '0.35rem', marginBottom: 0 }}>
             {onForgotClick ? (
               <button type="button" className="btn-link" onClick={() => { clearError(); onForgotClick() }}>
-                Forgot password?
+                {T('auth.forgotPassword')}
               </button>
             ) : (
               <Link to="/login" className="btn-link" onClick={() => clearError()}>
-                Forgot password?
+                {T('auth.forgotPassword')}
               </Link>
             )}
           </p>
@@ -103,7 +121,7 @@ export function LoginForm({ onSuccess, embedded, onForgotClick }: Props) {
             aria-describedby="keep-logged-in-desc"
           />
           <label htmlFor={embedded ? 'home-keep-logged-in' : 'keep-logged-in'} id="keep-logged-in-desc" style={{ margin: 0, cursor: 'pointer' }}>
-            Keep me logged in
+            {T('auth.keepMeLoggedIn')}
           </label>
         </div>
         <button
@@ -112,12 +130,12 @@ export function LoginForm({ onSuccess, embedded, onForgotClick }: Props) {
           style={{ width: '100%', marginTop: '0.25rem' }}
           disabled={loading || notConfigured}
         >
-          {loading ? 'Signing in…' : 'Log in'}
+          {loading ? T('auth.signingIn') : T('auth.logIn')}
         </button>
       </form>
 
       <p className="auth-footer">
-        Don’t have an account? <Link to="/signup">Sign up</Link>
+        {T('auth.dontHaveAccount')} <Link to="/signup">{T('auth.signUp')}</Link>
       </p>
     </div>
   )

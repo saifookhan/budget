@@ -16,6 +16,9 @@ type SettingsProps = {
   onRefreshFromServer: () => void | Promise<void>
   refreshFromServerLoading: boolean
   refreshFromServerDone: boolean
+  refreshFromServerError: string | null
+  dismissRefreshError: () => void
+  isOffline: boolean
 }
 
 function formatLastSynced(iso: string): string {
@@ -41,6 +44,9 @@ export default function Settings({
   onRefreshFromServer,
   refreshFromServerLoading,
   refreshFromServerDone,
+  refreshFromServerError,
+  dismissRefreshError,
+  isOffline,
 }: SettingsProps) {
   return (
     <>
@@ -51,11 +57,22 @@ export default function Settings({
       <div className="card settings-page-card">
         {user && (
           <div className="form-group" style={{ marginBottom: '1rem' }}>
+            {isOffline && (
+              <p className="muted" style={{ marginTop: 0, marginBottom: '0.5rem', fontSize: '0.9rem' }} role="status">
+                {T('sync.offline')}
+              </p>
+            )}
             {lastSyncedAt ? (
               <p className="muted" style={{ marginTop: 0, marginBottom: '0.5rem', fontSize: '0.9rem' }}>
                 {T('sync.lastSyncedAt')} {formatLastSynced(lastSyncedAt)}
               </p>
             ) : null}
+            {refreshFromServerError && (
+              <p style={{ marginTop: 0, marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--danger)' }} role="alert">
+                {T('sync.refreshFailed')}
+                <button type="button" className="btn-link" onClick={dismissRefreshError} style={{ marginLeft: '0.35rem' }} aria-label={T('common.dismiss')}>×</button>
+              </p>
+            )}
             <button
               type="button"
               className="btn btn-ghost"

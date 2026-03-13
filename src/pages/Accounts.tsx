@@ -412,6 +412,12 @@ export default function Accounts() {
       </div>
       )}
 
+      {showMultipleAccounts && state.accounts.length === 0 && (
+        <div className="card">
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.title')}</h2>
+          <p className="muted" style={{ margin: 0 }}>{t('emptyStates.addWalletHint')}</p>
+        </div>
+      )}
       {showMultipleAccounts && state.accounts.length > 0 && (
         <div className="card">
           <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.title')}</h2>

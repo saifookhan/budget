@@ -64,6 +64,7 @@ function AppShell() {
   const [serverConflictUpdatedAt, setServerConflictUpdatedAt] = useState<string | null>(null)
   const [refreshFromServerLoading, setRefreshFromServerLoading] = useState(false)
   const [refreshFromServerDone, setRefreshFromServerDone] = useState(false)
+  const [refreshFromServerError, setRefreshFromServerError] = useState<string | null>(null)
   const { user, signOut } = useAuth()
 
   useEffect(() => {
@@ -168,8 +169,13 @@ function AppShell() {
     if (!user?.id) return
     setRefreshFromServerLoading(true)
     setRefreshFromServerDone(false)
+    setRefreshFromServerError(null)
     try {
-      const { data: remote, updated_at: serverUpdatedAt } = await fetchBudgetState(user.id)
+      const { data: remote, updated_at: serverUpdatedAt, error: fetchError } = await fetchBudgetState(user.id)
+      if (fetchError) {
+        setRefreshFromServerError(fetchError)
+        return
+      }
       if (remote && user.id) {
         replaceLocalState(remote)
         if (serverUpdatedAt) setLastServerUpdatedAt(user.id, serverUpdatedAt)
@@ -195,6 +201,11 @@ function AppShell() {
     <LanguageProvider language={language}>
     <UndoProvider>
     <div className="app">
+      {typeof navigator !== 'undefined' && !navigator.onLine && !syncError && (
+        <div className="sync-error-banner" role="status" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
+          {T('sync.offline')}
+        </div>
+      )}
       {syncError && (
         <div className="sync-error-banner" role="alert">
           Could not load your budget from the cloud. {syncError.includes('exist') || syncError.includes('relation') ? 'Run the SQL in supabase_budget_table.sql in Supabase to enable sync.' : syncError}
@@ -346,6 +357,9 @@ function AppShell() {
               onRefreshFromServer={handleRefreshFromServer}
               refreshFromServerLoading={refreshFromServerLoading}
               refreshFromServerDone={refreshFromServerDone}
+              refreshFromServerError={refreshFromServerError}
+              dismissRefreshError={() => setRefreshFromServerError(null)}
+              isOffline={typeof navigator !== 'undefined' && !navigator.onLine}
             />
           }
         />

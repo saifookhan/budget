@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import { getState, subscribe } from '../store'
 import type { BudgetState } from '../types'
 import { useTranslation } from '../LanguageContext'
@@ -252,6 +252,7 @@ export default function Overview({ theme }: OverviewProps) {
             type="checkbox"
             checked={showMoneyInWallets}
             onChange={handleShowMoneyInWalletsChange}
+            aria-label={t('overview.showMoneyInWalletsOption')}
             aria-describedby="overview-show-money-in-wallets-desc"
           />
           <span id="overview-show-money-in-wallets-desc">{t('overview.showMoneyInWalletsOption')}</span>
@@ -317,7 +318,15 @@ export default function Overview({ theme }: OverviewProps) {
         )}
       </div>
 
-      {Object.keys(data.byCategory).length > 0 && (() => {
+      {Object.keys(data.byCategory).length === 0 ? (
+        <div className="card">
+          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('overview.spendingByCategory')}</h2>
+          <p className="muted" style={{ margin: 0 }}>{t('emptyStates.noSpendingYet')}</p>
+          <p style={{ marginTop: '0.5rem', marginBottom: 0 }}>
+            <Link to="/" className="btn btn-primary">{t('expenses.addButton')}</Link>
+          </p>
+        </div>
+      ) : Object.keys(data.byCategory).length > 0 && (() => {
         const TOP_N = 8
         const chartColors = getChartColorsForTheme(chartTheme)
         const sorted = Object.entries(data.byCategory).sort((a, b) => b[1] - a[1])
@@ -371,7 +380,7 @@ export default function Overview({ theme }: OverviewProps) {
             </div>
 
             {chartType === 'pie' && (
-              <div className="overview-category-chart">
+              <div className="overview-category-chart" role="img" aria-label={t('overview.spendingByCategory')}>
                 <div className="overview-category-chart-pie-wrap" aria-hidden>
                   <div
                     className="overview-category-chart-pie"
@@ -379,7 +388,7 @@ export default function Overview({ theme }: OverviewProps) {
                   />
                   <div className="overview-category-chart-pie-hole" />
                 </div>
-                <ul className="overview-category-chart-legend" aria-label="Spending by category">
+                <ul className="overview-category-chart-legend" aria-label={t('overview.spendingByCategory')}>
                   {segments.map(({ catId, amount, color }) => (
                     <li key={catId}>
                       <span className="overview-category-chart-swatch" style={{ background: color }} aria-hidden />
@@ -403,7 +412,7 @@ export default function Overview({ theme }: OverviewProps) {
               const yTicks = 5
               const yMax = niceAxisMax(maxAmount)
               return (
-                <div className="overview-bar-chart-svg-wrap">
+                <div className="overview-bar-chart-svg-wrap" role="img" aria-label={t('overview.spendingByCategory')}>
                   <svg width="100%" height={chartH} viewBox={`0 0 ${chartW} ${chartH}`} className="overview-bar-chart-svg" aria-hidden>
                     {/* Y-axis line */}
                     <line x1={pad.left} y1={pad.top} x2={pad.left} y2={pad.top + innerH} stroke="var(--border)" strokeWidth="1" />

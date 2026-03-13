@@ -2,6 +2,21 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { supabase } from '../supabase'
+import { t } from '../i18n'
+import type { LanguageCode } from '../types'
+
+const BUDGET_STORAGE_KEY = 'budget-app-data'
+function getAuthLang(): LanguageCode {
+  try {
+    if (typeof localStorage === 'undefined') return 'en'
+    const raw = localStorage.getItem(BUDGET_STORAGE_KEY)
+    if (!raw) return 'en'
+    const state = JSON.parse(raw) as { language?: string }
+    return (state?.language ?? 'en') as LanguageCode
+  } catch {
+    return 'en'
+  }
+}
 
 export default function Signup() {
   const { signUp, error, clearError } = useAuth()
@@ -34,13 +49,15 @@ export default function Signup() {
 
   const notConfigured = !supabase
   const passwordsMatch = password === confirmPassword || confirmPassword === ''
+  const authLang = getAuthLang()
+  const T = (key: string) => t(key, authLang)
 
   return (
     <div className="auth-page">
       <div className="auth-card card">
-        <h1 className="auth-title">Sign up</h1>
+        <h1 className="auth-title">{T('auth.signUpTitle')}</h1>
         <p className="muted">
-          Create an account to use the budget app.
+          {T('auth.signUpSubtitle')}
         </p>
 
         {notConfigured && (
@@ -88,11 +105,11 @@ export default function Signup() {
               disabled={notConfigured}
             />
             <span className="muted" style={{ fontSize: '0.85rem' }}>
-              At least 6 characters
+              {T('auth.passwordMinLength')}
             </span>
           </div>
           <div className="form-group">
-            <label htmlFor="signup-confirm">Confirm password</label>
+            <label htmlFor="signup-confirm">{T('auth.confirmPassword')}</label>
             <input
               id="signup-confirm"
               type="password"
@@ -103,7 +120,7 @@ export default function Signup() {
               disabled={notConfigured}
             />
             {!passwordsMatch && (
-              <span className="auth-field-error">Passwords don’t match</span>
+              <span className="auth-field-error">{T('auth.passwordsDontMatch')}</span>
             )}
           </div>
           <button
@@ -112,12 +129,12 @@ export default function Signup() {
             style={{ width: '100%', marginTop: '0.5rem' }}
             disabled={loading || notConfigured || !passwordsMatch}
           >
-            {loading ? 'Creating account…' : 'Sign up'}
+            {loading ? T('auth.creatingAccount') : T('auth.signUp')}
           </button>
         </form>
 
         <p className="auth-footer">
-          Already have an account? <Link to="/login">Log in</Link>
+          {T('auth.alreadyHaveAccount')} <Link to="/login">{T('auth.logIn')}</Link>
         </p>
       </div>
     </div>

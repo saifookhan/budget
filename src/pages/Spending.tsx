@@ -214,6 +214,9 @@ export default function Expenses() {
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
+            {categories.length === 0 && (
+              <p className="muted" style={{ margin: 0, fontSize: '0.85rem', width: '100%' }}>{t('emptyStates.noCategoriesYet')}</p>
+            )}
             {!showAddCategory ? (
               <button
                 type="button"
@@ -283,7 +286,10 @@ export default function Expenses() {
       <div className="card">
         <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('expenses.recent')}</h2>
         {sorted.length === 0 ? (
-          <p className="muted">{t('expenses.noExpenses')}</p>
+          <div className="muted">
+            <p style={{ marginTop: 0, marginBottom: '0.25rem' }}>{t('emptyStates.addFirstExpense')}</p>
+            <p style={{ margin: 0, fontSize: '0.9rem' }}>{t('emptyStates.addFirstExpenseHint')}</p>
+          </div>
         ) : (
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {sorted.slice(0, 50).map((tx) => (
