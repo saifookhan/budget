@@ -5,10 +5,29 @@ import { replaceLocalState } from '../budgetSync'
 import { useTranslation } from '../LanguageContext'
 import { useUndo } from '../UndoContext'
 import { formatCurrency } from '../utils'
-import type { Transaction } from '../types'
+import type { LanguageCode, Transaction } from '../types'
+
+const MONTH_LABEL_LOCALE: Record<LanguageCode, string> = {
+  en: 'en-US',
+  it: 'it-IT',
+  de: 'de-DE',
+  fr: 'fr-FR',
+  es: 'es-ES',
+}
+
+function monthKeyFromDate(dateStr: string): string {
+  return dateStr.length >= 7 ? dateStr.slice(0, 7) : dateStr
+}
+
+function formatExpenseMonthLabel(ym: string, lang: LanguageCode): string {
+  const [y, m] = ym.split('-').map(Number)
+  if (!Number.isFinite(y) || !Number.isFinite(m)) return ym
+  const d = new Date(y, m - 1, 1)
+  return d.toLocaleDateString(MONTH_LABEL_LOCALE[lang] ?? 'en-US', { month: 'long', year: 'numeric' })
+}
 
 export default function Expenses() {
-  const { t } = useTranslation()
+  const { t, language } = useTranslation()
   const { showUndo } = useUndo()
   const location = useLocation()
   const navigate = useNavigate()
@@ -162,6 +181,15 @@ export default function Expenses() {
   const sorted = [...transactions].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   )
+  const sortedLimited = sorted.slice(0, 50)
+
+  const expensesByMonth = sortedLimited.reduce<Map<string, Transaction[]>>((map, tx) => {
+    const key = monthKeyFromDate(tx.date)
+    if (!map.has(key)) map.set(key, [])
+    map.get(key)!.push(tx)
+    return map
+  }, new Map())
+  const monthKeys = [...expensesByMonth.keys()].sort((a, b) => b.localeCompare(a))
 
   const showGettingStarted = !gettingStartedDismissed && sorted.length === 0
 
@@ -339,46 +367,59 @@ export default function Expenses() {
             <p style={{ margin: 0, fontSize: '0.9rem' }}>{t('emptyStates.addFirstExpenseHint')}</p>
           </div>
         ) : (
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-            {sorted.slice(0, 50).map((tx) => (
-              <li
-                key={tx.id}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: '0.5rem 0',
-                  borderBottom: '1px solid var(--border)',
-                }}
-              >
-                <div>
-                  <span>{tx.memo || categoryNames[tx.categoryId ?? ''] || 'Expense'}</span>
-                  <span className="muted" style={{ marginLeft: '0.5rem' }}>
-                    {tx.date} {accountNames[tx.accountId ?? ''] && `· ${accountNames[tx.accountId!]}`}
-                  </span>
-                </div>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span className="amount-negative">{formatCurrency(tx.amount, state.currency)}</span>
-                  <button
-                    type="button"
-                    className="btn btn-ghost"
-                    onClick={() => startEdit(tx)}
-                    aria-label={t('common.edit')}
-                  >
-                    {t('common.edit')}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-ghost"
-                    onClick={() => remove(tx.id)}
-                    aria-label="Delete"
-                  >
-                    ✕
-                  </button>
-                </span>
-              </li>
-            ))}
-          </ul>
+          <div className="expenses-by-month">
+            {monthKeys.map((ym, monthIndex) => {
+              const list = expensesByMonth.get(ym) ?? []
+              const monthTotal = list.reduce((s, tx) => s + tx.amount, 0)
+              return (
+                <details key={ym} className="expenses-month-details" open={monthIndex === 0}>
+                  <summary className="expenses-month-summary">
+                    <span className="expenses-month-summary-inner">
+                      <span className="expenses-month-chevron" aria-hidden>
+                        ▸
+                      </span>
+                      <span className="expenses-month-summary-title">{formatExpenseMonthLabel(ym, language)}</span>
+                    </span>
+                    <span className="expenses-month-summary-meta muted">
+                      {list.length} · {formatCurrency(monthTotal, state.currency)}
+                    </span>
+                  </summary>
+                  <ul className="expenses-month-list">
+                    {list.map((tx) => (
+                      <li key={tx.id} className="expenses-month-row">
+                        <div className="expenses-month-row-main">
+                          <span>{tx.memo || categoryNames[tx.categoryId ?? ''] || t('expenses.rowFallbackLabel')}</span>
+                          <span className="muted expenses-month-row-sub">
+                            {tx.date}
+                            {accountNames[tx.accountId ?? ''] ? ` · ${accountNames[tx.accountId!]}` : ''}
+                          </span>
+                        </div>
+                        <span className="expenses-month-row-actions">
+                          <span className="amount-negative">{formatCurrency(tx.amount, state.currency)}</span>
+                          <button
+                            type="button"
+                            className="btn btn-ghost"
+                            onClick={() => startEdit(tx)}
+                            aria-label={t('common.edit')}
+                          >
+                            {t('common.edit')}
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-ghost"
+                            onClick={() => remove(tx.id)}
+                            aria-label={t('common.remove')}
+                          >
+                            ✕
+                          </button>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )
+            })}
+          </div>
         )}
       </div>
 

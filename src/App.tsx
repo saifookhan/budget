@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route, NavLink, Navigate, useLocation } from 'react-router-dom'
+import { Routes, Route, NavLink, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import Overview from './pages/Overview'
 import Accounts from './pages/Accounts'
 import Expenses from './pages/Spending'
@@ -47,8 +47,32 @@ function persistSidebarsPinned(value: boolean): void {
   localStorage.setItem(SIDEBARS_PINNED_KEY, value ? '1' : '0')
 }
 
+function shellPageHeading(pathname: string, T: (key: string) => string): string {
+  switch (pathname) {
+    case '/':
+      return T('expenses.title')
+    case '/overview':
+      return T('overview.title')
+    case '/accounts':
+      return T('accounts.pageTitle')
+    case '/past':
+      return T('past.title')
+    case '/expenses-report':
+      return T('expensesReport.title')
+    case '/subscriptions':
+      return T('subscriptions.title')
+    case '/savings':
+      return T('savings.title')
+    case '/settings':
+      return T('nav.settings')
+    default:
+      return T('expenses.title')
+  }
+}
+
 function AppShell() {
   const location = useLocation()
+  const navigate = useNavigate()
   const [theme, setTheme] = useState<ThemeId>(getStoredTheme())
   const initial = getState()
   const [currency, setCurrency] = useState<CurrencyCode>(initial.currency)
@@ -266,7 +290,10 @@ function AppShell() {
             </span>
           </button>
         </div>
-        <div className="header-actions">
+        <div className="app-title">
+          <span className="app-header-page-name">{shellPageHeading(location.pathname, T)}</span>
+        </div>
+        <div className="header-actions" aria-label={T('nav.quickActions')}>
           <button
             type="button"
             className={`btn btn-icon sidebar-pin-btn ${sidebarsPinned ? 'active' : ''}`}
@@ -277,33 +304,19 @@ function AppShell() {
           >
             <span aria-hidden>{sidebarsPinned ? '📌✓' : '📌'}</span>
           </button>
-          <NavLink
-            to="/"
-            state={{ focusAdd: true }}
-            className="btn btn-icon header-add-expense-btn"
-            aria-label={T('expenses.addExpense')}
-            title={T('expenses.addExpense')}
-          >
-            <span aria-hidden>+</span>
-          </NavLink>
           <button
             type="button"
-            className={`btn btn-icon header-chat-btn ${contactOpen ? 'active' : ''}`}
+            className={`header-chat-block${contactOpen ? ' active' : ''}`}
             onClick={() => setContactOpen((o) => !o)}
             aria-label={T('contact.open')}
             aria-expanded={contactOpen}
             title={T('contact.open')}
           >
-            <span aria-hidden>💬</span>
+            <span className="header-chat-emoji" aria-hidden>
+              💬
+            </span>
+            <span className="header-chat-tagline">{T('contact.headerTagline')}</span>
           </button>
-          <NavLink
-            to="/settings"
-            className={({ isActive }) => `btn btn-icon header-settings-btn ${isActive ? 'active' : ''}`}
-            aria-label={T('nav.settings')}
-            title={T('nav.settings')}
-          >
-            <span aria-hidden>⚙️</span>
-          </NavLink>
         </div>
       </header>
       <div
@@ -316,7 +329,7 @@ function AppShell() {
       />
       <aside
         className={`sidebar-nav ${menuOpen ? 'sidebar-nav-open' : ''}`}
-        aria-label="Main navigation"
+        aria-label={T('nav.mainNavigation')}
       >
         <div className="sidebar-nav-links">
           <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
@@ -339,6 +352,9 @@ function AppShell() {
           </NavLink>
           <NavLink to="/past" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
             <span aria-hidden>📅</span> {T('nav.past')}
+          </NavLink>
+          <NavLink to="/settings" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+            <span aria-hidden>⚙️</span> {T('nav.settings')}
           </NavLink>
         </div>
       </aside>
@@ -411,6 +427,18 @@ function AppShell() {
           <span className="mobile-bottom-nav-icon" aria-hidden>⚙️</span>
           <span className="mobile-bottom-nav-label">{T('nav.settings')}</span>
         </NavLink>
+        <button
+          type="button"
+          className="mobile-bottom-nav-item mobile-bottom-nav-item--btn"
+          onClick={() => {
+            if (!sidebarsPinned) setMenuOpen(false)
+            navigate('/', { state: { focusAdd: true } })
+          }}
+          aria-label={T('expenses.bottomNavNewExpense')}
+        >
+          <span className="mobile-bottom-nav-icon" aria-hidden>➕</span>
+          <span className="mobile-bottom-nav-label">{T('expenses.bottomNavNewExpense')}</span>
+        </button>
       </nav>
       <ContactChat open={contactOpen} onOpenChange={setContactOpen} />
     </div>

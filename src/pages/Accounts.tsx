@@ -421,40 +421,31 @@ export default function Accounts() {
       {showMultipleAccounts && state.accounts.length > 0 && (
         <div className="card">
           <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.title')}</h2>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          <ul className="wallet-accounts-list">
             {state.accounts.map((a) => (
-              <li
-                key={a.id}
-                style={{
-                  padding: '0.75rem 0',
-                  borderBottom: '1px solid var(--border)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  flexWrap: 'wrap',
-                  gap: '0.5rem',
-                }}
-              >
+              <li key={a.id} className={`wallet-account-item${editing === a.id ? ' wallet-account-item--editing' : ''}`}>
                 {editing === a.id ? (
-                  <form onSubmit={saveEdit} style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', width: '100%' }}>
+                  <form onSubmit={saveEdit} className="wallet-account-edit-form">
                     <input
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder={t('accounts.editNamePlaceholder')}
-                      style={{ flex: '1 1 120px', padding: '0.4rem' }}
+                      className="wallet-account-edit-input"
                     />
                     <input
                       value={purpose}
                       onChange={(e) => setPurpose(e.target.value)}
                       placeholder={t('accounts.editPurposePlaceholder')}
-                      style={{ flex: '1 1 120px', padding: '0.4rem' }}
+                      className="wallet-account-edit-input"
                     />
-                    <button type="submit" className="btn btn-primary">{t('common.save')}</button>
-                    <button type="button" className="btn btn-ghost" onClick={() => setEditing(null)}>{t('common.cancel')}</button>
+                    <div className="wallet-account-edit-actions">
+                      <button type="submit" className="btn btn-primary">{t('common.save')}</button>
+                      <button type="button" className="btn btn-ghost" onClick={() => setEditing(null)}>{t('common.cancel')}</button>
+                    </div>
                   </form>
                 ) : (
                   <>
-                    <div style={{ flex: 1, minWidth: 0 }}>
+                    <div className="wallet-account-item-main">
                       <strong>{a.name}</strong>
                       {a.purpose && <span className="muted"> — {a.purpose}</span>}
                       <div className="muted" style={{ marginTop: '0.35rem', fontSize: '0.9rem' }}>
@@ -473,7 +464,7 @@ export default function Accounts() {
                         {t('accounts.balanceReconcileNote')}
                       </p>
                       {reconcilingId === a.id ? (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
+                        <div className="wallet-account-reconcile-row">
                           <label className="muted" style={{ fontSize: '0.9rem' }}>{t('accounts.setBalanceTo')}</label>
                           <input
                             type="number"
@@ -501,11 +492,11 @@ export default function Accounts() {
                         </div>
                       ) : null}
                     </div>
-                    <span style={{ display: 'flex', gap: '0.5rem' }}>
+                    <div className="wallet-account-item-actions">
                       <button type="button" className="btn btn-ghost" onClick={() => { setReconcilingId(a.id); setReconcileValue(String(a.balance ?? '')) }}>{t('accounts.reconcile')}</button>
                       <button type="button" className="btn btn-ghost" onClick={() => startEdit(a)}>{t('common.edit')}</button>
                       <button type="button" className="btn btn-ghost" onClick={() => remove(a.id)}>{t('common.remove')}</button>
-                    </span>
+                    </div>
                   </>
                 )}
               </li>

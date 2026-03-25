@@ -146,6 +146,109 @@ body {
   line-height: 1.45;
 }
 
+.expenses-by-month {
+  display: flex;
+  flex-direction: column;
+}
+
+.expenses-month-details {
+  border-bottom: 1px solid var(--border);
+}
+
+.expenses-month-details:last-child {
+  border-bottom: none;
+}
+
+.expenses-month-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem 0.75rem;
+  padding: 0.65rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+  user-select: none;
+}
+
+.expenses-month-summary::-webkit-details-marker {
+  display: none;
+}
+
+.expenses-month-summary-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.expenses-month-chevron {
+  display: inline-block;
+  font-size: 0.7rem;
+  line-height: 1;
+  opacity: 0.65;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.expenses-month-details[open] .expenses-month-chevron {
+  transform: rotate(90deg);
+}
+
+.expenses-month-summary-title {
+  min-width: 0;
+  text-align: left;
+}
+
+.expenses-month-summary-meta {
+  font-size: 0.85rem;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.expenses-month-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0.5rem;
+}
+
+.expenses-month-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem 0 0.5rem 1.1rem;
+  border-top: 1px solid var(--border);
+}
+
+.expenses-month-list .expenses-month-row:first-child {
+  border-top: none;
+  padding-top: 0.2rem;
+}
+
+.expenses-month-row-main {
+  flex: 1 1 160px;
+  min-width: 0;
+}
+
+.expenses-month-row-sub {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.85rem;
+}
+
+.expenses-month-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 .form-hint {
   margin: 0.35rem 0 0;
   font-size: 0.875rem;
@@ -239,7 +342,7 @@ button {
   margin-top: 1.5rem;
   margin-bottom: 2rem;
   min-height: 44px;
-  padding: 0 0 0 1rem;
+  padding: 0 0.75rem 0 1rem;
 }
 
 .app-header .hamburger-wrap {
@@ -259,6 +362,18 @@ button {
   margin: 0 0 0 16px;
   padding: 0 8px 0 0;
   box-sizing: border-box;
+}
+
+.app-header .app-title .app-header-page-name {
+  display: block;
+  min-width: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .app-header .app-title a {
@@ -289,6 +404,7 @@ button {
 @media (max-width: 480px) {
   .app-header {
     padding-left: 1.25rem;
+    padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
   }
   .app-header .hamburger-wrap {
     flex: 0 0 48px;
@@ -296,7 +412,9 @@ button {
   }
   .app-header .app-title {
     margin-left: 12px;
-    font-size: 1.1rem;
+  }
+  .app-header .app-title .app-header-page-name {
+    font-size: 1.05rem;
   }
 }
 
@@ -318,22 +436,49 @@ button {
   box-sizing: border-box;
 }
 
-.header-add-expense-btn {
-  font-size: 1.4rem;
-  font-weight: 300;
-  line-height: 1;
-  text-decoration: none;
+.header-chat-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.18rem;
+  margin-top: 0.65rem;
+  padding: 0.35rem 0.4rem 0.25rem;
+  min-height: 44px;
+  min-width: 44px;
+  max-width: 5.75rem;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  cursor: pointer;
   color: inherit;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
-.header-add-expense-btn:hover { color: var(--accent); }
 
-.header-settings-btn {
-  font-size: 1.25rem;
-  text-decoration: none;
-  color: inherit;
+.header-chat-block:hover {
+  color: var(--accent);
 }
-.header-settings-btn:hover { color: var(--accent); }
-.header-settings-btn.active { color: var(--accent); }
+
+.header-chat-block.active {
+  color: var(--accent);
+}
+
+.header-chat-emoji {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.header-chat-tagline {
+  display: block;
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  max-width: 100%;
+  hyphens: auto;
+}
 
 .hamburger-lines {
   display: flex;
@@ -541,6 +686,107 @@ button {
   }
 }
 
+/* Wallet / accounts list: avoid action buttons overlapping balance & notes */
+.wallet-accounts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.wallet-account-item {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.wallet-account-item-main {
+  min-width: 0;
+}
+
+.wallet-account-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.wallet-account-item-actions .btn {
+  flex: 0 1 auto;
+}
+
+.wallet-account-reconcile-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.wallet-account-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.wallet-account-edit-input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.4rem;
+}
+
+.wallet-account-edit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .wallet-account-item:not(.wallet-account-item--editing) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+  }
+
+  .wallet-account-item:not(.wallet-account-item--editing) .wallet-account-item-main {
+    flex: 1 1 220px;
+    min-width: 0;
+  }
+
+  .wallet-account-item:not(.wallet-account-item--editing) .wallet-account-item-actions {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .wallet-account-edit-form {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .wallet-account-edit-input {
+    flex: 1 1 140px;
+    width: auto;
+    min-width: 0;
+  }
+
+  .wallet-account-edit-actions {
+    flex: 0 0 auto;
+  }
+}
+
 .overview-accounts-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -569,6 +815,182 @@ button {
 
 .overview-three-boxes .overview-box {
   margin-bottom: 0;
+}
+
+.overview-page {
+  max-width: 52rem;
+}
+
+.overview-page-title {
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+}
+
+.overview-page-subtitle {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.overview-intro {
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  max-width: 40rem;
+}
+
+.overview-section {
+  margin-bottom: 2rem;
+}
+
+.overview-section-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+
+.overview-section-intro {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  max-width: 42rem;
+}
+
+.overview-option-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.overview-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.overview-box-heading {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.overview-box-heading--wallet {
+  font-size: 1rem;
+}
+
+.overview-box-figure {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.overview-box-figure--wallet {
+  font-size: 1.35rem;
+}
+
+.overview-box-detail {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+
+.overview-kpi-hint {
+  margin-top: 0.65rem;
+  margin-bottom: 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.overview-wallet-purpose {
+  margin: 0 0 0.4rem;
+  font-size: 0.88rem;
+}
+
+.overview-wallet-breakdown {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  font-size: 0.85rem;
+}
+
+.overview-to-wallet-link {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.overview-to-wallet-link:hover {
+  color: var(--accent);
+}
+
+.overview-pie-card {
+  margin-bottom: 0;
+}
+
+.overview-pie-chart-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+}
+
+.overview-pie-svg {
+  max-width: min(100%, 280px);
+  height: auto;
+  display: block;
+}
+
+.overview-pie-slice-label {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  pointer-events: none;
+}
+
+.overview-pie-slice-label-name {
+  font-size: 9px;
+  font-weight: 700;
+  fill: #fff;
+  stroke: rgba(0, 0, 0, 0.45);
+  stroke-width: 0.35px;
+  paint-order: stroke fill;
+}
+
+.overview-pie-slice-label-amount {
+  font-size: 8px;
+  font-weight: 600;
+  fill: #fff;
+  stroke: rgba(0, 0, 0, 0.4);
+  stroke-width: 0.3px;
+  paint-order: stroke fill;
+}
+
+.overview-by-wallet-card {
+  margin-bottom: 0;
+}
+
+.overview-by-wallet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.overview-by-wallet-row {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.overview-by-wallet-row:last-child {
+  border-bottom: none;
+}
+
+.overview-by-wallet-detail {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
 }
 
 .overview-category-chart {
@@ -644,20 +1066,6 @@ button {
   height: 12px;
   border-radius: 3px;
   flex-shrink: 0;
-}
-
-/* Bar chart – real bar graph with Y-axis scale and grid */
-.overview-bar-chart-svg-wrap {
-  margin-bottom: 0.5rem;
-}
-
-.overview-bar-chart-svg {
-  max-width: 100%;
-  display: block;
-}
-
-.overview-bar-chart-axis-text {
-  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
 .btn {
@@ -1053,7 +1461,7 @@ button {
 .expenses-fab {
   position: fixed;
   bottom: 1rem;
-  left: 1rem;
+  right: 1rem;
   z-index: 89;
   width: 48px;
   height: 48px;
@@ -1249,6 +1657,14 @@ button {
   white-space: nowrap;
 }
 
+/* Button tab: same look as NavLink items */
+.mobile-bottom-nav-item--btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+
 @media (max-width: 768px) {
   .mobile-bottom-nav {
     display: flex;
@@ -1267,7 +1683,7 @@ button {
   .app-header {
     margin-top: calc(1rem + env(safe-area-inset-top, 0px));
     padding-left: max(0.25rem, env(safe-area-inset-left));
-    padding-right: max(0.25rem, env(safe-area-inset-right));
+    padding-right: max(0.65rem, env(safe-area-inset-right));
   }
 
   .sidebar-nav {
@@ -1281,8 +1697,7 @@ button {
   }
 
   .expenses-fab {
-    bottom: calc(var(--mobile-tab-bar-height) + env(safe-area-inset-bottom, 0px) + 0.75rem);
-    left: max(1rem, env(safe-area-inset-left));
+    display: none;
   }
 
   .contact-fab {

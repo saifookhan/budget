@@ -12,24 +12,7 @@ import {
   isMonthKey,
 } from '../utils'
 
-const CHART_TYPE_KEY = 'overview-chart-type'
 const SHOW_MONEY_IN_WALLETS_KEY = 'overview-show-money-in-wallets'
-
-export type OverviewChartType = 'pie' | 'bar'
-
-function getStoredChartType(): OverviewChartType {
-  try {
-    const v = localStorage.getItem(CHART_TYPE_KEY) as OverviewChartType | null
-    if (v === 'pie' || v === 'bar') return v
-  } catch {}
-  return 'pie'
-}
-
-function setStoredChartType(type: OverviewChartType): void {
-  try {
-    localStorage.setItem(CHART_TYPE_KEY, type)
-  } catch {}
-}
 
 function getStoredShowMoneyInWallets(): boolean {
   try {
@@ -42,18 +25,6 @@ function setStoredShowMoneyInWallets(value: boolean): void {
   try {
     localStorage.setItem(SHOW_MONEY_IN_WALLETS_KEY, value ? '1' : '0')
   } catch {}
-}
-
-/** Round up to a "nice" max for Y-axis (e.g. 87 -> 100, 350 -> 500). */
-function niceAxisMax(value: number): number {
-  if (value <= 0) return 1
-  const exp = Math.floor(Math.log10(value))
-  const magnitude = 10 ** exp
-  const normalized = value / magnitude
-  if (normalized <= 1) return magnitude
-  if (normalized <= 2) return 2 * magnitude
-  if (normalized <= 5) return 5 * magnitude
-  return 10 * magnitude
 }
 
 function useOverview() {
@@ -188,14 +159,7 @@ export default function Overview({ theme }: OverviewProps) {
   const { t } = useTranslation()
   const data = useOverview()
   const chartTheme = theme ?? getStoredTheme()
-  const [chartType, setChartType] = useState<OverviewChartType>(getStoredChartType)
   const [showMoneyInWallets, setShowMoneyInWallets] = useState(getStoredShowMoneyInWallets)
-
-  const handleChartTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value as OverviewChartType
-    setChartType(value)
-    setStoredChartType(value)
-  }
 
   const handleShowMoneyInWalletsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked
@@ -204,128 +168,136 @@ export default function Overview({ theme }: OverviewProps) {
   }
 
   return (
-    <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('overview.title')}</h1>
-      <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        {t('overview.subtitle')}
-      </p>
+    <div className="overview-page">
+      <h1 className="overview-page-title">{t('overview.title')}</h1>
+      <p className="muted overview-page-subtitle">{t('overview.subtitle')}</p>
+      <p className="overview-intro">{t('overview.intro')}</p>
 
-      {data.accounts.length > 0 && (
-        <div className="overview-accounts-grid">
-          {data.accounts.map((a) => {
-            const available = data.accountAvailable[a.id] ?? 0
-            const start = a.balance ?? 0
-            const spent = data.byAccount[a.id]?.expense ?? 0
-            const saved = data.byAccount[a.id]?.saving ?? 0
-            return (
-              <div key={a.id} className="card overview-box">
-                <h2 style={{ marginTop: 0, fontSize: '1.05rem' }}>{a.name}</h2>
-                {a.purpose && (
-                  <p className="muted" style={{ marginTop: 0, marginBottom: '0.4rem' }}>
-                    {a.purpose}
-                  </p>
-                )}
-                <p
-                  style={{
-                    fontSize: '1.4rem',
-                    fontWeight: 700,
-                    margin: 0,
-                    color: available >= 0 ? 'var(--success)' : 'var(--danger)',
-                  }}
-                >
-                  {a.balance != null ? formatCurrency(available, data.currency) : '—'}
-                </p>
-                {(spent > 0 || saved > 0 || start) && (
-                  <p className="muted" style={{ marginTop: '0.5rem', fontSize: '0.85rem' }}>
-                    {t('overview.starting')} {formatCurrency(start, data.currency)} · {t('overview.spent')} {formatCurrency(spent, data.currency)} · {t('overview.saved')} {formatCurrency(saved, data.currency)}
-                  </p>
-                )}
-              </div>
-            )
-          })}
+      <section className="overview-section" aria-labelledby="overview-section-summary">
+        <h2 id="overview-section-summary" className="overview-section-title">
+          {t('overview.sectionSummary')}
+        </h2>
+        <div className="overview-option-row">
+          <label className="overview-checkbox-label">
+            <input
+              type="checkbox"
+              checked={showMoneyInWallets}
+              onChange={handleShowMoneyInWalletsChange}
+              aria-label={t('overview.showMoneyInWalletsOption')}
+              aria-describedby="overview-show-money-in-wallets-desc"
+            />
+            <span id="overview-show-money-in-wallets-desc">{t('overview.showMoneyInWalletsOption')}</span>
+          </label>
         </div>
-      )}
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.95rem' }}>
-          <input
-            type="checkbox"
-            checked={showMoneyInWallets}
-            onChange={handleShowMoneyInWalletsChange}
-            aria-label={t('overview.showMoneyInWalletsOption')}
-            aria-describedby="overview-show-money-in-wallets-desc"
-          />
-          <span id="overview-show-money-in-wallets-desc">{t('overview.showMoneyInWalletsOption')}</span>
-        </label>
-      </div>
-
-      <div className="overview-three-boxes">
-        <div className="card overview-box">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('overview.availableThisMonth')}</h2>
-          <p style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0 }}>
-            {formatCurrency(data.availableThisMonth, data.currency)}
-          </p>
-          <p className="muted" style={{ marginTop: '0.5rem' }}>
-            {t('overview.income')}: {formatCurrency(data.income, data.currency)}
-            {data.carryOverFromLastMonth !== 0 && (
-              <> · {t('overview.carryOver')}: {formatCurrency(data.carryOverFromLastMonth, data.currency)}</>
-            )}
-          </p>
-          {data.income === 0 && (
-            <p className="muted" style={{ marginTop: '0.5rem' }}>
-              {t('overview.setIncomeHint')}
+        <div className="overview-three-boxes">
+          <div className="card overview-box">
+            <h3 className="overview-box-heading">{t('overview.availableThisMonth')}</h3>
+            <p className="overview-box-figure">{formatCurrency(data.availableThisMonth, data.currency)}</p>
+            <p className="muted overview-box-detail">
+              {t('overview.income')}: {formatCurrency(data.income, data.currency)}
+              {data.carryOverFromLastMonth !== 0 && (
+                <> · {t('overview.carryOver')}: {formatCurrency(data.carryOverFromLastMonth, data.currency)}</>
+              )}
             </p>
+            {data.income === 0 && (
+              <p className="overview-box-detail">
+                <Link to="/accounts" className="overview-to-wallet-link muted">
+                  {t('overview.setIncomeHint')}
+                </Link>
+              </p>
+            )}
+            <p className="overview-kpi-hint muted">{t('overview.availableHelp')}</p>
+          </div>
+
+          <div className="card overview-box">
+            <h3 className="overview-box-heading">{t('overview.moneyLeft')}</h3>
+            <p
+              className="overview-box-figure"
+              style={{ color: data.leftReal >= 0 ? 'var(--success)' : 'var(--danger)' }}
+            >
+              {formatCurrency(data.leftReal, data.currency)}
+            </p>
+            <p className="muted overview-box-detail">
+              {t('overview.spent')}: {formatCurrency(data.totalExpenses, data.currency)} · {t('overview.saved')}:{' '}
+              {formatCurrency(data.totalSavings, data.currency)}
+              {data.totalSubscriptionAmount > 0 && (
+                <>
+                  {' '}
+                  · {t('overview.subscriptionsThisMonth')}: {formatCurrency(data.totalSubscriptionAmount, data.currency)}
+                </>
+              )}
+            </p>
+            <p className="overview-kpi-hint muted">{t('overview.moneyLeftHelp')}</p>
+          </div>
+
+          {showMoneyInWallets && (
+            <div className="card overview-box">
+              <h3 className="overview-box-heading">{t('overview.moneyInWallets')}</h3>
+              <p
+                className="overview-box-figure"
+                style={{ color: data.totalInAccounts >= 0 ? 'var(--success)' : 'var(--danger)' }}
+              >
+                {formatCurrency(data.totalInAccounts, data.currency)}
+              </p>
+              <p className="overview-kpi-hint muted">{t('overview.moneyInWalletsHint')}</p>
+            </div>
           )}
         </div>
+      </section>
 
-        <div className="card overview-box">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('overview.moneyLeft')}</h2>
-          <p
-            style={{
-              fontSize: '1.5rem',
-              fontWeight: 700,
-              margin: 0,
-              color: data.leftReal >= 0 ? 'var(--success)' : 'var(--danger)',
-            }}
-          >
-            {formatCurrency(data.leftReal, data.currency)}
-          </p>
-          <p className="muted" style={{ marginTop: '0.5rem' }}>
-            {t('overview.spent')}: {formatCurrency(data.totalExpenses, data.currency)} · {t('overview.saved')}: {formatCurrency(data.totalSavings, data.currency)}
-            {data.totalSubscriptionAmount > 0 && (
-              <> · {t('overview.subscriptionsThisMonth')}: {formatCurrency(data.totalSubscriptionAmount, data.currency)}</>
-            )}
-          </p>
-        </div>
-
-        {showMoneyInWallets && (
-          <div className="card overview-box">
-            <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('overview.moneyInWallets')}</h2>
-            <p
-              style={{
-                fontSize: '1.5rem',
-                fontWeight: 700,
-                margin: 0,
-                color: data.totalInAccounts >= 0 ? 'var(--success)' : 'var(--danger)',
-              }}
-            >
-              {formatCurrency(data.totalInAccounts, data.currency)}
-            </p>
-            <p className="muted" style={{ marginTop: '0.5rem' }}>
-              {t('overview.moneyInWalletsHint')}
-            </p>
+      {data.accounts.length > 0 && (
+        <section className="overview-section" aria-labelledby="overview-section-wallets">
+          <h2 id="overview-section-wallets" className="overview-section-title">
+            {t('overview.sectionWallets')}
+          </h2>
+          <p className="muted overview-section-intro">{t('overview.walletsSectionIntro')}</p>
+          <div className="overview-accounts-grid">
+            {data.accounts.map((a) => {
+              const available = data.accountAvailable[a.id] ?? 0
+              const start = a.balance ?? 0
+              const spent = data.byAccount[a.id]?.expense ?? 0
+              const saved = data.byAccount[a.id]?.saving ?? 0
+              return (
+                <div key={a.id} className="card overview-box">
+                  <h3 className="overview-box-heading overview-box-heading--wallet">{a.name}</h3>
+                  {a.purpose && <p className="muted overview-wallet-purpose">{a.purpose}</p>}
+                  <p
+                    className="overview-box-figure overview-box-figure--wallet"
+                    style={{ color: available >= 0 ? 'var(--success)' : 'var(--danger)' }}
+                  >
+                    {a.balance != null ? formatCurrency(available, data.currency) : '—'}
+                  </p>
+                  {(spent > 0 || saved > 0 || start > 0) && (
+                    <p className="muted overview-wallet-breakdown">
+                      {t('overview.starting')} {formatCurrency(start, data.currency)} · {t('overview.spent')}{' '}
+                      {formatCurrency(spent, data.currency)} · {t('overview.saved')} {formatCurrency(saved, data.currency)}
+                    </p>
+                  )}
+                </div>
+              )
+            })}
           </div>
-        )}
-      </div>
+        </section>
+      )}
 
       {Object.keys(data.byCategory).length === 0 ? (
-        <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('overview.spendingByCategory')}</h2>
-          <p className="muted" style={{ margin: 0 }}>{t('emptyStates.noSpendingYet')}</p>
-          <p style={{ marginTop: '0.5rem', marginBottom: 0 }}>
-            <Link to="/" className="btn btn-primary">{t('expenses.addButton')}</Link>
-          </p>
-        </div>
+        <section className="overview-section" aria-labelledby="overview-section-spending">
+          <h2 id="overview-section-spending" className="overview-section-title">
+            {t('overview.sectionSpending')}
+          </h2>
+          <div className="card">
+            <h3 className="overview-box-heading">{t('overview.spendingByCategory')}</h3>
+            <p className="muted" style={{ margin: 0 }}>
+              {t('emptyStates.noSpendingYet')}
+            </p>
+            <p style={{ marginTop: '0.75rem', marginBottom: 0 }}>
+              <Link to="/" className="btn btn-primary">
+                {t('expenses.addButton')}
+              </Link>
+            </p>
+          </div>
+        </section>
       ) : Object.keys(data.byCategory).length > 0 && (() => {
         const TOP_N = 8
         const chartColors = getChartColorsForTheme(chartTheme)
@@ -336,175 +308,158 @@ export default function Overview({ theme }: OverviewProps) {
             ? [...sorted.slice(0, TOP_N), ['other', otherAmount]]
             : sorted
         const total = reducedEntries.reduce((s, [, amt]) => s + amt, 0)
-        const maxAmount = Math.max(...reducedEntries.map(([, amt]) => amt), 1)
-        let acc = 0
+        const twoPi = Math.PI * 2
+        let angleAcc = 0
         const segments = reducedEntries.map(([catId, amount], i) => {
           const pct = total > 0 ? (amount / total) * 100 : 0
-          const start = acc
-          acc += pct
+          const a0 = angleAcc
+          const sliceAngle = total > 0 ? (amount / total) * twoPi : 0
+          angleAcc += sliceAngle
+          const a1 = angleAcc
           return {
             catId,
             amount,
             pct,
             color: chartColors[i % chartColors.length],
-            start: start.toFixed(2),
-            end: acc.toFixed(2),
+            a0,
+            a1,
           }
         })
-        const conic = total > 0
-          ? segments.map((s) => `${s.color} ${s.start}% ${s.end}%`).join(', ')
-          : 'var(--border) 0% 100%'
 
-        const chartTypeOptions: { value: OverviewChartType; labelKey: string }[] = [
-          { value: 'pie', labelKey: 'overview.chartPie' },
-          { value: 'bar', labelKey: 'overview.chartBar' },
-        ]
+        const pieSize = 240
+        const cx = pieSize / 2
+        const cy = pieSize / 2
+        const R = pieSize * 0.42
+        const rInner = R * 0.52
+
+        function donutPath(a0: number, a1: number): string {
+          const x0 = cx + R * Math.sin(a0)
+          const y0 = cy - R * Math.cos(a0)
+          const x1 = cx + R * Math.sin(a1)
+          const y1 = cy - R * Math.cos(a1)
+          const x0i = cx + rInner * Math.sin(a0)
+          const y0i = cy - rInner * Math.cos(a0)
+          const x1i = cx + rInner * Math.sin(a1)
+          const y1i = cy - rInner * Math.cos(a1)
+          const large = a1 - a0 > Math.PI ? 1 : 0
+          return `M ${x0} ${y0} A ${R} ${R} 0 ${large} 1 ${x1} ${y1} L ${x1i} ${y1i} A ${rInner} ${rInner} 0 ${large} 0 ${x0i} ${y0i} Z`
+        }
 
         return (
-          <div className="card">
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-              <h2 style={{ margin: 0, fontSize: '1.1rem', flex: '1 1 auto' }}>{t('overview.spendingByCategory')}</h2>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.9rem' }}>
-                <span className="muted">{t('overview.chartType')}</span>
-                <select
-                  value={chartType}
-                  onChange={handleChartTypeChange}
-                  aria-label={t('overview.chartType')}
-                  style={{ padding: '0.35rem 0.6rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)' }}
+          <section className="overview-section" aria-labelledby="overview-section-spending">
+            <h2 id="overview-section-spending" className="overview-section-title">
+              {t('overview.sectionSpending')}
+            </h2>
+            <div className="card overview-pie-card">
+              <div
+                className="overview-pie-chart-wrap"
+                role="img"
+                aria-label={[
+                  t('overview.spendingByCategory'),
+                  ...segments.map((s) => {
+                    const name =
+                      s.catId === 'other' ? t('overview.other') : (data.categoryNames[s.catId] ?? t('overview.uncategorized'))
+                    return `${name}: ${formatCurrency(s.amount, data.currency)}`
+                  }),
+                ].join('. ')}
+              >
+                <svg
+                  width={pieSize}
+                  height={pieSize}
+                  viewBox={`0 0 ${pieSize} ${pieSize}`}
+                  className="overview-pie-svg"
+                  aria-hidden
                 >
-                  {chartTypeOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>{t(opt.labelKey)}</option>
-                  ))}
-                </select>
-              </label>
-            </div>
+                  {total <= 0 ? (
+                    <circle cx={cx} cy={cy} r={(R + rInner) / 2} fill="var(--border)" opacity={0.35} />
+                  ) : (
+                    segments.map((s) => {
+                      const name =
+                        s.catId === 'other' ? t('overview.other') : (data.categoryNames[s.catId] ?? t('overview.uncategorized'))
+                      const mid = (s.a0 + s.a1) / 2
+                      const labelR = (R + rInner) / 2
+                      const tx = cx + labelR * Math.sin(mid)
+                      const ty = cy - labelR * Math.cos(mid)
+                      const amtShort = formatCurrency(s.amount, data.currency)
+                      const maxName = s.pct < 6 ? 6 : s.pct < 12 ? 10 : 14
+                      const nameLine = name.length > maxName ? `${name.slice(0, maxName - 1)}…` : name
+                      const showLabel = s.pct >= 4.5
+                      const span = s.a1 - s.a0
+                      const fullCircle = span >= twoPi - 1e-4
 
-            {chartType === 'pie' && (
-              <div className="overview-category-chart" role="img" aria-label={t('overview.spendingByCategory')}>
-                <div className="overview-category-chart-pie-wrap" aria-hidden>
-                  <div
-                    className="overview-category-chart-pie"
-                    style={{ background: `conic-gradient(${conic})` }}
-                  />
-                  <div className="overview-category-chart-pie-hole" />
-                </div>
-                <ul className="overview-category-chart-legend" aria-label={t('overview.spendingByCategory')}>
-                  {segments.map(({ catId, amount, color }) => (
-                    <li key={catId}>
-                      <span className="overview-category-chart-swatch" style={{ background: color }} aria-hidden />
-                      <span>{catId === 'other' ? t('overview.other') : (data.categoryNames[catId] ?? t('overview.uncategorized'))}</span>
-                      <span className="amount-negative">{formatCurrency(amount, data.currency)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {chartType === 'bar' && (() => {
-              const chartW = 400
-              const chartH = 220
-              const pad = { top: 12, right: 16, bottom: 44, left: 56 }
-              const innerW = chartW - pad.left - pad.right
-              const innerH = chartH - pad.top - pad.bottom
-              const n = segments.length
-              const barGap = 8
-              const barWidth = n > 0 ? Math.max(20, (innerW - barGap * (n - 1)) / n) : 0
-              const yTicks = 5
-              const yMax = niceAxisMax(maxAmount)
-              return (
-                <div className="overview-bar-chart-svg-wrap" role="img" aria-label={t('overview.spendingByCategory')}>
-                  <svg width="100%" height={chartH} viewBox={`0 0 ${chartW} ${chartH}`} className="overview-bar-chart-svg" aria-hidden>
-                    {/* Y-axis line */}
-                    <line x1={pad.left} y1={pad.top} x2={pad.left} y2={pad.top + innerH} stroke="var(--border)" strokeWidth="1" />
-                    {/* X-axis line */}
-                    <line x1={pad.left} y1={pad.top + innerH} x2={pad.left + innerW} y2={pad.top + innerH} stroke="var(--border)" strokeWidth="1" />
-                    {/* Y-axis labels and grid – round values */}
-                    {Array.from({ length: yTicks + 1 }, (_, i) => {
-                      const val = (yMax * (yTicks - i)) / yTicks
-                      const y = pad.top + (innerH * i) / yTicks
-                      return (
-                        <g key={i}>
-                          {i > 0 && (
-                            <line x1={pad.left} y1={y} x2={pad.left + innerW} y2={y} stroke="var(--border)" strokeWidth="1" strokeDasharray="4" opacity="0.6" />
-                          )}
-                          <text x={pad.left - 6} y={y + 4} textAnchor="end" fontSize="10" fill="var(--text-muted)" className="overview-bar-chart-axis-text">
-                            {formatCurrency(val, data.currency)}
+                      const labelEl =
+                        showLabel || fullCircle ? (
+                          <text
+                            x={tx}
+                            y={ty}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                            className="overview-pie-slice-label"
+                          >
+                            <tspan x={tx} dy="-0.55em" className="overview-pie-slice-label-name">
+                              {nameLine}
+                            </tspan>
+                            <tspan x={tx} dy="1.15em" className="overview-pie-slice-label-amount">
+                              {amtShort}
+                            </tspan>
                           </text>
+                        ) : null
+
+                      const titleEl = `${name}: ${amtShort}`
+
+                      if (fullCircle) {
+                        const half = s.a0 + Math.PI
+                        return (
+                          <g key={s.catId}>
+                            <path d={donutPath(s.a0, half)} fill={s.color}>
+                              <title>{titleEl}</title>
+                            </path>
+                            <path d={donutPath(half, s.a1)} fill={s.color}>
+                              <title>{titleEl}</title>
+                            </path>
+                            {labelEl}
+                          </g>
+                        )
+                      }
+
+                      return (
+                        <g key={s.catId}>
+                          <path d={donutPath(s.a0, s.a1)} fill={s.color}>
+                            <title>{titleEl}</title>
+                          </path>
+                          {labelEl}
                         </g>
                       )
-                    })}
-                    {/* Bars – scale by yMax so bars don't exceed axis */}
-                    {segments.map(({ catId, amount, color }, i) => {
-                      const barH = yMax > 0 ? (amount / yMax) * innerH : 0
-                      const x = pad.left + i * (barWidth + barGap) + barGap / 2
-                      const y = pad.top + innerH - barH
-                      return (
-                        <g key={catId}>
-                          <rect
-                            x={x}
-                            y={y}
-                            width={barWidth}
-                            height={barH}
-                            fill={color}
-                            rx="4"
-                            ry="4"
-                          />
-                          <title>{`${catId === 'other' ? t('overview.other') : (data.categoryNames[catId] ?? t('overview.uncategorized'))}: ${formatCurrency(amount, data.currency)}`}</title>
-                        </g>
-                      )
-                    })}
-                    {/* X-axis labels */}
-                    {segments.map(({ catId }, i) => {
-                      const x = pad.left + i * (barWidth + barGap) + barGap / 2 + barWidth / 2
-                      const y = pad.top + innerH + 18
-                      const label = (catId === 'other' ? t('overview.other') : (data.categoryNames[catId] ?? t('overview.uncategorized'))).slice(0, 12)
-                      return (
-                        <text key={catId} x={x} y={y} textAnchor="middle" fontSize="10" fill="var(--text-muted)" className="overview-bar-chart-axis-text">
-                          {label}{label.length >= 12 ? '…' : ''}
-                        </text>
-                      )
-                    })}
-                  </svg>
-                  <ul className="overview-category-chart-legend" style={{ marginTop: '0.5rem' }} aria-label="Spending by category">
-                    {segments.map(({ catId, amount, color }) => (
-                      <li key={catId}>
-                        <span className="overview-category-chart-swatch" style={{ background: color }} aria-hidden />
-                        <span>{catId === 'other' ? t('overview.other') : (data.categoryNames[catId] ?? t('overview.uncategorized'))}</span>
-                        <span className="amount-negative">{formatCurrency(amount, data.currency)}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )
-            })()}
-          </div>
+                    })
+                  )}
+                </svg>
+              </div>
+            </div>
+          </section>
         )
       })()}
 
       {Object.keys(data.byAccount).length > 0 && (
-        <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('overview.byAccount')}</h2>
-          <p className="muted" style={{ marginBottom: '0.75rem' }}>
-            {t('overview.byAccountHint')}
-          </p>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-            {Object.entries(data.byAccount).map(([accId, totals]) => (
-              <li
-                key={accId}
-                style={{
-                  padding: '0.5rem 0',
-                  borderBottom: '1px solid var(--border)',
-                }}
-              >
-                <strong>{data.accountNames[accId] ?? t('overview.noAccount')}</strong>
-                <div className="muted" style={{ marginTop: '0.25rem' }}>
-                  {t('nav.expenses')}: {formatCurrency(totals.expense, data.currency)} · {t('nav.savings')}: {formatCurrency(totals.saving, data.currency)}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <section className="overview-section" aria-labelledby="overview-section-by-wallet">
+          <h2 id="overview-section-by-wallet" className="overview-section-title">
+            {t('overview.byAccount')}
+          </h2>
+          <p className="muted overview-section-intro">{t('overview.byAccountHint')}</p>
+          <div className="card overview-by-wallet-card">
+            <ul className="overview-by-wallet-list">
+              {Object.entries(data.byAccount).map(([accId, totals]) => (
+                <li key={accId} className="overview-by-wallet-row">
+                  <strong>{data.accountNames[accId] ?? t('overview.noAccount')}</strong>
+                  <div className="muted overview-by-wallet-detail">
+                    {t('nav.expenses')}: {formatCurrency(totals.expense, data.currency)} · {t('nav.savings')}:{' '}
+                    {formatCurrency(totals.saving, data.currency)}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
       )}
-    </>
+    </div>
   )
 }
