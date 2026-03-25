@@ -381,7 +381,7 @@ export default function Expenses() {
                       <span className="expenses-month-summary-title">{formatExpenseMonthLabel(ym, language)}</span>
                     </span>
                     <span className="expenses-month-summary-meta muted">
-                      {list.length} {t('expenses.monthItems')} · {formatCurrency(monthTotal, state.currency)}
+                      {formatCurrency(monthTotal, state.currency)}
                     </span>
                   </summary>
                   <ul className="expenses-month-list">
