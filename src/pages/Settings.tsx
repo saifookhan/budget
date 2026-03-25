@@ -30,6 +30,11 @@ function formatLastSynced(iso: string): string {
   }
 }
 
+function isLikelyNetworkFetchError(msg: string): boolean {
+  const m = msg.toLowerCase()
+  return m.includes('failed to fetch') || m.includes('networkerror') || m.includes('load failed') || m.includes('network request failed')
+}
+
 export default function Settings({
   theme,
   setTheme,
@@ -52,7 +57,7 @@ export default function Settings({
     <>
       <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{T('nav.settings')}</h1>
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        Change theme, currency, and language.
+        {T('settings.pageSubtitle')}
       </p>
       <div className="card settings-page-card">
         {user && (
@@ -68,10 +73,17 @@ export default function Settings({
               </p>
             ) : null}
             {refreshFromServerError && (
-              <p style={{ marginTop: 0, marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--danger)' }} role="alert">
-                {T('sync.refreshFailed')}
-                <button type="button" className="btn-link" onClick={dismissRefreshError} style={{ marginLeft: '0.35rem' }} aria-label={T('common.dismiss')}>×</button>
-              </p>
+              <div style={{ marginTop: 0, marginBottom: '0.5rem' }} role="alert">
+                <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--danger)' }}>
+                  {T('sync.refreshFailed')}
+                  <button type="button" className="btn-link" onClick={dismissRefreshError} style={{ marginLeft: '0.35rem' }} aria-label={T('common.dismiss')}>×</button>
+                </p>
+                {isLikelyNetworkFetchError(refreshFromServerError) && (
+                  <p className="muted" style={{ marginTop: '0.35rem', marginBottom: 0, fontSize: '0.85rem' }}>
+                    {T('sync.fetchFailedHint')}
+                  </p>
+                )}
+              </div>
             )}
             <button
               type="button"

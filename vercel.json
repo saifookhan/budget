@@ -7,6 +7,7 @@
   "rewrites": [
     { "source": "/categories", "destination": "/index.html" },
     { "source": "/income", "destination": "/index.html" },
+    { "source": "/overview", "destination": "/index.html" },
     { "source": "/past", "destination": "/index.html" },
     { "source": "/accounts", "destination": "/index.html" },
     { "source": "/spending", "destination": "/index.html" },

@@ -187,6 +187,11 @@ function AppShell() {
     }
   }
 
+  function isLikelyNetworkFetchError(msg: string): boolean {
+    const m = msg.toLowerCase()
+    return m.includes('failed to fetch') || m.includes('networkerror') || m.includes('load failed') || m.includes('network request failed')
+  }
+
   const waitingForSync = user && !localHasData && !syncDone
 
   if (waitingForSync) {
@@ -208,7 +213,15 @@ function AppShell() {
       )}
       {syncError && (
         <div className="sync-error-banner" role="alert">
-          Could not load your budget from the cloud. {syncError.includes('exist') || syncError.includes('relation') ? 'Run the SQL in supabase_budget_table.sql in Supabase to enable sync.' : syncError}
+          Could not load your budget from the cloud.{' '}
+          {syncError.includes('exist') || syncError.includes('relation')
+            ? 'Run the SQL in supabase_budget_table.sql in Supabase to enable sync.'
+            : syncError}
+          {isLikelyNetworkFetchError(syncError) && (
+            <span className="muted" style={{ display: 'block', marginTop: '0.35rem', fontSize: '0.9rem' }}>
+              {T('sync.fetchFailedHint')}
+            </span>
+          )}
           <button type="button" className="btn-link" onClick={() => setSyncError(null)} aria-label={T('common.dismiss')}>{T('common.dismiss')}</button>
         </div>
       )}
@@ -243,7 +256,7 @@ function AppShell() {
             type="button"
             className="btn btn-icon hamburger"
             onClick={() => setMenuOpen((o) => !o)}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={menuOpen ? T('nav.closeMenu') : T('nav.openMenu')}
             aria-expanded={menuOpen}
           >
             <span className="hamburger-lines" aria-hidden>
@@ -265,7 +278,7 @@ function AppShell() {
             <span aria-hidden>{sidebarsPinned ? '📌✓' : '📌'}</span>
           </button>
           <NavLink
-            to="/spending"
+            to="/"
             state={{ focusAdd: true }}
             className="btn btn-icon header-add-expense-btn"
             aria-label={T('expenses.addExpense')}
@@ -297,7 +310,7 @@ function AppShell() {
         className={`sidebar-overlay ${menuOpen && !sidebarsPinned ? 'sidebar-overlay-open' : ''}`}
         aria-hidden
         onClick={() => !sidebarsPinned && setMenuOpen(false)}
-        aria-label="Close menu"
+        aria-label={T('nav.closeMenu')}
         role="button"
         tabIndex={-1}
       />
@@ -364,6 +377,41 @@ function AppShell() {
           }
         />
       </Routes>
+      <nav className="mobile-bottom-nav" aria-label={T('nav.bottomNav')}>
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) => `mobile-bottom-nav-item${isActive ? ' active' : ''}`}
+          onClick={() => !sidebarsPinned && setMenuOpen(false)}
+        >
+          <span className="mobile-bottom-nav-icon" aria-hidden>🛒</span>
+          <span className="mobile-bottom-nav-label">{T('nav.expenses')}</span>
+        </NavLink>
+        <NavLink
+          to="/overview"
+          className={({ isActive }) => `mobile-bottom-nav-item${isActive ? ' active' : ''}`}
+          onClick={() => !sidebarsPinned && setMenuOpen(false)}
+        >
+          <span className="mobile-bottom-nav-icon" aria-hidden>📊</span>
+          <span className="mobile-bottom-nav-label">{T('nav.overview')}</span>
+        </NavLink>
+        <NavLink
+          to="/accounts"
+          className={({ isActive }) => `mobile-bottom-nav-item${isActive ? ' active' : ''}`}
+          onClick={() => !sidebarsPinned && setMenuOpen(false)}
+        >
+          <span className="mobile-bottom-nav-icon" aria-hidden>💰</span>
+          <span className="mobile-bottom-nav-label">{T('accounts.title')}</span>
+        </NavLink>
+        <NavLink
+          to="/settings"
+          className={({ isActive }) => `mobile-bottom-nav-item${isActive ? ' active' : ''}`}
+          onClick={() => !sidebarsPinned && setMenuOpen(false)}
+        >
+          <span className="mobile-bottom-nav-icon" aria-hidden>⚙️</span>
+          <span className="mobile-bottom-nav-label">{T('nav.settings')}</span>
+        </NavLink>
+      </nav>
       <ContactChat open={contactOpen} onOpenChange={setContactOpen} />
     </div>
     </UndoProvider>

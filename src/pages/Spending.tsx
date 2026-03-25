@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getState, updateState, subscribe, id } from '../store'
 import { replaceLocalState } from '../budgetSync'
 import { useTranslation } from '../LanguageContext'
@@ -22,6 +22,11 @@ export default function Expenses() {
   const [categoryId, setCategoryId] = useState('')
   const [accountId, setAccountId] = useState('')
   const [memo, setMemo] = useState('')
+  const GETTING_STARTED_KEY = 'budget-getting-started-dismissed'
+  const [gettingStartedDismissed, setGettingStartedDismissed] = useState(() => {
+    if (typeof localStorage === 'undefined') return false
+    return localStorage.getItem(GETTING_STARTED_KEY) === '1'
+  })
 
   useEffect(() => {
     setState(getState())
@@ -158,6 +163,19 @@ export default function Expenses() {
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   )
 
+  const showGettingStarted = !gettingStartedDismissed && sorted.length === 0
+
+  useEffect(() => {
+    if (categories.length === 1 && !categoryId && !editingId) {
+      setCategoryId(categories[0].id)
+    }
+  }, [categories.length, categories[0]?.id, categoryId, editingId])
+
+  const dismissGettingStarted = () => {
+    if (typeof localStorage !== 'undefined') localStorage.setItem(GETTING_STARTED_KEY, '1')
+    setGettingStartedDismissed(true)
+  }
+
   const focusAddForm = () => {
     if (editingId) cancelEdit()
     const form = document.getElementById('expenses-add-form')
@@ -167,11 +185,38 @@ export default function Expenses() {
   }
 
   return (
-    <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('expenses.title')}</h1>
-      <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        {t('expenses.subtitle')}
+    <div className="page-content">
+      <h1 className="page-title">{t('expenses.title')}</h1>
+      <p className="muted page-lead">
+        {t('expenses.subtitleShort')}
       </p>
+
+      {showGettingStarted && (
+        <div className="card getting-started-card">
+          <h2 style={{ marginTop: 0, fontSize: '1.05rem' }}>{t('easy.gettingStartedTitle')}</h2>
+          <ol style={{ margin: '0 0 0.75rem 1rem', padding: 0, lineHeight: 1.6 }}>
+            <li style={{ marginBottom: '0.35rem' }}>
+              {t('easy.step1')}{' '}
+              <Link to="/accounts" className="btn-link">{t('easy.setIncome')}</Link>
+            </li>
+            <li style={{ marginBottom: '0.35rem' }}>
+              {t('easy.step2')}{' '}
+              <button type="button" className="btn-link" onClick={() => { setShowAddCategory(true); document.getElementById('sp-category')?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }}>
+                {t('easy.addCategory')}
+              </button>
+            </li>
+            <li>
+              {t('easy.step3')}{' '}
+              <button type="button" className="btn-link" onClick={focusAddForm}>
+                {t('easy.focusForm')}
+              </button>
+            </li>
+          </ol>
+          <button type="button" className="btn btn-ghost" onClick={dismissGettingStarted}>
+            {t('easy.dismiss')}
+          </button>
+        </div>
+      )}
 
       <form id="expenses-add-form" onSubmit={save} className="card" style={{ marginBottom: '1rem' }}>
         <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>
@@ -188,7 +233,9 @@ export default function Expenses() {
             onChange={(e) => setAmount(e.target.value)}
             placeholder={t('expenses.amountPlaceholder')}
             required
+            inputMode="decimal"
           />
+          <p className="form-hint muted">{t('expenses.amountHint')}</p>
         </div>
         <div className="form-group">
           <label htmlFor="sp-date">{t('expenses.date')}</label>
@@ -251,6 +298,7 @@ export default function Expenses() {
         </div>
         <div className="form-group">
           <label htmlFor="sp-account">{t('expenses.account')}</label>
+          <p className="form-hint muted" style={{ marginTop: 0, marginBottom: '0.35rem' }}>{t('expenses.accountHint')}</p>
           <select
             id="sp-account"
             value={accountId}
@@ -343,6 +391,6 @@ export default function Expenses() {
       >
         +
       </button>
-    </>
+    </div>
   )
 }
