@@ -376,12 +376,12 @@ export default function Expenses() {
                   <summary className="expenses-month-summary">
                     <span className="expenses-month-summary-inner">
                       <span className="expenses-month-chevron" aria-hidden>
-                        ▸
+                        ↓
                       </span>
                       <span className="expenses-month-summary-title">{formatExpenseMonthLabel(ym, language)}</span>
                     </span>
                     <span className="expenses-month-summary-meta muted">
-                      {list.length} · {formatCurrency(monthTotal, state.currency)}
+                      {list.length} {t('expenses.monthItems')} · {formatCurrency(monthTotal, state.currency)}
                     </span>
                   </summary>
                   <ul className="expenses-month-list">
