@@ -334,7 +334,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 2px;
+  gap: 0.35rem;
   margin-left: 4px;
 }
 
@@ -371,6 +371,36 @@ button {
   .app-header .app-title .app-header-page-name {
     font-size: 1.05rem;
   }
+}
+
+.header-settings-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.18rem;
+  margin-top: 0.65rem;
+  padding: 0.35rem 0.4rem 0.25rem;
+  min-height: 44px;
+  min-width: 44px;
+  max-width: 5.75rem;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  text-decoration: none;
+}
+
+.header-settings-link:hover {
+  color: var(--accent);
+}
+
+.header-settings-link.active {
+  color: var(--accent);
 }
 
 .header-chat-block {

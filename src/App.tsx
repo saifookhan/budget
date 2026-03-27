@@ -251,6 +251,17 @@ function AppShell() {
           <span className="app-header-page-name">{shellPageHeading(location.pathname, T)}</span>
         </div>
         <div className="header-actions" aria-label={T('nav.quickActions')}>
+          <NavLink
+            to="/settings"
+            className={({ isActive }) => `header-settings-link${isActive ? ' active' : ''}`}
+            aria-label={T('nav.settings')}
+            title={T('nav.settings')}
+          >
+            <span className="header-chat-emoji" aria-hidden>
+              ⚙️
+            </span>
+            <span className="header-chat-tagline">{T('nav.settings')}</span>
+          </NavLink>
           <button
             type="button"
             className={`header-chat-block${contactOpen ? ' active' : ''}`}
@@ -302,10 +313,6 @@ function AppShell() {
         />
       </Routes>
       <nav className="app-bottom-nav" aria-label={T('nav.bottomNav')}>
-        <NavLink to="/" end className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
-          <span className="app-bottom-nav-icon" aria-hidden>🛒</span>
-          <span className="app-bottom-nav-label">{T('nav.expenses')}</span>
-        </NavLink>
         <NavLink to="/overview" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
           <span className="app-bottom-nav-icon" aria-hidden>📊</span>
           <span className="app-bottom-nav-label">{T('nav.overview')}</span>
@@ -321,10 +328,6 @@ function AppShell() {
         <NavLink to="/savings" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
           <span className="app-bottom-nav-icon" aria-hidden>📈</span>
           <span className="app-bottom-nav-label">{T('nav.savings')}</span>
-        </NavLink>
-        <NavLink to="/settings" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
-          <span className="app-bottom-nav-icon" aria-hidden>⚙️</span>
-          <span className="app-bottom-nav-label">{T('nav.settings')}</span>
         </NavLink>
         <button
           type="button"
