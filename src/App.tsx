@@ -332,13 +332,25 @@ function AppShell() {
         aria-label={T('nav.mainNavigation')}
       >
         <div className="sidebar-nav-links">
-          <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+          <NavLink
+            to="/"
+            className={({ isActive }) => `sidebar-nav-in-tab-bar${isActive ? ' active' : ''}`}
+            onClick={() => !sidebarsPinned && setMenuOpen(false)}
+          >
             <span aria-hidden>🛒</span> {T('nav.expenses')}
           </NavLink>
-          <NavLink to="/overview" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+          <NavLink
+            to="/overview"
+            className={({ isActive }) => `sidebar-nav-in-tab-bar${isActive ? ' active' : ''}`}
+            onClick={() => !sidebarsPinned && setMenuOpen(false)}
+          >
             <span aria-hidden>📊</span> {T('nav.overview')}
           </NavLink>
-          <NavLink to="/accounts" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+          <NavLink
+            to="/accounts"
+            className={({ isActive }) => `sidebar-nav-in-tab-bar${isActive ? ' active' : ''}`}
+            onClick={() => !sidebarsPinned && setMenuOpen(false)}
+          >
             <span aria-hidden>💰</span> {T('income.monthlyTitle')}
           </NavLink>
           <NavLink to="/expenses-report" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
@@ -353,7 +365,11 @@ function AppShell() {
           <NavLink to="/past" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
             <span aria-hidden>📅</span> {T('nav.past')}
           </NavLink>
-          <NavLink to="/settings" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
+          <NavLink
+            to="/settings"
+            className={({ isActive }) => `sidebar-nav-in-tab-bar${isActive ? ' active' : ''}`}
+            onClick={() => !sidebarsPinned && setMenuOpen(false)}
+          >
             <span aria-hidden>⚙️</span> {T('nav.settings')}
           </NavLink>
         </div>

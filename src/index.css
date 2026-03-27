@@ -1692,6 +1692,11 @@ button {
     padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
   }
 
+  /* Bottom tab bar already covers these; keep them in sidebar on wider screens */
+  .sidebar-nav-in-tab-bar {
+    display: none;
+  }
+
   .sidebar-nav-stick .sidebar-pin-btn {
     display: none !important;
   }
