@@ -368,11 +368,11 @@ export default function Expenses() {
           </div>
         ) : (
           <div className="expenses-by-month">
-            {monthKeys.map((ym, monthIndex) => {
+            {monthKeys.map((ym) => {
               const list = expensesByMonth.get(ym) ?? []
               const monthTotal = list.reduce((s, tx) => s + tx.amount, 0)
               return (
-                <details key={ym} className="expenses-month-details" open={monthIndex === 0}>
+                <details key={ym} className="expenses-month-details">
                   <summary className="expenses-month-summary">
                     <span className="expenses-month-summary-inner">
                       <span className="expenses-month-chevron" aria-hidden>
