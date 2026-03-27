@@ -170,13 +170,8 @@ export default function Overview({ theme }: OverviewProps) {
   return (
     <div className="overview-page">
       <h1 className="overview-page-title">{t('overview.title')}</h1>
-      <p className="muted overview-page-subtitle">{t('overview.subtitle')}</p>
-      <p className="overview-intro">{t('overview.intro')}</p>
 
-      <section className="overview-section" aria-labelledby="overview-section-summary">
-        <h2 id="overview-section-summary" className="overview-section-title">
-          {t('overview.sectionSummary')}
-        </h2>
+      <section className="overview-section" aria-label={t('overview.sectionSummary')}>
         <div className="overview-option-row">
           <label className="overview-checkbox-label">
             <input
@@ -207,7 +202,6 @@ export default function Overview({ theme }: OverviewProps) {
                 </Link>
               </p>
             )}
-            <p className="overview-kpi-hint muted">{t('overview.availableHelp')}</p>
           </div>
 
           <div className="card overview-box">
@@ -228,7 +222,6 @@ export default function Overview({ theme }: OverviewProps) {
                 </>
               )}
             </p>
-            <p className="overview-kpi-hint muted">{t('overview.moneyLeftHelp')}</p>
           </div>
 
           {showMoneyInWallets && (
@@ -240,7 +233,6 @@ export default function Overview({ theme }: OverviewProps) {
               >
                 {formatCurrency(data.totalInAccounts, data.currency)}
               </p>
-              <p className="overview-kpi-hint muted">{t('overview.moneyInWalletsHint')}</p>
             </div>
           )}
         </div>
@@ -251,7 +243,6 @@ export default function Overview({ theme }: OverviewProps) {
           <h2 id="overview-section-wallets" className="overview-section-title">
             {t('overview.sectionWallets')}
           </h2>
-          <p className="muted overview-section-intro">{t('overview.walletsSectionIntro')}</p>
           <div className="overview-accounts-grid">
             {data.accounts.map((a) => {
               const available = data.accountAvailable[a.id] ?? 0
@@ -444,7 +435,6 @@ export default function Overview({ theme }: OverviewProps) {
           <h2 id="overview-section-by-wallet" className="overview-section-title">
             {t('overview.byAccount')}
           </h2>
-          <p className="muted overview-section-intro">{t('overview.byAccountHint')}</p>
           <div className="card overview-by-wallet-card">
             <ul className="overview-by-wallet-list">
               {Object.entries(data.byAccount).map(([accId, totals]) => (
