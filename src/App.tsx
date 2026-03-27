@@ -31,22 +31,6 @@ import { LanguageProvider } from './LanguageContext'
 import { UndoProvider } from './UndoContext'
 import type { BudgetState, CurrencyCode, LanguageCode } from './types'
 
-const SIDEBARS_PINNED_KEY = 'budget-sidebars-pinned'
-
-function getSidebarsPinned(): boolean {
-  if (typeof localStorage === 'undefined') return false
-  const v = localStorage.getItem(SIDEBARS_PINNED_KEY)
-  if (v !== null) return v === '1'
-  const menu = localStorage.getItem('budget-menu-stuck')
-  const settings = localStorage.getItem('budget-settings-stuck')
-  if (menu === null && settings === null) return false
-  return menu === '1' || settings !== '0'
-}
-
-function persistSidebarsPinned(value: boolean): void {
-  localStorage.setItem(SIDEBARS_PINNED_KEY, value ? '1' : '0')
-}
-
 function shellPageHeading(pathname: string, T: (key: string) => string): string {
   switch (pathname) {
     case '/':
@@ -77,8 +61,6 @@ function AppShell() {
   const initial = getState()
   const [currency, setCurrency] = useState<CurrencyCode>(initial.currency)
   const [language, setLanguage] = useState<LanguageCode>(initial.language ?? 'en')
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [sidebarsPinned, setSidebarsPinnedState] = useState(getSidebarsPinned)
   const [overviewKey, setOverviewKey] = useState(0)
   const [syncDone, setSyncDone] = useState(false)
   const [syncError, setSyncError] = useState<string | null>(null)
@@ -151,16 +133,6 @@ function AppShell() {
   useEffect(() => {
     if (location.pathname === '/overview') setOverviewKey((k) => k + 1)
   }, [location.pathname])
-
-  const setSidebarsPinned = (value: boolean) => {
-    setSidebarsPinnedState(value)
-    persistSidebarsPinned(value)
-    if (value) {
-      setMenuOpen(true)
-    } else {
-      setMenuOpen(false)
-    }
-  }
 
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const code = e.target.value as CurrencyCode
@@ -275,35 +247,10 @@ function AppShell() {
         </div>
       )}
       <header className="app-header">
-        <div className="hamburger-wrap">
-          <button
-            type="button"
-            className="btn btn-icon hamburger"
-            onClick={() => setMenuOpen((o) => !o)}
-            aria-label={menuOpen ? T('nav.closeMenu') : T('nav.openMenu')}
-            aria-expanded={menuOpen}
-          >
-            <span className="hamburger-lines" aria-hidden>
-              <span />
-              <span />
-              <span />
-            </span>
-          </button>
-        </div>
         <div className="app-title">
           <span className="app-header-page-name">{shellPageHeading(location.pathname, T)}</span>
         </div>
         <div className="header-actions" aria-label={T('nav.quickActions')}>
-          <button
-            type="button"
-            className={`btn btn-icon sidebar-pin-btn ${sidebarsPinned ? 'active' : ''}`}
-            onClick={() => setSidebarsPinned(!sidebarsPinned)}
-            aria-pressed={sidebarsPinned}
-            aria-label={sidebarsPinned ? T('nav.keepOpenOn') : T('nav.keepOpenOff')}
-            title={sidebarsPinned ? T('nav.keepOpenOn') : T('nav.keepOpenOff')}
-          >
-            <span aria-hidden>{sidebarsPinned ? '📌✓' : '📌'}</span>
-          </button>
           <button
             type="button"
             className={`header-chat-block${contactOpen ? ' active' : ''}`}
@@ -319,61 +266,6 @@ function AppShell() {
           </button>
         </div>
       </header>
-      <div
-        className={`sidebar-overlay ${menuOpen && !sidebarsPinned ? 'sidebar-overlay-open' : ''}`}
-        aria-hidden
-        onClick={() => !sidebarsPinned && setMenuOpen(false)}
-        aria-label={T('nav.closeMenu')}
-        role="button"
-        tabIndex={-1}
-      />
-      <aside
-        className={`sidebar-nav ${menuOpen ? 'sidebar-nav-open' : ''}`}
-        aria-label={T('nav.mainNavigation')}
-      >
-        <div className="sidebar-nav-links">
-          <NavLink
-            to="/"
-            className={({ isActive }) => `sidebar-nav-in-tab-bar${isActive ? ' active' : ''}`}
-            onClick={() => !sidebarsPinned && setMenuOpen(false)}
-          >
-            <span aria-hidden>🛒</span> {T('nav.expenses')}
-          </NavLink>
-          <NavLink
-            to="/overview"
-            className={({ isActive }) => `sidebar-nav-in-tab-bar${isActive ? ' active' : ''}`}
-            onClick={() => !sidebarsPinned && setMenuOpen(false)}
-          >
-            <span aria-hidden>📊</span> {T('nav.overview')}
-          </NavLink>
-          <NavLink
-            to="/accounts"
-            className={({ isActive }) => `sidebar-nav-in-tab-bar${isActive ? ' active' : ''}`}
-            onClick={() => !sidebarsPinned && setMenuOpen(false)}
-          >
-            <span aria-hidden>💰</span> {T('income.monthlyTitle')}
-          </NavLink>
-          <NavLink to="/expenses-report" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-            <span aria-hidden>📋</span> {T('nav.allExpenses')}
-          </NavLink>
-          <NavLink to="/subscriptions" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-            <span aria-hidden>🔄</span> {T('nav.subscriptions')}
-          </NavLink>
-          <NavLink to="/savings" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-            <span aria-hidden>📈</span> {T('nav.savings')}
-          </NavLink>
-          <NavLink to="/past" className={({ isActive }) => (isActive ? 'active' : '')} onClick={() => !sidebarsPinned && setMenuOpen(false)}>
-            <span aria-hidden>📅</span> {T('nav.past')}
-          </NavLink>
-          <NavLink
-            to="/settings"
-            className={({ isActive }) => `sidebar-nav-in-tab-bar${isActive ? ' active' : ''}`}
-            onClick={() => !sidebarsPinned && setMenuOpen(false)}
-          >
-            <span aria-hidden>⚙️</span> {T('nav.settings')}
-          </NavLink>
-        </div>
-      </aside>
       <Routes>
         <Route path="/" element={<Expenses />} />
         <Route path="/overview" element={<Overview key={overviewKey} theme={theme} />} />
@@ -409,51 +301,39 @@ function AppShell() {
           }
         />
       </Routes>
-      <nav className="mobile-bottom-nav" aria-label={T('nav.bottomNav')}>
-        <NavLink
-          to="/"
-          end
-          className={({ isActive }) => `mobile-bottom-nav-item${isActive ? ' active' : ''}`}
-          onClick={() => !sidebarsPinned && setMenuOpen(false)}
-        >
-          <span className="mobile-bottom-nav-icon" aria-hidden>🛒</span>
-          <span className="mobile-bottom-nav-label">{T('nav.expenses')}</span>
+      <nav className="app-bottom-nav" aria-label={T('nav.bottomNav')}>
+        <NavLink to="/" end className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
+          <span className="app-bottom-nav-icon" aria-hidden>🛒</span>
+          <span className="app-bottom-nav-label">{T('nav.expenses')}</span>
         </NavLink>
-        <NavLink
-          to="/overview"
-          className={({ isActive }) => `mobile-bottom-nav-item${isActive ? ' active' : ''}`}
-          onClick={() => !sidebarsPinned && setMenuOpen(false)}
-        >
-          <span className="mobile-bottom-nav-icon" aria-hidden>📊</span>
-          <span className="mobile-bottom-nav-label">{T('nav.overview')}</span>
+        <NavLink to="/overview" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
+          <span className="app-bottom-nav-icon" aria-hidden>📊</span>
+          <span className="app-bottom-nav-label">{T('nav.overview')}</span>
         </NavLink>
-        <NavLink
-          to="/accounts"
-          className={({ isActive }) => `mobile-bottom-nav-item${isActive ? ' active' : ''}`}
-          onClick={() => !sidebarsPinned && setMenuOpen(false)}
-        >
-          <span className="mobile-bottom-nav-icon" aria-hidden>💰</span>
-          <span className="mobile-bottom-nav-label">{T('accounts.title')}</span>
+        <NavLink to="/accounts" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
+          <span className="app-bottom-nav-icon" aria-hidden>💰</span>
+          <span className="app-bottom-nav-label">{T('accounts.title')}</span>
         </NavLink>
-        <NavLink
-          to="/settings"
-          className={({ isActive }) => `mobile-bottom-nav-item${isActive ? ' active' : ''}`}
-          onClick={() => !sidebarsPinned && setMenuOpen(false)}
-        >
-          <span className="mobile-bottom-nav-icon" aria-hidden>⚙️</span>
-          <span className="mobile-bottom-nav-label">{T('nav.settings')}</span>
+        <NavLink to="/subscriptions" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
+          <span className="app-bottom-nav-icon" aria-hidden>🔄</span>
+          <span className="app-bottom-nav-label">{T('nav.subscriptions')}</span>
+        </NavLink>
+        <NavLink to="/savings" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
+          <span className="app-bottom-nav-icon" aria-hidden>📈</span>
+          <span className="app-bottom-nav-label">{T('nav.savings')}</span>
+        </NavLink>
+        <NavLink to="/settings" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
+          <span className="app-bottom-nav-icon" aria-hidden>⚙️</span>
+          <span className="app-bottom-nav-label">{T('nav.settings')}</span>
         </NavLink>
         <button
           type="button"
-          className="mobile-bottom-nav-item mobile-bottom-nav-item--btn"
-          onClick={() => {
-            if (!sidebarsPinned) setMenuOpen(false)
-            navigate('/', { state: { focusAdd: true } })
-          }}
+          className="app-bottom-nav-item app-bottom-nav-item--btn"
+          onClick={() => navigate('/', { state: { focusAdd: true } })}
           aria-label={T('expenses.bottomNavNewExpense')}
         >
-          <span className="mobile-bottom-nav-icon" aria-hidden>➕</span>
-          <span className="mobile-bottom-nav-label">{T('expenses.bottomNavNewExpense')}</span>
+          <span className="app-bottom-nav-icon" aria-hidden>➕</span>
+          <span className="app-bottom-nav-label">{T('expenses.bottomNavNewExpense')}</span>
         </button>
       </nav>
       <ContactChat open={contactOpen} onOpenChange={setContactOpen} />

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { THEMES, type ThemeId } from '../theme'
 import { CURRENCIES, LANGUAGES } from '../constants'
 import type { CurrencyCode, LanguageCode } from '../types'
@@ -59,6 +60,14 @@ export default function Settings({
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
         {T('settings.pageSubtitle')}
       </p>
+      <nav className="card settings-page-card settings-more-nav" aria-label={T('nav.morePages')}>
+        <Link to="/expenses-report" className="btn btn-ghost settings-more-nav-link">
+          {T('nav.allExpenses')}
+        </Link>
+        <Link to="/past" className="btn btn-ghost settings-more-nav-link">
+          {T('nav.past')}
+        </Link>
+      </nav>
       <div className="card settings-page-card">
         {user && (
           <div className="form-group" style={{ marginBottom: '1rem' }}>
