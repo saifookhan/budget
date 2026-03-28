@@ -221,7 +221,7 @@ export default function Expenses() {
 
       {showGettingStarted && (
         <div className="card getting-started-card">
-          <h2 style={{ marginTop: 0, fontSize: '1.05rem' }}>{t('easy.gettingStartedTitle')}</h2>
+          <h2 className="section-title">{t('easy.gettingStartedTitle')}</h2>
           <ol style={{ margin: '0 0 0.75rem 1rem', padding: 0, lineHeight: 1.6 }}>
             <li style={{ marginBottom: '0.35rem' }}>
               {t('easy.step1')}{' '}
@@ -247,7 +247,7 @@ export default function Expenses() {
       )}
 
       <form id="expenses-add-form" onSubmit={save} className="card" style={{ marginBottom: '1rem' }}>
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>
+        <h2 className="section-title">
           {editingId ? t('expenses.editExpense') : t('expenses.addExpense')}
         </h2>
         <div className="form-group">
@@ -360,7 +360,7 @@ export default function Expenses() {
       </form>
 
       <div className="card">
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('expenses.recent')}</h2>
+        <h2 className="section-title">{t('expenses.recent')}</h2>
         {sorted.length === 0 ? (
           <div className="muted">
             <p style={{ marginTop: 0, marginBottom: '0.25rem' }}>{t('emptyStates.addFirstExpense')}</p>

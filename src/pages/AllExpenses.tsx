@@ -41,15 +41,13 @@ export default function AllExpenses() {
   const maxAmount = Math.max(...sortedCategories.map(([, amt]) => amt), 1)
 
   return (
-    <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('expensesReport.title')}</h1>
-      <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        {t('expensesReport.subtitle')}
-      </p>
+    <div className="page-content">
+      <h1 className="page-title">{t('expensesReport.title')}</h1>
+      <p className="muted page-lead">{t('expensesReport.subtitle')}</p>
 
       {expenses.length > 0 && (
         <div className="card" style={{ marginBottom: '1.5rem' }}>
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('expensesReport.byCategory')}</h2>
+          <h2 className="section-title">{t('expensesReport.byCategory')}</h2>
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: 180, padding: '0.5rem 0', marginBottom: '0.75rem' }}>
             {sortedCategories.map(([catId, amount], i) => {
               const heightPct = (amount / maxAmount) * 100
@@ -90,7 +88,7 @@ export default function AllExpenses() {
       )}
 
       <div className="card">
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('expensesReport.allExpenses')}</h2>
+        <h2 className="section-title">{t('expensesReport.allExpenses')}</h2>
         {expenses.length === 0 ? (
           <p className="muted">{t('expensesReport.noExpenses')}</p>
         ) : (
@@ -123,6 +121,6 @@ export default function AllExpenses() {
           </ul>
         )}
       </div>
-    </>
+    </div>
   )
 }

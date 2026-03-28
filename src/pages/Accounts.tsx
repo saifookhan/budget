@@ -214,14 +214,14 @@ export default function Accounts() {
 
   return (
     <div className="wallet-page">
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('accounts.pageTitle')}</h1>
-      <p className="muted" style={{ marginBottom: '1rem' }}>
+      <h1 className="page-title">{t('accounts.pageTitle')}</h1>
+      <p className="muted page-lead" style={{ marginBottom: '1rem' }}>
         {t('accounts.subtitle')}
       </p>
 
       <div className="wallet-grid">
         <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('income.monthlyTitle')}</h2>
+          <h2 className="section-title">{t('income.monthlyTitle')}</h2>
         <p className="muted" style={{ marginBottom: '1rem', fontSize: '0.9rem' }}>{t('income.subtitleLong')}</p>
         <form onSubmit={saveIncome}>
           <div className="form-group">
@@ -249,7 +249,7 @@ export default function Accounts() {
 
         {showMultipleAccounts && (
         <form onSubmit={add} className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.addAccount')}</h2>
+          <h2 className="section-title">{t('accounts.addAccount')}</h2>
           <div className="form-group">
             <label htmlFor="acc-name">{t('accounts.name')}</label>
             <input
@@ -299,7 +299,7 @@ export default function Accounts() {
       {showTransfer && (
       <div className="wallet-grid">
         <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.transferTitle')}</h2>
+          <h2 className="section-title">{t('accounts.transferTitle')}</h2>
         {accounts.length >= 2 ? (
           <form onSubmit={addTransfer}>
             <p className="muted" style={{ marginBottom: '1rem', fontSize: '0.9rem' }}>{t('accounts.transferSubtitle')}</p>
@@ -372,7 +372,7 @@ export default function Accounts() {
 
         {transfers.length > 0 && (
           <div className="card">
-            <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.recentTransfers')}</h2>
+            <h2 className="section-title">{t('accounts.recentTransfers')}</h2>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {transfers.map((tx) => (
               <li
@@ -414,13 +414,13 @@ export default function Accounts() {
 
       {showMultipleAccounts && state.accounts.length === 0 && (
         <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.title')}</h2>
+          <h2 className="section-title">{t('accounts.title')}</h2>
           <p className="muted" style={{ margin: 0 }}>{t('emptyStates.addWalletHint')}</p>
         </div>
       )}
       {showMultipleAccounts && state.accounts.length > 0 && (
         <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('accounts.title')}</h2>
+          <h2 className="section-title">{t('accounts.title')}</h2>
           <ul className="wallet-accounts-list">
             {state.accounts.map((a) => (
               <li key={a.id} className={`wallet-account-item${editing === a.id ? ' wallet-account-item--editing' : ''}`}>

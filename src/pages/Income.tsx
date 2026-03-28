@@ -21,11 +21,9 @@ export default function Income() {
   }
 
   return (
-    <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('income.monthlyTitle')}</h1>
-      <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        {t('income.subtitleLong')}
-      </p>
+    <div className="page-content">
+      <h1 className="page-title">{t('income.monthlyTitle')}</h1>
+      <p className="muted page-lead">{t('income.subtitleLong')}</p>
 
       <form onSubmit={handleSubmit} className="card">
         <div className="form-group">
@@ -50,6 +48,6 @@ export default function Income() {
           {t('income.basedOn')} {formatCurrency(income, state.currency)} {t('income.perMonth')}.
         </p>
       )}
-    </>
+    </div>
   )
 }

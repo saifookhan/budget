@@ -98,14 +98,12 @@ export default function Subscriptions() {
   const totalPerMonth = recurring.reduce((s, r) => s + r.amount, 0)
 
   return (
-    <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('subscriptions.title')}</h1>
-      <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        {t('subscriptions.subtitle')}
-      </p>
+    <div className="page-content">
+      <h1 className="page-title">{t('subscriptions.title')}</h1>
+      <p className="muted page-lead">{t('subscriptions.subtitle')}</p>
 
       <form onSubmit={save} className="card" style={{ marginBottom: '1rem' }}>
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>
+        <h2 className="section-title">
           {editingId ? t('subscriptions.editSubscription') : t('subscriptions.addSubscription')}
         </h2>
         <div className="form-group">
@@ -182,7 +180,7 @@ export default function Subscriptions() {
 
       {recurring.length > 0 && (
         <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('subscriptions.monthlyList')}</h2>
+          <h2 className="section-title">{t('subscriptions.monthlyList')}</h2>
           <p className="muted" style={{ marginBottom: '0.75rem' }}>
             {t('subscriptions.totalPerMonth')}: <strong>{formatCurrency(totalPerMonth)}</strong> {t('subscriptions.perMonth')}
           </p>
@@ -216,6 +214,6 @@ export default function Subscriptions() {
           </ul>
         </div>
       )}
-    </>
+    </div>
   )
 }

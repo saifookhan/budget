@@ -95,7 +95,7 @@ export default function ContactChat({ open: controlledOpen, onOpenChange }: Cont
       {open && (
         <div className={`contact-panel ${isControlled ? 'contact-panel-from-header' : ''}`} role="dialog" aria-label={T('contact.title')}>
           <div className="contact-panel-header">
-            <h2 style={{ margin: 0, fontSize: '1.1rem' }}>{T('contact.title')}</h2>
+            <h2 className="section-title section-title--flush">{T('contact.title')}</h2>
             <button
               type="button"
               className="btn btn-ghost"

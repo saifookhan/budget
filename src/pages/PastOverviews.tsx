@@ -77,11 +77,9 @@ export default function PastOverviews() {
   }, [state.transactions, expensesMonthKey])
 
   return (
-    <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('past.title')}</h1>
-      <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        {t('past.subtitle')}
-      </p>
+    <div className="page-content">
+      <h1 className="page-title">{t('past.title')}</h1>
+      <p className="muted page-lead">{t('past.subtitle')}</p>
 
       <div className="card">
         <div style={{ overflowX: 'auto' }}>
@@ -171,7 +169,7 @@ export default function PastOverviews() {
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h2 style={{ margin: 0, fontSize: '1.1rem' }}>
+              <h2 className="section-title section-title--flush">
                 {t('past.expensesForMonthTitle')} {monthYearLabel(expensesMonthKey)}
               </h2>
               <button
@@ -217,6 +215,6 @@ export default function PastOverviews() {
           </div>
         </div>
       )}
-    </>
+    </div>
   )
 }

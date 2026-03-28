@@ -116,14 +116,12 @@ export default function Savings() {
   }
 
   return (
-    <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{t('savings.title')}</h1>
-      <p className="muted" style={{ marginBottom: '1.5rem' }}>
-        {t('savings.subtitle')}
-      </p>
+    <div className="page-content">
+      <h1 className="page-title">{t('savings.title')}</h1>
+      <p className="muted page-lead">{t('savings.subtitle')}</p>
 
       <form onSubmit={add} className="card" style={{ marginBottom: '1rem' }}>
-        <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('savings.addGoal')}</h2>
+        <h2 className="section-title">{t('savings.addGoal')}</h2>
         <div className="form-group">
           <label>{t('savings.goalType')}</label>
           <select
@@ -178,7 +176,7 @@ export default function Savings() {
 
       {savingsGoals.length > 0 && (
         <div className="card" style={{ marginBottom: '1rem' }}>
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('savings.goals')}</h2>
+          <h2 className="section-title">{t('savings.goals')}</h2>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {savingsGoals.map((g) => renderGoal(g, t('savings.savedSoFar')))}
           </ul>
@@ -187,12 +185,12 @@ export default function Savings() {
 
       {investmentGoals.length > 0 && (
         <div className="card">
-          <h2 style={{ marginTop: 0, fontSize: '1.1rem' }}>{t('savings.investments')}</h2>
+          <h2 className="section-title">{t('savings.investments')}</h2>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {investmentGoals.map((g) => renderGoal(g, t('savings.investedSoFar')))}
           </ul>
         </div>
       )}
-    </>
+    </div>
   )
 }
