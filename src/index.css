@@ -8,89 +8,91 @@
   --mobile-tab-bar-height: 3.75rem;
 }
 
-/* Neon black — dark pink/black, neon pink accent (homepage vibe) */
+/* Wine night — bordeaux froid, crema, oro */
 [data-theme="neonBlack"] {
-  --bg: #1a0a14;
-  --bg-soft: #220d1a;
-  --surface: #2d0d22;
-  --card: #220d1a;
-  --text: #fff;
-  --text-muted: rgba(255, 255, 255, 0.72);
-  --accent: #ff2a6d;
-  --accent-soft: rgba(255, 43, 109, 0.28);
-  --success: #ff6b9d;
-  --success-soft: rgba(255, 43, 109, 0.2);
-  --danger: #ff4d87;
-  --danger-soft: rgba(255, 43, 109, 0.2);
-  --border: rgba(255, 43, 109, 0.3);
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.3), 0 0 24px rgba(255, 43, 109, 0.08);
-  --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 32px rgba(255, 43, 109, 0.12);
+  --bg: #3d0a1f;
+  --bg-soft: #4a0c24;
+  --surface: #5a0f2e;
+  --card: #52142c;
+  --text: #f5efea;
+  --text-muted: rgba(214, 165, 181, 0.82);
+  --accent: #c9a96e;
+  --accent-soft: rgba(201, 169, 110, 0.28);
+  --success: #c9a96e;
+  --success-soft: rgba(201, 169, 110, 0.22);
+  --danger: #d6a5b5;
+  --danger-soft: rgba(214, 165, 181, 0.18);
+  --border: rgba(214, 165, 181, 0.28);
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.35), 0 0 28px rgba(201, 169, 110, 0.08);
+  --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 36px rgba(201, 169, 110, 0.12);
 }
 [data-theme="neonBlack"] .settings-page-card select,
 [data-theme="neonBlack"] .settings-page-card .theme-dropdown {
-  color: #1a0a14;
-  background: #fce7f3;
+  color: #5a0f2e;
+  background: #f5efea;
+  border: 1px solid rgba(214, 165, 181, 0.55);
 }
 [data-theme="neonBlack"] .settings-page-card select option {
-  color: #1a0a14;
-  background: #fce7f3;
+  color: #5a0f2e;
+  background: #f5efea;
 }
 
-/* Neon rainbow — dark with multi-color neon (pink, cyan, yellow, purple, blue) */
+/* Magenta — stessa palette, accento magenta su bordeaux */
 [data-theme="neonRainbow"] {
-  --bg: #0d0a12;
-  --bg-soft: #15101c;
-  --surface: #1a1425;
-  --card: #15101c;
-  --text: #fff;
-  --text-muted: rgba(255, 255, 255, 0.7);
-  --accent: #00f5d4;
-  --accent-soft: rgba(0, 245, 212, 0.2);
-  --success: #00f5d4;
-  --success-soft: rgba(0, 245, 212, 0.15);
-  --danger: #ff2a6d;
-  --danger-soft: rgba(255, 43, 109, 0.2);
-  --border: rgba(0, 245, 212, 0.25);
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.4), 0 0 24px rgba(0, 245, 212, 0.06);
-  --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 32px rgba(155, 93, 229, 0.1);
+  --bg: #3d0a1f;
+  --bg-soft: #4a0c24;
+  --surface: #5a0f2e;
+  --card: #52142c;
+  --text: #f5efea;
+  --text-muted: rgba(245, 239, 234, 0.65);
+  --accent: #8c1c5b;
+  --accent-soft: rgba(140, 28, 91, 0.32);
+  --success: #c9a96e;
+  --success-soft: rgba(201, 169, 110, 0.2);
+  --danger: #d6a5b5;
+  --danger-soft: rgba(214, 165, 181, 0.2);
+  --border: rgba(201, 169, 110, 0.32);
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.35), 0 0 28px rgba(140, 28, 91, 0.1);
+  --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 36px rgba(140, 28, 91, 0.14);
 }
 [data-theme="neonRainbow"] .settings-page-card select,
 [data-theme="neonRainbow"] .settings-page-card .theme-dropdown {
-  color: #0d0a12;
-  background: #e0f7f4;
+  color: #5a0f2e;
+  background: #f5efea;
+  border: 1px solid rgba(214, 165, 181, 0.55);
 }
 [data-theme="neonRainbow"] .settings-page-card select option {
-  color: #0d0a12;
-  background: #e0f7f4;
+  color: #5a0f2e;
+  background: #f5efea;
 }
 
-/* Neon clear — light background with neon pink accents */
+/* Crème — beige caldo, testo bordeaux, oro accento */
 [data-theme="neonClear"] {
-  --bg: #faf5f8;
-  --bg-soft: #f5eef2;
-  --surface: #fff;
-  --card: #fff;
-  --text: #2d1f28;
-  --text-muted: #6b5a65;
-  --accent: #ff2a6d;
-  --accent-soft: #fce7f3;
-  --success: #ff6b9d;
-  --success-soft: #fce7f3;
-  --danger: #ff4d87;
-  --danger-soft: #fce7f3;
-  --border: rgba(255, 43, 109, 0.25);
-  --shadow: 0 2px 12px rgba(255, 43, 109, 0.08);
-  --shadow-hover: 0 4px 20px rgba(255, 43, 109, 0.12);
+  --bg: #f5efea;
+  --bg-soft: #ebe2da;
+  --surface: #fffdfb;
+  --card: #fffcfa;
+  --text: #5a0f2e;
+  --text-muted: rgba(90, 15, 46, 0.58);
+  --accent: #c9a96e;
+  --accent-soft: rgba(201, 169, 110, 0.22);
+  --success: #8c1c5b;
+  --success-soft: rgba(140, 28, 91, 0.1);
+  --danger: #7a2848;
+  --danger-soft: rgba(122, 40, 72, 0.12);
+  --border: rgba(214, 165, 181, 0.55);
+  --shadow: 0 2px 12px rgba(90, 15, 46, 0.06);
+  --shadow-hover: 0 4px 20px rgba(90, 15, 46, 0.1);
 }
 [data-theme="neonClear"] .settings-page-card select,
 [data-theme="neonClear"] .settings-page-card .theme-dropdown {
-  color: #2d1f28;
-  background: #fff;
+  color: #5a0f2e;
+  background: #fffcfa;
   border: 1px solid var(--border);
 }
 [data-theme="neonClear"] .settings-page-card select option {
-  color: #2d1f28;
-  background: #fff;
+  color: #5a0f2e;
+  background: #fffcfa;
 }
 
 * {
@@ -1088,8 +1090,8 @@ button {
 }
 [data-theme="neonBlack"] .accounts-balance-input,
 [data-theme="neonRainbow"] .accounts-balance-input {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.12);
+  color: #f5efea;
+  background: rgba(245, 239, 234, 0.1);
 }
 
 .muted { color: var(--text-muted); font-size: 0.9rem; }
@@ -1201,14 +1203,14 @@ button {
   padding: 3rem 2rem;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(165deg, #1a0a14 0%, #2d0d22 35%, #1f0818 100%);
+  background: linear-gradient(165deg, #3d0a1f 0%, #5a0f2e 42%, #4a0c24 100%);
 }
 
 .home-hero-pattern {
   position: absolute;
   inset: 0;
-  opacity: 0.35;
-  background-image: radial-gradient(circle at 1px 1px, #ff2a6d 1px, transparent 0);
+  opacity: 0.4;
+  background-image: radial-gradient(circle at 1px 1px, rgba(201, 169, 110, 0.45) 1px, transparent 0);
   background-size: 28px 28px;
   pointer-events: none;
 }
@@ -1226,9 +1228,9 @@ button {
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #ff6b9d;
+  color: #d6a5b5;
   margin: 0 0 1rem 0;
-  text-shadow: 0 0 20px rgba(255, 43, 109, 0.4);
+  text-shadow: 0 0 18px rgba(201, 169, 110, 0.35);
 }
 
 .home-title {
@@ -1236,19 +1238,19 @@ button {
   font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: #fff;
+  color: #f5efea;
   margin: 0;
   line-height: 1.05;
-  text-shadow: 0 0 40px rgba(255, 43, 109, 0.25);
+  text-shadow: 0 0 36px rgba(201, 169, 110, 0.2);
 }
 
 .home-title-rule {
   width: 56px;
   height: 4px;
   margin: 1.25rem auto 1.5rem;
-  background: linear-gradient(90deg, #ff2a6d, #ff6b9d);
+  background: linear-gradient(90deg, #c9a96e, #dcc598);
   border-radius: 2px;
-  box-shadow: 0 0 20px #ff2a6d, 0 0 40px rgba(255, 43, 109, 0.5);
+  box-shadow: 0 0 16px rgba(201, 169, 110, 0.45), 0 0 32px rgba(140, 28, 91, 0.25);
 }
 
 .home-tagline {
@@ -1266,7 +1268,7 @@ button {
   align-items: flex-start;
   justify-content: center;
   padding: 2rem 1.5rem;
-  background: linear-gradient(180deg, #0f0610 0%, #1a0a14 100%);
+  background: linear-gradient(180deg, #2d0818 0%, #3d0a1f 100%);
 }
 
 .home-login-card.auth-card.card {
@@ -1274,77 +1276,76 @@ button {
   max-width: 360px;
   padding: 1.75rem 1.5rem;
   border-radius: var(--radius);
-  background: linear-gradient(180deg, #1a0a14 0%, #220d1a 100%);
-  border: 1px solid rgba(255, 43, 109, 0.35);
-  box-shadow: 0 0 0 1px rgba(255, 43, 109, 0.15), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 48px rgba(255, 43, 109, 0.12);
+  background: linear-gradient(180deg, #4a0c24 0%, #3d0a1f 100%);
+  border: 1px solid rgba(201, 169, 110, 0.35);
+  box-shadow: 0 0 0 1px rgba(214, 165, 181, 0.12), 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 40px rgba(140, 28, 91, 0.12);
 }
 
-/* Login card: neon pink theme — title, text, inputs, button, links */
 .home-login-card .auth-title {
-  color: #fff;
-  text-shadow: 0 0 24px rgba(255, 43, 109, 0.2);
+  color: #f5efea;
+  text-shadow: 0 0 20px rgba(201, 169, 110, 0.2);
 }
 .home-login-card .muted {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(214, 165, 181, 0.88);
 }
 .home-login-card .form-group label {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(245, 239, 234, 0.92);
 }
 .home-login-card .contact-input,
 .home-login-card input[type="email"],
 .home-login-card input[type="password"] {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 43, 109, 0.3);
-  color: #fff;
+  background: rgba(245, 239, 234, 0.08);
+  border: 1px solid rgba(214, 165, 181, 0.35);
+  color: #f5efea;
   color-scheme: dark;
 }
 .home-login-card .contact-input::placeholder,
 .home-login-card input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(245, 239, 234, 0.42);
 }
 .home-login-card .contact-input:focus,
 .home-login-card input:focus {
-  border-color: #ff2a6d;
-  box-shadow: 0 0 0 3px rgba(255, 43, 109, 0.25), 0 0 20px rgba(255, 43, 109, 0.15);
+  border-color: #c9a96e;
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.22), 0 0 18px rgba(140, 28, 91, 0.15);
   outline: none;
 }
 .home-login-card .btn-primary,
 .home-login-card .contact-send {
-  background: linear-gradient(135deg, #ff2a6d 0%, #ff6b9d 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #c9a96e 0%, #dcc598 100%);
+  color: #5a0f2e;
   border: none;
-  box-shadow: 0 0 20px rgba(255, 43, 109, 0.4);
+  box-shadow: 0 0 18px rgba(201, 169, 110, 0.35);
 }
 .home-login-card .btn-primary:hover:not(:disabled),
 .home-login-card .contact-send:hover {
-  box-shadow: 0 0 28px rgba(255, 43, 109, 0.5);
+  box-shadow: 0 0 26px rgba(201, 169, 110, 0.45);
   opacity: 1;
 }
 .home-login-card .btn-link,
 .home-login-card .auth-footer a {
-  color: #ff6b9d;
+  color: #d6a5b5;
 }
 .home-login-card .btn-link:hover,
 .home-login-card .auth-footer a:hover {
-  color: #ff8ab3;
-  text-shadow: 0 0 12px rgba(255, 43, 109, 0.3);
+  color: #f5efea;
+  text-shadow: 0 0 12px rgba(201, 169, 110, 0.35);
 }
 .home-login-card .auth-footer {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(214, 165, 181, 0.85);
 }
 .home-login-card .auth-alert {
-  background: rgba(255, 43, 109, 0.15);
-  border: 1px solid rgba(255, 43, 109, 0.3);
-  color: #ff8ab3;
+  background: rgba(140, 28, 91, 0.2);
+  border: 1px solid rgba(214, 165, 181, 0.35);
+  color: #d6a5b5;
 }
 .home-login-card .auth-alert-error {
-  background: rgba(255, 43, 109, 0.2);
-  border-color: rgba(255, 43, 109, 0.5);
-  color: #ff8ab3;
+  background: rgba(140, 28, 91, 0.28);
+  border-color: rgba(214, 165, 181, 0.45);
+  color: #f0d4dc;
 }
 .home-login-card .auth-alert code {
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(255, 255, 255, 0.1);
+  color: rgba(245, 239, 234, 0.92);
+  background: rgba(90, 15, 46, 0.35);
 }
 
 @media (min-width: 900px) {

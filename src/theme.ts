@@ -1,9 +1,9 @@
 export type ThemeId = 'neonBlack' | 'neonRainbow' | 'neonClear'
 
 export const THEMES: { id: ThemeId; label: string }[] = [
-  { id: 'neonBlack', label: '✨ Neon black' },
-  { id: 'neonRainbow', label: '🌈 Neon rainbow' },
-  { id: 'neonClear', label: '☀️ Neon clear' },
+  { id: 'neonBlack', label: '🍷 Wine night' },
+  { id: 'neonRainbow', label: '💗 Magenta' },
+  { id: 'neonClear', label: '☀️ Crème' },
 ]
 
 const VALID_THEMES: ThemeId[] = ['neonBlack', 'neonRainbow', 'neonClear']
@@ -31,19 +31,19 @@ export function applyTheme(id: ThemeId): void {
 
 const CHART_COLORS_BY_THEME: Record<ThemeId, string[]> = {
   neonBlack: [
-    '#ff2a6d', '#ff6b9d', '#ff8ab3', '#ff4d87', '#e91a5c',
-    '#ff9ec4', '#ff3d7a', '#d41a5a', '#ff7aa8', '#ff5c8d',
-    '#e84d7a', '#ffb3cc',
+    '#8c1c5b', '#c9a96e', '#d6a5b5', '#5a0f2e', '#a67d8c',
+    '#b89268', '#7a2848', '#dcc598', '#9e6b7c', '#8b7355',
+    '#c4a574', '#b07a90',
   ],
   neonRainbow: [
-    '#ff2a6d', '#00f5d4', '#fee440', '#9b5de5', '#00bbf9',
-    '#ff6b9d', '#00e5c0', '#f9c74f', '#c77dff', '#48cae4',
-    '#ff8ab3', '#94d2bd',
+    '#8c1c5b', '#c9a96e', '#5a0f2e', '#d6a5b5', '#a08050',
+    '#6d3d52', '#d4b896', '#9b4d72', '#e4d4c4', '#7a2848',
+    '#b89268', '#a67d8c',
   ],
   neonClear: [
-    '#ff2a6d', '#ff6b9d', '#ff8ab3', '#ff4d87', '#e91a5c',
-    '#ff9ec4', '#ff3d7a', '#d41a5a', '#ff7aa8', '#ff5c8d',
-    '#e84d7a', '#ffb3cc',
+    '#8c1c5b', '#c9a96e', '#5a0f2e', '#d6a5b5', '#a67d8c',
+    '#b89268', '#7a2848', '#dcc598', '#9e6b7c', '#8b7355',
+    '#c4a574', '#b07a90',
   ],
 }
 

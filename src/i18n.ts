@@ -250,7 +250,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'contact.botOverview': 'On **Overview**, use the "Chart type" dropdown to switch between Pie, Bar, Line, or List for spending by category. Money left includes all subscriptions for the month.',
     'contact.botDelete': 'Deleted expenses stay deleted. If something still appears, try refreshing the page. Recurring (subscription) items you delete are not re-added.',
     'contact.botLanguage': 'Tap **Settings** (⚙️ next to the chat in the top bar), then use the **Language** dropdown. Your choice is saved.',
-    'contact.botTheme': 'Tap **Settings** (⚙️ next to the chat in the top bar), then use the **Theme** dropdown. You can pick **Neon black**, **Neon rainbow**, or **Neon clear**.',
+    'contact.botTheme': 'Tap **Settings** (⚙️ next to the chat in the top bar), then use the **Theme** dropdown. You can pick **Wine night**, **Magenta**, or **Crème**.',
     'contact.botWallet': 'Go to **Wallet**. Add wallets (e.g. Revolut, bank), set a balance, and assign them to expenses and subscriptions.',
     'contact.botSavings': 'Go to **Savings & investments**. Add a goal (savings or investment) with a monthly amount; it\'s added automatically each month so you can track progress.',
     'contact.botPassword': 'Use "Forgot password?" on the login page. Set **Site URL** and **Redirect URLs** in Supabase (Auth → URL Configuration) to your app URL (e.g. your Vercel URL).',
@@ -498,7 +498,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'contact.botExpenses': 'Vai su **Spese**. Usa il modulo per aggiungere importo, categoria e conto. Puoi **Modifica** o eliminare (✕) ogni spesa.',
     'contact.botOverview': 'In **Panoramica** usa il menu "Tipo grafico" per scegliere Torta, Barre, Linea o Elenco.',
     'contact.botLanguage': 'Tocca **Impostazioni** (⚙️ in alto accanto alla chat) e usa il menu **Lingua**.',
-    'contact.botTheme': 'Tocca **Impostazioni** (⚙️ in alto accanto alla chat) e usa il menu **Tema**. Puoi scegliere **Neon black**, **Neon rainbow** o **Neon clear**.',
+    'contact.botTheme': 'Tocca **Impostazioni** (⚙️ in alto accanto alla chat) e usa il menu **Tema**. Puoi scegliere **Wine night**, **Magenta** o **Crème**.',
     'contact.botFallback': 'Non sono sicuro. Prova a chiedere in altri termini o descrivi cosa non va.',
   },
   de: {
