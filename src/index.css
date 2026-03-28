@@ -8,23 +8,23 @@
   --mobile-tab-bar-height: 3.75rem;
 }
 
-/* Wine night — bordeaux dominante sullo sfondo, oro su accenti e CTA */
+/* Wine night — bordeaux più saturo e contrastato, oro su CTA */
 [data-theme="neonBlack"] {
-  --bg: #1f0a12;
-  --bg-soft: #2a0c18;
-  --surface: #5a0f2e;
-  --card: #451020;
-  --text: #f0e4e8;
-  --text-muted: #d6a5b5;
+  --bg: #1a070e;
+  --bg-soft: #240814;
+  --surface: #6b2240;
+  --card: #50182f;
+  --text: #fdf5f7;
+  --text-muted: #f0c4d4;
   --accent: #c9a96e;
   --accent-soft: rgba(201, 169, 110, 0.32);
   --success: #c9a96e;
   --success-soft: rgba(201, 169, 110, 0.22);
-  --danger: #d6a5b5;
-  --danger-soft: rgba(214, 165, 181, 0.22);
-  --border: rgba(90, 15, 46, 0.55);
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.42), 0 0 28px rgba(201, 169, 110, 0.12), 0 0 40px rgba(90, 15, 46, 0.14);
-  --shadow-hover: 0 4px 22px rgba(0, 0, 0, 0.5), 0 0 36px rgba(201, 169, 110, 0.18), 0 0 48px rgba(90, 15, 46, 0.16);
+  --danger: #f0b8cc;
+  --danger-soft: rgba(240, 184, 204, 0.22);
+  --border: rgba(180, 70, 110, 0.45);
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.42), 0 0 28px rgba(201, 169, 110, 0.14), 0 0 44px rgba(120, 30, 65, 0.22);
+  --shadow-hover: 0 4px 22px rgba(0, 0, 0, 0.5), 0 0 36px rgba(201, 169, 110, 0.2), 0 0 52px rgba(140, 40, 80, 0.2);
 }
 [data-theme="neonBlack"] .settings-page-card select,
 [data-theme="neonBlack"] .settings-page-card .theme-dropdown {
@@ -37,23 +37,23 @@
   background: #f5efea;
 }
 
-/* Magenta — bordeaux profondo + magenta, CTA in oro */
+/* Magenta — bordeaux/magenta più vividi, CTA in oro */
 [data-theme="neonRainbow"] {
-  --bg: #1f0a12;
-  --bg-soft: #320a1a;
-  --surface: #4f1528;
-  --card: #421020;
-  --text: #f0e4e8;
-  --text-muted: #d6a5b5;
+  --bg: #1a070e;
+  --bg-soft: #2a0818;
+  --surface: #751a48;
+  --card: #5c1538;
+  --text: #fdf5f8;
+  --text-muted: #f5b8d8;
   --accent: #c9a96e;
   --accent-soft: rgba(201, 169, 110, 0.3);
   --success: #c9a96e;
   --success-soft: rgba(201, 169, 110, 0.24);
-  --danger: #d6a5b5;
-  --danger-soft: rgba(214, 165, 181, 0.24);
-  --border: rgba(90, 15, 46, 0.5);
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.44), 0 0 32px rgba(201, 169, 110, 0.1), 0 0 44px rgba(90, 15, 46, 0.12), 0 0 36px rgba(140, 28, 91, 0.1);
-  --shadow-hover: 0 4px 22px rgba(0, 0, 0, 0.52), 0 0 40px rgba(201, 169, 110, 0.16), 0 0 52px rgba(90, 15, 46, 0.14), 0 0 44px rgba(140, 28, 91, 0.12);
+  --danger: #f0b8d8;
+  --danger-soft: rgba(240, 184, 216, 0.24);
+  --border: rgba(200, 60, 130, 0.42);
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.44), 0 0 32px rgba(201, 169, 110, 0.12), 0 0 48px rgba(140, 28, 91, 0.2), 0 0 40px rgba(120, 25, 70, 0.16);
+  --shadow-hover: 0 4px 22px rgba(0, 0, 0, 0.52), 0 0 40px rgba(201, 169, 110, 0.18), 0 0 56px rgba(160, 35, 100, 0.22), 0 0 48px rgba(140, 28, 91, 0.18);
 }
 [data-theme="neonRainbow"] .settings-page-card select,
 [data-theme="neonRainbow"] .settings-page-card .theme-dropdown {
@@ -66,23 +66,23 @@
   background: #f5efea;
 }
 
-/* Crème — bordeaux morbido (non troppo scuro), oro su CTA */
+/* Crème — bordeaux saturo e contrastato sul chiaro, oro su CTA */
 [data-theme="neonClear"] {
-  --bg: #e8d9dd;
-  --bg-soft: #dbc9cf;
-  --surface: #f6f0f1;
-  --card: #fff8f9;
-  --text: #6e575f;
-  --text-muted: rgba(110, 87, 95, 0.72);
+  --bg: #edd6dc;
+  --bg-soft: #e0c4cd;
+  --surface: #f8f1f3;
+  --card: #fffafb;
+  --text: #5a0f2e;
+  --text-muted: rgba(90, 15, 46, 0.62);
   --accent: #c9a96e;
   --accent-soft: rgba(201, 169, 110, 0.22);
-  --success: #5f4850;
-  --success-soft: rgba(95, 72, 80, 0.14);
-  --danger: #7a2848;
-  --danger-soft: rgba(122, 40, 72, 0.14);
-  --border: rgba(110, 87, 95, 0.18);
-  --shadow: 0 2px 12px rgba(90, 15, 46, 0.08), 0 0 0 1px rgba(110, 87, 95, 0.05);
-  --shadow-hover: 0 4px 20px rgba(90, 15, 46, 0.12), 0 0 28px rgba(201, 169, 110, 0.12);
+  --success: #6d1538;
+  --success-soft: rgba(109, 21, 56, 0.12);
+  --danger: #8c1c5b;
+  --danger-soft: rgba(140, 28, 91, 0.14);
+  --border: rgba(90, 15, 46, 0.22);
+  --shadow: 0 2px 12px rgba(90, 15, 46, 0.1), 0 0 0 1px rgba(140, 40, 80, 0.06);
+  --shadow-hover: 0 4px 20px rgba(90, 15, 46, 0.14), 0 0 28px rgba(201, 169, 110, 0.14);
 }
 
 [data-theme="neonClear"] h1,
@@ -90,18 +90,18 @@
 [data-theme="neonClear"] h3,
 [data-theme="neonClear"] .page-title,
 [data-theme="neonClear"] .overview-page-title {
-  color: #5c444d;
+  color: #451020;
 }
 
 [data-theme="neonClear"] .settings-page-card select,
 [data-theme="neonClear"] .settings-page-card .theme-dropdown {
   color: var(--text);
-  background: #fff8f9;
-  border: 1px solid rgba(110, 87, 95, 0.22);
+  background: #fffafb;
+  border: 1px solid rgba(90, 15, 46, 0.28);
 }
 [data-theme="neonClear"] .settings-page-card select option {
   color: var(--text);
-  background: #fff8f9;
+  background: #fffafb;
 }
 
 * {
@@ -1099,8 +1099,8 @@ button {
 }
 [data-theme="neonBlack"] .accounts-balance-input,
 [data-theme="neonRainbow"] .accounts-balance-input {
-  color: #f0e4e8;
-  background: rgba(240, 228, 232, 0.1);
+  color: #fdf5f7;
+  background: rgba(253, 245, 247, 0.1);
 }
 
 .muted { color: var(--text-muted); font-size: 0.9rem; }
@@ -1212,7 +1212,7 @@ button {
   padding: 3rem 2rem;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(165deg, #1f0a12 0%, #4a0c24 32%, #5a0f2e 52%, #3d0818 100%);
+  background: linear-gradient(165deg, #1a070e 0%, #5a0f2e 28%, #6b2240 48%, #751a48 72%, #3d0818 100%);
 }
 
 .home-hero-pattern {
@@ -1221,7 +1221,7 @@ button {
   opacity: 0.45;
   background-image:
     radial-gradient(circle at 1px 1px, rgba(201, 169, 110, 0.38) 1px, transparent 0),
-    radial-gradient(circle at 14px 14px, rgba(140, 28, 91, 0.22) 1px, transparent 0);
+    radial-gradient(circle at 14px 14px, rgba(200, 70, 120, 0.28) 1px, transparent 0);
   background-size: 28px 28px, 28px 28px;
   pointer-events: none;
 }
@@ -1239,9 +1239,9 @@ button {
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #d6a5b5;
+  color: #f5c2d4;
   margin: 0 0 1rem 0;
-  text-shadow: 0 0 18px rgba(201, 169, 110, 0.4), 0 0 22px rgba(140, 28, 91, 0.2);
+  text-shadow: 0 0 18px rgba(201, 169, 110, 0.45), 0 0 24px rgba(200, 80, 130, 0.25);
 }
 
 .home-title {
@@ -1249,10 +1249,10 @@ button {
   font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: #f0e4e8;
+  color: #fdf5f7;
   margin: 0;
   line-height: 1.05;
-  text-shadow: 0 0 32px rgba(201, 169, 110, 0.28), 0 0 40px rgba(140, 28, 91, 0.12);
+  text-shadow: 0 0 32px rgba(201, 169, 110, 0.32), 0 0 48px rgba(180, 50, 100, 0.18);
 }
 
 .home-title-rule {
@@ -1279,7 +1279,7 @@ button {
   align-items: flex-start;
   justify-content: center;
   padding: 2rem 1.5rem;
-  background: linear-gradient(180deg, #1f0a12 0%, #320a1a 50%, #3d0818 100%);
+  background: linear-gradient(180deg, #1a070e 0%, #3a0a22 45%, #451020 100%);
 }
 
 .home-login-card.auth-card.card {
@@ -1287,41 +1287,41 @@ button {
   max-width: 360px;
   padding: 1.75rem 1.5rem;
   border-radius: var(--radius);
-  background: linear-gradient(180deg, #451020 0%, #2a0c18 100%);
-  border: 1px solid rgba(201, 169, 110, 0.32);
+  background: linear-gradient(180deg, #5c1538 0%, #3a0f22 100%);
+  border: 1px solid rgba(220, 100, 150, 0.35);
   box-shadow:
-    0 0 0 1px rgba(140, 28, 91, 0.12),
+    0 0 0 1px rgba(180, 50, 100, 0.18),
     0 8px 32px rgba(0, 0, 0, 0.4),
-    0 0 40px rgba(201, 169, 110, 0.1),
-    0 0 48px rgba(140, 28, 91, 0.12);
+    0 0 40px rgba(201, 169, 110, 0.12),
+    0 0 52px rgba(160, 40, 90, 0.18);
 }
 
 .home-login-card .auth-title {
-  color: #f0e4e8;
-  text-shadow: 0 0 22px rgba(201, 169, 110, 0.35), 0 0 28px rgba(140, 28, 91, 0.15);
+  color: #fdf5f7;
+  text-shadow: 0 0 22px rgba(201, 169, 110, 0.38), 0 0 32px rgba(200, 70, 120, 0.2);
 }
 .home-login-card .muted {
-  color: rgba(214, 165, 181, 0.88);
+  color: rgba(245, 200, 220, 0.92);
 }
 .home-login-card .form-group label {
-  color: rgba(245, 239, 234, 0.92);
+  color: rgba(253, 245, 247, 0.94);
 }
 .home-login-card .contact-input,
 .home-login-card input[type="email"],
 .home-login-card input[type="password"] {
-  background: rgba(240, 228, 232, 0.08);
-  border: 1px solid rgba(214, 165, 181, 0.35);
-  color: #f0e4e8;
+  background: rgba(253, 245, 247, 0.08);
+  border: 1px solid rgba(230, 150, 185, 0.4);
+  color: #fdf5f7;
   color-scheme: dark;
 }
 .home-login-card .contact-input::placeholder,
 .home-login-card input::placeholder {
-  color: rgba(245, 239, 234, 0.42);
+  color: rgba(253, 245, 247, 0.45);
 }
 .home-login-card .contact-input:focus,
 .home-login-card input:focus {
   border-color: #c9a96e;
-  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.28), 0 0 18px rgba(140, 28, 91, 0.12);
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.3), 0 0 20px rgba(200, 80, 130, 0.15);
   outline: none;
 }
 .home-login-card .btn-primary,
@@ -1338,29 +1338,29 @@ button {
 }
 .home-login-card .btn-link,
 .home-login-card .auth-footer a {
-  color: #d6a5b5;
+  color: #f5b8d0;
 }
 .home-login-card .btn-link:hover,
 .home-login-card .auth-footer a:hover {
-  color: #f0e4e8;
-  text-shadow: 0 0 12px rgba(201, 169, 110, 0.35);
+  color: #fdf5f7;
+  text-shadow: 0 0 12px rgba(201, 169, 110, 0.38);
 }
 .home-login-card .auth-footer {
-  color: rgba(214, 165, 181, 0.85);
+  color: rgba(245, 200, 220, 0.88);
 }
 .home-login-card .auth-alert {
-  background: rgba(140, 28, 91, 0.2);
-  border: 1px solid rgba(214, 165, 181, 0.35);
-  color: #d6a5b5;
+  background: rgba(140, 28, 91, 0.28);
+  border: 1px solid rgba(240, 160, 195, 0.4);
+  color: #f8d0e4;
 }
 .home-login-card .auth-alert-error {
-  background: rgba(140, 28, 91, 0.28);
-  border-color: rgba(214, 165, 181, 0.45);
-  color: #f0d4dc;
+  background: rgba(140, 28, 91, 0.34);
+  border-color: rgba(240, 160, 195, 0.5);
+  color: #ffe8f0;
 }
 .home-login-card .auth-alert code {
-  color: rgba(240, 228, 232, 0.92);
-  background: rgba(90, 15, 46, 0.35);
+  color: rgba(253, 245, 247, 0.95);
+  background: rgba(90, 15, 46, 0.4);
 }
 
 @media (min-width: 900px) {
