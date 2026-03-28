@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useCallback } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { getState, subscribe } from '../store'
 import type { BudgetState } from '../types'
@@ -13,6 +13,7 @@ import {
 } from '../utils'
 
 const SHOW_MONEY_IN_WALLETS_KEY = 'overview-show-money-in-wallets'
+const CATEGORY_VIEW_KEY = 'overview-category-chart-view'
 
 function getStoredShowMoneyInWallets(): boolean {
   try {
@@ -21,9 +22,23 @@ function getStoredShowMoneyInWallets(): boolean {
   return false
 }
 
-function setStoredShowMoneyInWallets(value: boolean): void {
+function setStoredShowMoneyInWallets(value: boolean) {
   try {
     localStorage.setItem(SHOW_MONEY_IN_WALLETS_KEY, value ? '1' : '0')
+  } catch {}
+}
+
+function getStoredCategoryView(): 'pie' | 'bar' {
+  try {
+    const v = localStorage.getItem(CATEGORY_VIEW_KEY)
+    if (v === 'pie' || v === 'bar') return v
+  } catch {}
+  return 'bar'
+}
+
+function setStoredCategoryView(v: 'pie' | 'bar') {
+  try {
+    localStorage.setItem(CATEGORY_VIEW_KEY, v)
   } catch {}
 }
 
@@ -105,7 +120,6 @@ function useOverview() {
   const currency = state.currency
   const availableThisMonth = income + carryOverFromLastMonth
   const left = availableThisMonth - totalExpenses - totalSavings
-  // Money left after all subscriptions (all treated as cut for the month)
   const leftReal = left - totalSubscriptionAmount + appliedSubscriptionAmount
 
   const categoryNames = Object.fromEntries(
@@ -115,7 +129,6 @@ function useOverview() {
     state.accounts.map((a) => [a.id, a.name])
   )
 
-  // Per-account available = balance minus this month's expenses and savings from that account
   const accountAvailable = useMemo(() => {
     const out: Record<string, number> = {}
     state.accounts.forEach((a) => {
@@ -153,19 +166,114 @@ function useOverview() {
   }
 }
 
+const TOP_N = 8
+const twoPi = Math.PI * 2
+
+type PieSeg = {
+  catId: string
+  amount: number
+  pct: number
+  color: string
+  a0: number
+  a1: number
+}
+
+function buildCategoryPie(
+  byCategory: Record<string, number>,
+  chartColors: string[]
+): { entries: [string, number][]; total: number; segments: PieSeg[] } | null {
+  const keys = Object.keys(byCategory)
+  if (keys.length === 0) return null
+
+  const sorted = Object.entries(byCategory).sort((a, b) => b[1] - a[1])
+  const otherAmount = sorted.length > TOP_N ? sorted.slice(TOP_N).reduce((s, [, amt]) => s + amt, 0) : 0
+  const reducedEntries: [string, number][] =
+    sorted.length > TOP_N && otherAmount > 0
+      ? [...sorted.slice(0, TOP_N), ['other', otherAmount]]
+      : sorted
+  const total = reducedEntries.reduce((s, [, amt]) => s + amt, 0)
+  if (total <= 0) return null
+
+  let angleAcc = 0
+  const segments: PieSeg[] = reducedEntries.map(([catId, amount], i) => {
+    const pct = (amount / total) * 100
+    const a0 = angleAcc
+    const sliceAngle = (amount / total) * twoPi
+    angleAcc += sliceAngle
+    const a1 = angleAcc
+    return {
+      catId,
+      amount,
+      pct,
+      color: chartColors[i % chartColors.length],
+      a0,
+      a1,
+    }
+  })
+
+  return { entries: reducedEntries, total, segments }
+}
+
+function donutPath(cx: number, cy: number, R: number, rInner: number, a0: number, a1: number): string {
+  const x0 = cx + R * Math.sin(a0)
+  const y0 = cy - R * Math.cos(a0)
+  const x1 = cx + R * Math.sin(a1)
+  const y1 = cy - R * Math.cos(a1)
+  const x0i = cx + rInner * Math.sin(a0)
+  const y0i = cy - rInner * Math.cos(a0)
+  const x1i = cx + rInner * Math.sin(a1)
+  const y1i = cy - rInner * Math.cos(a1)
+  const large = a1 - a0 > Math.PI ? 1 : 0
+  return `M ${x0} ${y0} A ${R} ${R} 0 ${large} 1 ${x1} ${y1} L ${x1i} ${y1i} A ${rInner} ${rInner} 0 ${large} 0 ${x0i} ${y0i} Z`
+}
+
 type OverviewProps = { theme?: ThemeId }
 
 export default function Overview({ theme }: OverviewProps) {
   const { t } = useTranslation()
   const data = useOverview()
   const chartTheme = theme ?? getStoredTheme()
+  const chartColors = useMemo(() => getChartColorsForTheme(chartTheme), [chartTheme])
   const [showMoneyInWallets, setShowMoneyInWallets] = useState(getStoredShowMoneyInWallets)
+  const [categoryView, setCategoryView] = useState<'pie' | 'bar'>(getStoredCategoryView)
 
   const handleShowMoneyInWalletsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked
     setShowMoneyInWallets(checked)
     setStoredShowMoneyInWallets(checked)
   }
+
+  const setCategoryChartView = useCallback((v: 'pie' | 'bar') => {
+    setCategoryView(v)
+    setStoredCategoryView(v)
+  }, [])
+
+  const flowScale = Math.max(data.availableThisMonth, data.totalExpenses + data.totalSavings, 0)
+  const wSpent = flowScale > 0 ? (data.totalExpenses / flowScale) * 100 : 0
+  const wSaved = flowScale > 0 ? (data.totalSavings / flowScale) * 100 : 0
+  const wLeft = flowScale > 0 ? (Math.max(0, data.left) / flowScale) * 100 : 0
+  const spentColor = chartColors[3] ?? '#8c1c5b'
+  const savedColor = chartColors[0] ?? '#c9a96e'
+
+  const monthFlowAria = [
+    `${t('overview.spent')}: ${formatCurrency(data.totalExpenses, data.currency)}`,
+    `${t('overview.saved')}: ${formatCurrency(data.totalSavings, data.currency)}`,
+    `${t('overview.moneyLeft')}: ${formatCurrency(data.leftReal, data.currency)}`,
+    `${t('overview.availableThisMonth')}: ${formatCurrency(data.availableThisMonth, data.currency)}`,
+  ].join('. ')
+
+  const categoryPie = useMemo(
+    () => buildCategoryPie(data.byCategory, chartColors),
+    [data.byCategory, chartColors]
+  )
+
+  const categoryMax = categoryPie ? Math.max(...categoryPie.entries.map(([, a]) => a), 1) : 1
+
+  const pieSize = 240
+  const cx = pieSize / 2
+  const cy = pieSize / 2
+  const R = pieSize * 0.42
+  const rInner = R * 0.52
 
   return (
     <div className="overview-page">
@@ -183,6 +291,108 @@ export default function Overview({ theme }: OverviewProps) {
             />
             <span id="overview-show-money-in-wallets-desc">{t('overview.showMoneyInWalletsOption')}</span>
           </label>
+        </div>
+
+        <div className="card overview-summary-flow-card">
+          <h2 className="overview-flow-heading">{t('overview.monthFlow')}</h2>
+          <p className="muted overview-flow-total">
+            {t('overview.availableThisMonth')}:{' '}
+            <strong style={{ color: 'var(--text)' }}>
+              {formatCurrency(data.availableThisMonth, data.currency)}
+            </strong>
+            {data.carryOverFromLastMonth !== 0 && (
+              <>
+                {' '}
+                · {t('overview.carryOver')}: {formatCurrency(data.carryOverFromLastMonth, data.currency)}
+              </>
+            )}
+          </p>
+
+          {flowScale > 0 ? (
+            <div className="overview-stacked-track">
+              <svg
+                className="overview-stacked-svg"
+                viewBox="0 0 100 20"
+                preserveAspectRatio="none"
+                role="img"
+                aria-label={monthFlowAria}
+              >
+                <title>{monthFlowAria}</title>
+                {wSpent > 0 && <rect x={0} y={0} width={wSpent} height={20} fill={spentColor} />}
+                {wSaved > 0 && <rect x={wSpent} y={0} width={wSaved} height={20} fill={savedColor} />}
+                {wLeft > 0 && (
+                  <rect x={wSpent + wSaved} y={0} width={wLeft} height={20} fill="var(--success)" />
+                )}
+              </svg>
+            </div>
+          ) : (
+            <p className="muted" style={{ margin: '0.5rem 0 0' }}>
+              {data.income === 0 ? (
+                <Link to="/accounts" className="overview-to-wallet-link">
+                  {t('overview.setIncomeHint')}
+                </Link>
+              ) : (
+                t('emptyStates.noSpendingYet')
+              )}
+            </p>
+          )}
+
+          <ul className="overview-flow-legend">
+            <li className="overview-flow-legend-item">
+              <div className="overview-flow-legend-top">
+                <span className="overview-flow-swatch" style={{ background: spentColor }} aria-hidden />
+                <span className="overview-flow-legend-label">{t('overview.spent')}</span>
+              </div>
+              <p className="overview-flow-legend-value">{formatCurrency(data.totalExpenses, data.currency)}</p>
+            </li>
+            <li className="overview-flow-legend-item">
+              <div className="overview-flow-legend-top">
+                <span className="overview-flow-swatch" style={{ background: savedColor }} aria-hidden />
+                <span className="overview-flow-legend-label">{t('overview.saved')}</span>
+              </div>
+              <p className="overview-flow-legend-value">{formatCurrency(data.totalSavings, data.currency)}</p>
+            </li>
+            <li className="overview-flow-legend-item">
+              <div className="overview-flow-legend-top">
+                <span
+                  className="overview-flow-swatch"
+                  style={{ background: 'var(--success)' }}
+                  aria-hidden
+                />
+                <span className="overview-flow-legend-label">{t('overview.moneyLeft')}</span>
+              </div>
+              <p
+                className="overview-flow-legend-value"
+                style={{ color: data.leftReal >= 0 ? 'var(--success)' : 'var(--danger)' }}
+              >
+                {formatCurrency(data.leftReal, data.currency)}
+              </p>
+              {data.totalSubscriptionAmount > 0 && (
+                <span className="muted" style={{ fontSize: '0.78rem', fontWeight: 500 }}>
+                  {t('overview.subscriptionsThisMonth')}:{' '}
+                  {formatCurrency(data.totalSubscriptionAmount, data.currency)}
+                </span>
+              )}
+            </li>
+            {showMoneyInWallets && (
+              <li className="overview-flow-legend-item">
+                <div className="overview-flow-legend-top">
+                  <span
+                    className="overview-flow-swatch"
+                    style={{ background: chartColors[5] ?? chartColors[1] }}
+                    aria-hidden
+                  />
+                  <span className="overview-flow-legend-label">{t('overview.moneyInWallets')}</span>
+                </div>
+                <p
+                  className="overview-flow-legend-value"
+                  style={{ color: data.totalInAccounts >= 0 ? 'var(--success)' : 'var(--danger)' }}
+                >
+                  {formatCurrency(data.totalInAccounts, data.currency)}
+                </p>
+              </li>
+            )}
+          </ul>
         </div>
 
         <div className="overview-three-boxes">
@@ -218,7 +428,8 @@ export default function Overview({ theme }: OverviewProps) {
               {data.totalSubscriptionAmount > 0 && (
                 <>
                   {' '}
-                  · {t('overview.subscriptionsThisMonth')}: {formatCurrency(data.totalSubscriptionAmount, data.currency)}
+                  · {t('overview.subscriptionsThisMonth')}:{' '}
+                  {formatCurrency(data.totalSubscriptionAmount, data.currency)}
                 </>
               )}
             </p>
@@ -272,7 +483,7 @@ export default function Overview({ theme }: OverviewProps) {
         </section>
       )}
 
-      {Object.keys(data.byCategory).length === 0 ? (
+      {!categoryPie ? (
         <section className="overview-section" aria-labelledby="overview-section-spending">
           <h2 id="overview-section-spending" className="overview-section-title">
             {t('overview.sectionSpending')}
@@ -289,67 +500,47 @@ export default function Overview({ theme }: OverviewProps) {
             </p>
           </div>
         </section>
-      ) : Object.keys(data.byCategory).length > 0 && (() => {
-        const TOP_N = 8
-        const chartColors = getChartColorsForTheme(chartTheme)
-        const sorted = Object.entries(data.byCategory).sort((a, b) => b[1] - a[1])
-        const otherAmount = sorted.length > TOP_N ? sorted.slice(TOP_N).reduce((s, [, amt]) => s + amt, 0) : 0
-        const reducedEntries: [string, number][] =
-          sorted.length > TOP_N && otherAmount > 0
-            ? [...sorted.slice(0, TOP_N), ['other', otherAmount]]
-            : sorted
-        const total = reducedEntries.reduce((s, [, amt]) => s + amt, 0)
-        const twoPi = Math.PI * 2
-        let angleAcc = 0
-        const segments = reducedEntries.map(([catId, amount], i) => {
-          const pct = total > 0 ? (amount / total) * 100 : 0
-          const a0 = angleAcc
-          const sliceAngle = total > 0 ? (amount / total) * twoPi : 0
-          angleAcc += sliceAngle
-          const a1 = angleAcc
-          return {
-            catId,
-            amount,
-            pct,
-            color: chartColors[i % chartColors.length],
-            a0,
-            a1,
-          }
-        })
+      ) : (
+        <section className="overview-section" aria-labelledby="overview-section-spending">
+          <h2 id="overview-section-spending" className="overview-section-title">
+            {t('overview.sectionSpending')}
+          </h2>
+          <p className="overview-section-intro muted" style={{ marginTop: '-0.25rem' }}>
+            {t('overview.chartSectionIntro')}
+          </p>
 
-        const pieSize = 240
-        const cx = pieSize / 2
-        const cy = pieSize / 2
-        const R = pieSize * 0.42
-        const rInner = R * 0.52
+          <div className="overview-chart-toolbar" role="group" aria-label={t('overview.chartType')}>
+            <span className="overview-chart-toolbar-label">{t('overview.chartType')}</span>
+            <div className="overview-chart-toggle">
+              <button
+                type="button"
+                aria-pressed={categoryView === 'pie'}
+                onClick={() => setCategoryChartView('pie')}
+              >
+                {t('overview.chartPie')}
+              </button>
+              <button
+                type="button"
+                aria-pressed={categoryView === 'bar'}
+                onClick={() => setCategoryChartView('bar')}
+              >
+                {t('overview.chartBar')}
+              </button>
+            </div>
+          </div>
 
-        function donutPath(a0: number, a1: number): string {
-          const x0 = cx + R * Math.sin(a0)
-          const y0 = cy - R * Math.cos(a0)
-          const x1 = cx + R * Math.sin(a1)
-          const y1 = cy - R * Math.cos(a1)
-          const x0i = cx + rInner * Math.sin(a0)
-          const y0i = cy - rInner * Math.cos(a0)
-          const x1i = cx + rInner * Math.sin(a1)
-          const y1i = cy - rInner * Math.cos(a1)
-          const large = a1 - a0 > Math.PI ? 1 : 0
-          return `M ${x0} ${y0} A ${R} ${R} 0 ${large} 1 ${x1} ${y1} L ${x1i} ${y1i} A ${rInner} ${rInner} 0 ${large} 0 ${x0i} ${y0i} Z`
-        }
-
-        return (
-          <section className="overview-section" aria-labelledby="overview-section-spending">
-            <h2 id="overview-section-spending" className="overview-section-title">
-              {t('overview.sectionSpending')}
-            </h2>
-            <div className="card overview-pie-card">
+          <div className="card overview-pie-card">
+            {categoryView === 'pie' ? (
               <div
                 className="overview-pie-chart-wrap"
                 role="img"
                 aria-label={[
                   t('overview.spendingByCategory'),
-                  ...segments.map((s) => {
+                  ...categoryPie.segments.map((s) => {
                     const name =
-                      s.catId === 'other' ? t('overview.other') : (data.categoryNames[s.catId] ?? t('overview.uncategorized'))
+                      s.catId === 'other'
+                        ? t('overview.other')
+                        : (data.categoryNames[s.catId] ?? t('overview.uncategorized'))
                     return `${name}: ${formatCurrency(s.amount, data.currency)}`
                   }),
                 ].join('. ')}
@@ -361,74 +552,101 @@ export default function Overview({ theme }: OverviewProps) {
                   className="overview-pie-svg"
                   aria-hidden
                 >
-                  {total <= 0 ? (
-                    <circle cx={cx} cy={cy} r={(R + rInner) / 2} fill="var(--border)" opacity={0.35} />
-                  ) : (
-                    segments.map((s) => {
-                      const name =
-                        s.catId === 'other' ? t('overview.other') : (data.categoryNames[s.catId] ?? t('overview.uncategorized'))
-                      const mid = (s.a0 + s.a1) / 2
-                      const labelR = (R + rInner) / 2
-                      const tx = cx + labelR * Math.sin(mid)
-                      const ty = cy - labelR * Math.cos(mid)
-                      const amtShort = formatCurrency(s.amount, data.currency)
-                      const maxName = s.pct < 6 ? 6 : s.pct < 12 ? 10 : 14
-                      const nameLine = name.length > maxName ? `${name.slice(0, maxName - 1)}…` : name
-                      const showLabel = s.pct >= 4.5
-                      const span = s.a1 - s.a0
-                      const fullCircle = span >= twoPi - 1e-4
+                  {categoryPie.segments.map((s) => {
+                    const name =
+                      s.catId === 'other'
+                        ? t('overview.other')
+                        : (data.categoryNames[s.catId] ?? t('overview.uncategorized'))
+                    const mid = (s.a0 + s.a1) / 2
+                    const labelR = (R + rInner) / 2
+                    const tx = cx + labelR * Math.sin(mid)
+                    const ty = cy - labelR * Math.cos(mid)
+                    const amtShort = formatCurrency(s.amount, data.currency)
+                    const maxName = s.pct < 6 ? 6 : s.pct < 12 ? 10 : 14
+                    const nameLine = name.length > maxName ? `${name.slice(0, maxName - 1)}…` : name
+                    const showLabel = s.pct >= 4.5
+                    const span = s.a1 - s.a0
+                    const fullCircle = span >= twoPi - 1e-4
 
-                      const labelEl =
-                        showLabel || fullCircle ? (
-                          <text
-                            x={tx}
-                            y={ty}
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                            className="overview-pie-slice-label"
-                          >
-                            <tspan x={tx} dy="-0.55em" className="overview-pie-slice-label-name">
-                              {nameLine}
-                            </tspan>
-                            <tspan x={tx} dy="1.15em" className="overview-pie-slice-label-amount">
-                              {amtShort}
-                            </tspan>
-                          </text>
-                        ) : null
+                    const labelEl =
+                      showLabel || fullCircle ? (
+                        <text
+                          x={tx}
+                          y={ty}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          className="overview-pie-slice-label"
+                        >
+                          <tspan x={tx} dy="-0.55em" className="overview-pie-slice-label-name">
+                            {nameLine}
+                          </tspan>
+                          <tspan x={tx} dy="1.15em" className="overview-pie-slice-label-amount">
+                            {amtShort}
+                          </tspan>
+                        </text>
+                      ) : null
 
-                      const titleEl = `${name}: ${amtShort}`
+                    const titleEl = `${name}: ${amtShort}`
 
-                      if (fullCircle) {
-                        const half = s.a0 + Math.PI
-                        return (
-                          <g key={s.catId}>
-                            <path d={donutPath(s.a0, half)} fill={s.color}>
-                              <title>{titleEl}</title>
-                            </path>
-                            <path d={donutPath(half, s.a1)} fill={s.color}>
-                              <title>{titleEl}</title>
-                            </path>
-                            {labelEl}
-                          </g>
-                        )
-                      }
-
+                    if (fullCircle) {
+                      const half = s.a0 + Math.PI
                       return (
                         <g key={s.catId}>
-                          <path d={donutPath(s.a0, s.a1)} fill={s.color}>
+                          <path d={donutPath(cx, cy, R, rInner, s.a0, half)} fill={s.color}>
+                            <title>{titleEl}</title>
+                          </path>
+                          <path d={donutPath(cx, cy, R, rInner, half, s.a1)} fill={s.color}>
                             <title>{titleEl}</title>
                           </path>
                           {labelEl}
                         </g>
                       )
-                    })
-                  )}
+                    }
+
+                    return (
+                      <g key={s.catId}>
+                        <path d={donutPath(cx, cy, R, rInner, s.a0, s.a1)} fill={s.color}>
+                          <title>{titleEl}</title>
+                        </path>
+                        {labelEl}
+                      </g>
+                    )
+                  })}
                 </svg>
               </div>
-            </div>
-          </section>
-        )
-      })()}
+            ) : (
+              <div
+                className="overview-category-bars"
+                role="list"
+                aria-label={t('overview.spendingByCategory')}
+              >
+                {categoryPie.entries.map(([catId, amount], i) => {
+                  const name =
+                    catId === 'other'
+                      ? t('overview.other')
+                      : (data.categoryNames[catId] ?? t('overview.uncategorized'))
+                  const pct = categoryMax > 0 ? (amount / categoryMax) * 100 : 0
+                  const color = chartColors[i % chartColors.length]
+                  return (
+                    <div key={catId} className="overview-category-bar-row" role="listitem">
+                      <p className="overview-category-bar-name" title={name}>
+                        {name}
+                      </p>
+                      <p className="overview-category-bar-amount">{formatCurrency(amount, data.currency)}</p>
+                      <div className="overview-category-bar-track" aria-hidden>
+                        <div
+                          className="overview-category-bar-fill"
+                          style={{ width: `${pct}%`, background: color }}
+                        />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {Object.keys(data.byAccount).length > 0 && (
         <section className="overview-section" aria-labelledby="overview-section-by-wallet">
