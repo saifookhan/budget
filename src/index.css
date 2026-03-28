@@ -14,8 +14,8 @@
   --bg-soft: #2a0c18;
   --surface: #5a0f2e;
   --card: #451020;
-  --text: #f5efea;
-  --text-muted: rgba(214, 165, 181, 0.88);
+  --text: #f0e4e8;
+  --text-muted: #d6a5b5;
   --accent: #c9a96e;
   --accent-soft: rgba(201, 169, 110, 0.32);
   --success: #c9a96e;
@@ -43,8 +43,8 @@
   --bg-soft: #320a1a;
   --surface: #4f1528;
   --card: #421020;
-  --text: #f5efea;
-  --text-muted: rgba(214, 165, 181, 0.86);
+  --text: #f0e4e8;
+  --text-muted: #d6a5b5;
   --accent: #c9a96e;
   --accent-soft: rgba(201, 169, 110, 0.3);
   --success: #c9a96e;
@@ -72,8 +72,8 @@
   --bg-soft: #dbc9cf;
   --surface: #f6f0f1;
   --card: #fff8f9;
-  --text: #3d0818;
-  --text-muted: rgba(61, 8, 24, 0.64);
+  --text: #5a0f2e;
+  --text-muted: rgba(90, 15, 46, 0.68);
   --accent: #c9a96e;
   --accent-soft: rgba(201, 169, 110, 0.22);
   --success: #5a0f2e;
@@ -86,12 +86,12 @@
 }
 [data-theme="neonClear"] .settings-page-card select,
 [data-theme="neonClear"] .settings-page-card .theme-dropdown {
-  color: #3d0818;
+  color: #5a0f2e;
   background: #fff8f9;
   border: 1px solid rgba(90, 15, 46, 0.18);
 }
 [data-theme="neonClear"] .settings-page-card select option {
-  color: #3d0818;
+  color: #5a0f2e;
   background: #fff8f9;
 }
 
@@ -451,7 +451,7 @@ button {
   background: none;
   border: none;
   cursor: pointer;
-  color: inherit;
+  color: var(--text-muted);
   font-family: inherit;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
@@ -485,7 +485,7 @@ button {
   background: none;
   border: none;
   cursor: pointer;
-  color: inherit;
+  color: var(--text-muted);
   font-family: inherit;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
@@ -1090,8 +1090,8 @@ button {
 }
 [data-theme="neonBlack"] .accounts-balance-input,
 [data-theme="neonRainbow"] .accounts-balance-input {
-  color: #f5efea;
-  background: rgba(245, 239, 234, 0.1);
+  color: #f0e4e8;
+  background: rgba(240, 228, 232, 0.1);
 }
 
 .muted { color: var(--text-muted); font-size: 0.9rem; }
@@ -1240,7 +1240,7 @@ button {
   font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: #f5efea;
+  color: #f0e4e8;
   margin: 0;
   line-height: 1.05;
   text-shadow: 0 0 32px rgba(201, 169, 110, 0.28), 0 0 40px rgba(140, 28, 91, 0.12);
@@ -1288,7 +1288,7 @@ button {
 }
 
 .home-login-card .auth-title {
-  color: #f5efea;
+  color: #f0e4e8;
   text-shadow: 0 0 22px rgba(201, 169, 110, 0.35), 0 0 28px rgba(140, 28, 91, 0.15);
 }
 .home-login-card .muted {
@@ -1300,9 +1300,9 @@ button {
 .home-login-card .contact-input,
 .home-login-card input[type="email"],
 .home-login-card input[type="password"] {
-  background: rgba(245, 239, 234, 0.08);
+  background: rgba(240, 228, 232, 0.08);
   border: 1px solid rgba(214, 165, 181, 0.35);
-  color: #f5efea;
+  color: #f0e4e8;
   color-scheme: dark;
 }
 .home-login-card .contact-input::placeholder,
@@ -1333,7 +1333,7 @@ button {
 }
 .home-login-card .btn-link:hover,
 .home-login-card .auth-footer a:hover {
-  color: #f5efea;
+  color: #f0e4e8;
   text-shadow: 0 0 12px rgba(201, 169, 110, 0.35);
 }
 .home-login-card .auth-footer {
@@ -1350,7 +1350,7 @@ button {
   color: #f0d4dc;
 }
 .home-login-card .auth-alert code {
-  color: rgba(245, 239, 234, 0.92);
+  color: rgba(240, 228, 232, 0.92);
   background: rgba(90, 15, 46, 0.35);
 }
 
