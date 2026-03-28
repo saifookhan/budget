@@ -1,9 +1,8 @@
 :root {
   --radius: 14px;
   --radius-sm: 10px;
-  --font-sans: 'DM Sans', system-ui, sans-serif;
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-wordmark: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
   --mobile-tab-bar-height: 3.75rem;
 }
 
@@ -347,7 +346,7 @@ button {
 }
 
 .app-header-logo-wordmark {
-  font-family: var(--font-wordmark);
+  font-family: var(--font-sans);
   font-style: normal;
   font-weight: 600;
   font-size: 15.5px;
