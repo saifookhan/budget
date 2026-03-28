@@ -253,6 +253,20 @@ function AppShell() {
             </span>
             <span className="header-chat-tagline">{T('contact.headerTagline')}</span>
           </button>
+          <button
+            type="button"
+            className="header-chat-block header-logout-block"
+            onClick={() => {
+              void signOut()
+            }}
+            aria-label={T('nav.logOut')}
+            title={T('nav.logOut')}
+          >
+            <span className="header-chat-emoji" aria-hidden>
+              🚪
+            </span>
+            <span className="header-chat-tagline">{T('nav.logOut')}</span>
+          </button>
         </div>
       </header>
       <Routes>

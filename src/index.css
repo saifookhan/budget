@@ -608,6 +608,16 @@ button {
   color: var(--accent);
 }
 
+.header-logout-block:hover {
+  color: var(--danger);
+}
+
+.header-logout-block:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
 .header-chat-emoji {
   font-size: 0.95rem;
   line-height: 1;
