@@ -56,7 +56,9 @@ export default function Settings({
 }: SettingsProps) {
   return (
     <>
-      <h1 style={{ marginTop: 0, marginBottom: '0.5rem' }}>{T('nav.settings')}</h1>
+      <h1 className="page-title" style={{ marginTop: 0, marginBottom: '0.5rem' }}>
+        {T('nav.settings')}
+      </h1>
       <p className="muted" style={{ marginBottom: '1.5rem' }}>
         {T('settings.pageSubtitle')}
       </p>

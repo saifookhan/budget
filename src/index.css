@@ -8,12 +8,12 @@
   --mobile-tab-bar-height: 3.75rem;
 }
 
-/* Wine night — bordeaux + magenta sullo sfondo, oro su accenti e CTA */
+/* Wine night — bordeaux dominante sullo sfondo, oro su accenti e CTA */
 [data-theme="neonBlack"] {
-  --bg: #2b0716;
-  --bg-soft: #35081c;
+  --bg: #1f0a12;
+  --bg-soft: #2a0c18;
   --surface: #5a0f2e;
-  --card: #4a0d27;
+  --card: #451020;
   --text: #f5efea;
   --text-muted: rgba(214, 165, 181, 0.88);
   --accent: #c9a96e;
@@ -22,9 +22,9 @@
   --success-soft: rgba(201, 169, 110, 0.22);
   --danger: #d6a5b5;
   --danger-soft: rgba(214, 165, 181, 0.22);
-  --border: rgba(140, 28, 91, 0.38);
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.4), 0 0 28px rgba(201, 169, 110, 0.12), 0 0 36px rgba(140, 28, 91, 0.08);
-  --shadow-hover: 0 4px 22px rgba(0, 0, 0, 0.48), 0 0 36px rgba(201, 169, 110, 0.18), 0 0 40px rgba(140, 28, 91, 0.1);
+  --border: rgba(90, 15, 46, 0.55);
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.42), 0 0 28px rgba(201, 169, 110, 0.12), 0 0 40px rgba(90, 15, 46, 0.14);
+  --shadow-hover: 0 4px 22px rgba(0, 0, 0, 0.5), 0 0 36px rgba(201, 169, 110, 0.18), 0 0 48px rgba(90, 15, 46, 0.16);
 }
 [data-theme="neonBlack"] .settings-page-card select,
 [data-theme="neonBlack"] .settings-page-card .theme-dropdown {
@@ -37,12 +37,12 @@
   background: #f5efea;
 }
 
-/* Magenta — palette magenta/bordeaux, CTA e highlight in oro */
+/* Magenta — bordeaux profondo + magenta, CTA in oro */
 [data-theme="neonRainbow"] {
-  --bg: #2b0716;
-  --bg-soft: #3d0a1f;
-  --surface: #621838;
-  --card: #541530;
+  --bg: #1f0a12;
+  --bg-soft: #320a1a;
+  --surface: #4f1528;
+  --card: #421020;
   --text: #f5efea;
   --text-muted: rgba(214, 165, 181, 0.86);
   --accent: #c9a96e;
@@ -51,9 +51,9 @@
   --success-soft: rgba(201, 169, 110, 0.24);
   --danger: #d6a5b5;
   --danger-soft: rgba(214, 165, 181, 0.24);
-  --border: rgba(140, 28, 91, 0.48);
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.42), 0 0 32px rgba(201, 169, 110, 0.1), 0 0 40px rgba(140, 28, 91, 0.14);
-  --shadow-hover: 0 4px 22px rgba(0, 0, 0, 0.5), 0 0 40px rgba(201, 169, 110, 0.16), 0 0 44px rgba(140, 28, 91, 0.18);
+  --border: rgba(90, 15, 46, 0.5);
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.44), 0 0 32px rgba(201, 169, 110, 0.1), 0 0 44px rgba(90, 15, 46, 0.12), 0 0 36px rgba(140, 28, 91, 0.1);
+  --shadow-hover: 0 4px 22px rgba(0, 0, 0, 0.52), 0 0 40px rgba(201, 169, 110, 0.16), 0 0 52px rgba(90, 15, 46, 0.14), 0 0 44px rgba(140, 28, 91, 0.12);
 }
 [data-theme="neonRainbow"] .settings-page-card select,
 [data-theme="neonRainbow"] .settings-page-card .theme-dropdown {
@@ -66,33 +66,33 @@
   background: #f5efea;
 }
 
-/* Crème — fondo rosato, bordeaux testo, oro su bottoni/link */
+/* Crème — wash bordeaux sul fondo, oro su bottoni/link */
 [data-theme="neonClear"] {
-  --bg: #f0e6e8;
-  --bg-soft: #e5d6da;
-  --surface: #faf4f5;
-  --card: #fff9fa;
-  --text: #4a0c24;
-  --text-muted: rgba(74, 12, 36, 0.62);
+  --bg: #e8d9dd;
+  --bg-soft: #dbc9cf;
+  --surface: #f6f0f1;
+  --card: #fff8f9;
+  --text: #3d0818;
+  --text-muted: rgba(61, 8, 24, 0.64);
   --accent: #c9a96e;
   --accent-soft: rgba(201, 169, 110, 0.22);
   --success: #5a0f2e;
-  --success-soft: rgba(90, 15, 46, 0.1);
+  --success-soft: rgba(90, 15, 46, 0.12);
   --danger: #7a2848;
   --danger-soft: rgba(122, 40, 72, 0.14);
-  --border: rgba(214, 165, 181, 0.45);
-  --shadow: 0 2px 12px rgba(90, 15, 46, 0.08), 0 0 0 1px rgba(201, 169, 110, 0.06);
-  --shadow-hover: 0 4px 20px rgba(90, 15, 46, 0.12), 0 0 28px rgba(201, 169, 110, 0.12);
+  --border: rgba(90, 15, 46, 0.12);
+  --shadow: 0 2px 12px rgba(90, 15, 46, 0.1), 0 0 0 1px rgba(90, 15, 46, 0.06);
+  --shadow-hover: 0 4px 20px rgba(90, 15, 46, 0.14), 0 0 28px rgba(201, 169, 110, 0.12);
 }
 [data-theme="neonClear"] .settings-page-card select,
 [data-theme="neonClear"] .settings-page-card .theme-dropdown {
-  color: #4a0c24;
-  background: #fff9fa;
-  border: 1px solid rgba(201, 169, 110, 0.35);
+  color: #3d0818;
+  background: #fff8f9;
+  border: 1px solid rgba(90, 15, 46, 0.18);
 }
 [data-theme="neonClear"] .settings-page-card select option {
-  color: #4a0c24;
-  background: #fff9fa;
+  color: #3d0818;
+  background: #fff8f9;
 }
 
 * {
@@ -444,7 +444,7 @@ button {
   min-height: var(--header-logo-height);
   max-height: var(--header-logo-height);
   min-width: 44px;
-  max-width: 5.75rem;
+  max-width: 6.5rem;
   box-sizing: border-box;
   overflow: hidden;
   flex-shrink: 0;
@@ -478,7 +478,7 @@ button {
   min-height: var(--header-logo-height);
   max-height: var(--header-logo-height);
   min-width: 44px;
-  max-width: 5.75rem;
+  max-width: 6.5rem;
   box-sizing: border-box;
   overflow: hidden;
   flex-shrink: 0;
@@ -507,9 +507,9 @@ button {
 
 .header-chat-tagline {
   display: block;
-  font-size: 0.45rem;
+  font-size: clamp(0.625rem, 2.1vw, 0.6875rem);
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.12;
   text-align: center;
   max-width: 100%;
   hyphens: auto;
@@ -1203,7 +1203,7 @@ button {
   padding: 3rem 2rem;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(165deg, #2b0716 0%, #5a0f2e 38%, #621838 72%, #3d0a1f 100%);
+  background: linear-gradient(165deg, #1f0a12 0%, #4a0c24 32%, #5a0f2e 52%, #3d0818 100%);
 }
 
 .home-hero-pattern {
@@ -1270,7 +1270,7 @@ button {
   align-items: flex-start;
   justify-content: center;
   padding: 2rem 1.5rem;
-  background: linear-gradient(180deg, #2b0716 0%, #3d0a1f 55%, #4a0d27 100%);
+  background: linear-gradient(180deg, #1f0a12 0%, #320a1a 50%, #3d0818 100%);
 }
 
 .home-login-card.auth-card.card {
@@ -1278,7 +1278,7 @@ button {
   max-width: 360px;
   padding: 1.75rem 1.5rem;
   border-radius: var(--radius);
-  background: linear-gradient(180deg, #541530 0%, #3d0a1f 100%);
+  background: linear-gradient(180deg, #451020 0%, #2a0c18 100%);
   border: 1px solid rgba(201, 169, 110, 0.32);
   box-shadow:
     0 0 0 1px rgba(140, 28, 91, 0.12),
