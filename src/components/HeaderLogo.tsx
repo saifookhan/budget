@@ -29,8 +29,8 @@ export default function HeaderLogo({ label, homeTo = '/overview' }: HeaderLogoPr
     >
       <svg
         className="app-header-logo"
-        viewBox="0 0 288 40"
-        width={288}
+        viewBox="0 0 318 40"
+        width={318}
         height={40}
         role="img"
         aria-hidden
@@ -55,7 +55,7 @@ export default function HeaderLogo({ label, homeTo = '/overview' }: HeaderLogoPr
           ))}
         </g>
         <text className="app-header-logo-wordmark" x={42} y={26} dominantBaseline="middle">
-          {label}
+          {label.toLocaleUpperCase()}
         </text>
       </svg>
     </Link>

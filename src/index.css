@@ -352,7 +352,7 @@ button {
   font-weight: 600;
   font-size: 15.5px;
   fill: currentColor;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.06em;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -410,7 +410,7 @@ button {
 
   .app-header-logo-wordmark {
     font-size: 14.25px;
-    letter-spacing: -0.018em;
+    letter-spacing: 0.055em;
   }
 }
 
