@@ -3,6 +3,7 @@
   --radius-sm: 10px;
   --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --header-logo-height: 2rem;
   --mobile-tab-bar-height: 3.75rem;
 }
 
@@ -295,13 +296,16 @@ button {
   gap: 0;
   margin-top: 1.5rem;
   margin-bottom: 2rem;
-  min-height: 44px;
+  min-height: var(--header-logo-height);
   padding: 0 0.75rem 0 1rem;
 }
 
 .app-header .app-title {
   flex: 1 1 0;
   min-width: 0;
+  min-height: var(--header-logo-height);
+  display: flex;
+  align-items: center;
   overflow: hidden;
   margin: 0;
   padding: 0 0.5rem 0 0;
@@ -329,7 +333,7 @@ button {
 
 .app-header-logo {
   display: block;
-  height: 2rem;
+  height: var(--header-logo-height);
   width: auto;
   max-width: 100%;
 }
@@ -369,6 +373,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  align-self: center;
+  height: var(--header-logo-height);
   gap: 0.35rem;
   margin-left: 4px;
 }
@@ -399,12 +405,13 @@ button {
 }
 
 @media (max-width: 480px) {
+  :root {
+    --header-logo-height: 1.88rem;
+  }
+
   .app-header {
     padding-left: 1.25rem;
     padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
-  }
-  .app-header-logo {
-    height: 1.88rem;
   }
 
   .app-header-logo-wordmark {
@@ -418,10 +425,11 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.18rem;
-  margin-top: 0.65rem;
-  padding: 0.35rem 0.4rem 0.25rem;
-  min-height: 44px;
+  gap: 0.06rem;
+  margin-top: 0;
+  padding: 0 0.35rem;
+  height: 100%;
+  max-height: var(--header-logo-height);
   min-width: 44px;
   max-width: 5.75rem;
   box-sizing: border-box;
@@ -448,10 +456,11 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.18rem;
-  margin-top: 0.65rem;
-  padding: 0.35rem 0.4rem 0.25rem;
-  min-height: 44px;
+  gap: 0.06rem;
+  margin-top: 0;
+  padding: 0 0.35rem;
+  height: 100%;
+  max-height: var(--header-logo-height);
   min-width: 44px;
   max-width: 5.75rem;
   box-sizing: border-box;
@@ -473,15 +482,15 @@ button {
 }
 
 .header-chat-emoji {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   line-height: 1;
 }
 
 .header-chat-tagline {
   display: block;
-  font-size: 0.58rem;
+  font-size: 0.5rem;
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.05;
   text-align: center;
   max-width: 100%;
   hyphens: auto;
