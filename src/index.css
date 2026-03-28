@@ -3,8 +3,6 @@
   --radius-sm: 10px;
   --font-sans: 'DM Sans', system-ui, sans-serif;
   --font-display: 'Fraunces', Georgia, serif;
-  /* Wordmark / logo only — high-contrast elegant serif */
-  --font-logo: 'Cormorant Garamond', 'Times New Roman', Times, serif;
   --mobile-tab-bar-height: 3.75rem;
 }
 
@@ -348,12 +346,12 @@ button {
 }
 
 .app-header-logo-wordmark {
-  font-family: var(--font-logo);
-  font-style: italic;
+  font-family: var(--font-display);
+  font-style: normal;
   font-weight: 600;
-  font-size: 17.5px;
+  font-size: 16.25px;
   fill: currentColor;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.04em;
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
 }
@@ -411,8 +409,8 @@ button {
   }
 
   .app-header-logo-wordmark {
-    font-size: 15px;
-    letter-spacing: 0.08em;
+    font-size: 14.5px;
+    letter-spacing: 0.035em;
   }
 }
 
