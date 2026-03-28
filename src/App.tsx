@@ -31,29 +31,6 @@ import { LanguageProvider } from './LanguageContext'
 import { UndoProvider } from './UndoContext'
 import type { BudgetState, CurrencyCode, LanguageCode } from './types'
 
-function shellPageHeading(pathname: string, T: (key: string) => string): string {
-  switch (pathname) {
-    case '/':
-      return T('expenses.title')
-    case '/overview':
-      return T('overview.title')
-    case '/accounts':
-      return T('accounts.pageTitle')
-    case '/past':
-      return T('past.title')
-    case '/expenses-report':
-      return T('expensesReport.title')
-    case '/subscriptions':
-      return T('subscriptions.title')
-    case '/savings':
-      return T('savings.title')
-    case '/settings':
-      return T('nav.settings')
-    default:
-      return T('expenses.title')
-  }
-}
-
 function AppShell() {
   const location = useLocation()
   const navigate = useNavigate()
@@ -248,7 +225,7 @@ function AppShell() {
       )}
       <header className="app-header">
         <div className="app-title">
-          <span className="app-header-page-name">{shellPageHeading(location.pathname, T)}</span>
+          <span className="app-header-page-name">{T('app.headerBrand')}</span>
         </div>
         <div className="header-actions" aria-label={T('nav.quickActions')}>
           <NavLink

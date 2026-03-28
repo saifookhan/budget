@@ -2,6 +2,7 @@ import type { LanguageCode } from './types'
 
 const translations: Record<LanguageCode, Record<string, string>> = {
   en: {
+    'app.headerBrand': 'The money hive',
     'nav.keepOpen': 'Pin',
     'nav.keepOpenOn': 'Keep side menu open',
     'nav.keepOpenOff': 'Side menu slides away',
@@ -257,6 +258,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'contact.botFallback': 'I\'m not sure about that. Try asking in different words (e.g. "how do I add an expense?" or "overview not updating"). If something is broken, describe what you did and what you expected.',
   },
   it: {
+    'app.headerBrand': 'The money hive',
     'nav.keepOpen': 'Pin',
     'nav.keepOpenOn': 'Menu laterale sempre aperto',
     'nav.keepOpenOff': 'Menu laterale a scomparsa',
@@ -500,6 +502,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'contact.botFallback': 'Non sono sicuro. Prova a chiedere in altri termini o descrivi cosa non va.',
   },
   de: {
+    'app.headerBrand': 'The money hive',
     'nav.keepOpen': 'Pin',
     'nav.keepOpenOn': 'Seitenmenü bleibt offen',
     'nav.keepOpenOff': 'Seitenmenü ausblendbar',
@@ -730,6 +733,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'contact.botFallback': 'Da bin ich unsicher. Beschreibe bitte, was nicht stimmt.',
   },
   fr: {
+    'app.headerBrand': 'The money hive',
     'nav.keepOpen': 'Pin',
     'nav.keepOpenOn': 'Menu latéral toujours ouvert',
     'nav.keepOpenOff': 'Menu latéral coulissant',
@@ -959,6 +963,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'contact.botFallback': 'Je ne suis pas sûr. Décris ce qui ne va pas.',
   },
   es: {
+    'app.headerBrand': 'The money hive',
     'nav.keepOpen': 'Pin',
     'nav.keepOpenOn': 'Menú lateral siempre abierto',
     'nav.keepOpenOff': 'Menú lateral deslizante',
