@@ -6,6 +6,11 @@
   /* Fixed px so logo SVG and header actions share one exact raster height */
   --header-logo-height: 40px;
   --mobile-tab-bar-height: 3.75rem;
+  /* sovrascritti da [data-theme]: sfumature stessa famiglia del grafico a torta */
+  --chart-wash-page: none;
+  --chart-wash-card: none;
+  --chart-wash-pie-extra: none;
+  --chart-wash-nav: none;
 }
 
 /* Wine night — bordeaux più saturo e contrastato, oro su CTA */
@@ -25,6 +30,33 @@
   --border: rgba(180, 70, 110, 0.45);
   --shadow: 0 2px 12px rgba(0, 0, 0, 0.42), 0 0 28px rgba(201, 169, 110, 0.14), 0 0 44px rgba(120, 30, 65, 0.22);
   --shadow-hover: 0 4px 22px rgba(0, 0, 0, 0.5), 0 0 36px rgba(201, 169, 110, 0.2), 0 0 52px rgba(140, 40, 80, 0.2);
+  --chart-wash-page:
+    radial-gradient(ellipse 140% 95% at 100% 0%, rgba(201, 169, 110, 0.2) 0%, transparent 58%),
+    radial-gradient(ellipse 100% 75% at 0% 100%, rgba(140, 28, 91, 0.16) 0%, transparent 52%),
+    radial-gradient(ellipse 90% 55% at 50% 110%, rgba(214, 165, 181, 0.12) 0%, transparent 48%);
+  --chart-wash-card: linear-gradient(
+    155deg,
+    rgba(201, 169, 110, 0.18) 0%,
+    rgba(201, 169, 110, 0) 26%,
+    rgba(140, 28, 91, 0.14) 50%,
+    rgba(90, 15, 46, 0) 66%,
+    rgba(214, 165, 181, 0.14) 86%,
+    rgba(201, 169, 110, 0) 100%
+  );
+  --chart-wash-pie-extra: radial-gradient(
+    circle at 50% 40%,
+    rgba(220, 195, 140, 0.22) 0%,
+    rgba(140, 28, 91, 0.1) 45%,
+    transparent 68%
+  );
+  --chart-wash-nav: linear-gradient(
+    90deg,
+    rgba(201, 169, 110, 0.22) 0%,
+    rgba(140, 28, 91, 0.18) 22%,
+    rgba(214, 165, 181, 0.16) 48%,
+    rgba(184, 146, 104, 0.18) 75%,
+    rgba(201, 169, 110, 0.22) 100%
+  );
 }
 [data-theme="neonBlack"] .settings-page-card select,
 [data-theme="neonBlack"] .settings-page-card .theme-dropdown {
@@ -54,6 +86,33 @@
   --border: rgba(200, 60, 130, 0.42);
   --shadow: 0 2px 12px rgba(0, 0, 0, 0.44), 0 0 32px rgba(201, 169, 110, 0.12), 0 0 48px rgba(140, 28, 91, 0.2), 0 0 40px rgba(120, 25, 70, 0.16);
   --shadow-hover: 0 4px 22px rgba(0, 0, 0, 0.52), 0 0 40px rgba(201, 169, 110, 0.18), 0 0 56px rgba(160, 35, 100, 0.22), 0 0 48px rgba(140, 28, 91, 0.18);
+  --chart-wash-page:
+    radial-gradient(ellipse 130% 90% at 95% -5%, rgba(230, 90, 160, 0.22) 0%, transparent 56%),
+    radial-gradient(ellipse 100% 70% at 0% 100%, rgba(140, 28, 91, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse 85% 55% at 55% 105%, rgba(201, 169, 110, 0.14) 0%, transparent 48%);
+  --chart-wash-card: linear-gradient(
+    160deg,
+    rgba(201, 169, 110, 0.16) 0%,
+    rgba(201, 169, 110, 0) 24%,
+    rgba(200, 60, 130, 0.16) 48%,
+    rgba(98, 24, 56, 0) 64%,
+    rgba(214, 165, 181, 0.14) 84%,
+    rgba(201, 169, 110, 0) 100%
+  );
+  --chart-wash-pie-extra: radial-gradient(
+    circle at 48% 38%,
+    rgba(240, 120, 180, 0.2) 0%,
+    rgba(140, 28, 91, 0.12) 42%,
+    transparent 66%
+  );
+  --chart-wash-nav: linear-gradient(
+    90deg,
+    rgba(201, 169, 110, 0.22) 0%,
+    rgba(200, 70, 140, 0.22) 25%,
+    rgba(214, 165, 181, 0.18) 50%,
+    rgba(155, 77, 114, 0.2) 78%,
+    rgba(201, 169, 110, 0.22) 100%
+  );
 }
 [data-theme="neonRainbow"] .settings-page-card select,
 [data-theme="neonRainbow"] .settings-page-card .theme-dropdown {
@@ -83,6 +142,33 @@
   --border: rgba(90, 15, 46, 0.22);
   --shadow: 0 2px 12px rgba(90, 15, 46, 0.1), 0 0 0 1px rgba(140, 40, 80, 0.06);
   --shadow-hover: 0 4px 20px rgba(90, 15, 46, 0.14), 0 0 28px rgba(201, 169, 110, 0.14);
+  --chart-wash-page:
+    radial-gradient(ellipse 125% 85% at 92% 8%, rgba(201, 169, 110, 0.28) 0%, transparent 52%),
+    radial-gradient(ellipse 100% 75% at 5% 92%, rgba(214, 165, 181, 0.45) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 48% 0%, rgba(140, 28, 91, 0.1) 0%, transparent 58%);
+  --chart-wash-card: linear-gradient(
+    145deg,
+    rgba(201, 169, 110, 0.22) 0%,
+    rgba(201, 169, 110, 0) 28%,
+    rgba(214, 165, 181, 0.32) 52%,
+    rgba(214, 165, 181, 0) 70%,
+    rgba(140, 28, 91, 0.08) 88%,
+    rgba(201, 169, 110, 0) 100%
+  );
+  --chart-wash-pie-extra: radial-gradient(
+    circle at 50% 40%,
+    rgba(201, 169, 110, 0.3) 0%,
+    rgba(214, 165, 181, 0.22) 48%,
+    transparent 72%
+  );
+  --chart-wash-nav: linear-gradient(
+    90deg,
+    rgba(201, 169, 110, 0.28) 0%,
+    rgba(214, 165, 181, 0.35) 28%,
+    rgba(140, 28, 91, 0.12) 52%,
+    rgba(220, 196, 152, 0.26) 78%,
+    rgba(201, 169, 110, 0.28) 100%
+  );
 }
 
 [data-theme="neonClear"] h1,
@@ -111,7 +197,8 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: var(--chart-wash-page);
   color: var(--text);
   font-family: var(--font-sans);
   font-size: 16px;
@@ -311,6 +398,19 @@ button {
   height: var(--header-logo-height);
   min-height: var(--header-logo-height);
   padding: 0 0.75rem 0 1rem;
+}
+
+.app-header::after {
+  content: '';
+  position: absolute;
+  left: max(0.5rem, env(safe-area-inset-left));
+  right: max(0.5rem, env(safe-area-inset-right));
+  bottom: -10px;
+  height: 2px;
+  border-radius: 2px;
+  opacity: 0.55;
+  background: var(--chart-wash-nav);
+  pointer-events: none;
 }
 
 .app-header .app-title {
@@ -589,7 +689,8 @@ button {
 }
 
 .card {
-  background: var(--surface);
+  background-color: var(--surface);
+  background-image: var(--chart-wash-card);
   border-radius: var(--radius);
   padding: 1.35rem 1.35rem 1.4rem;
   box-shadow: var(--shadow);
@@ -866,6 +967,8 @@ button {
 
 .overview-pie-card {
   margin-bottom: 0;
+  background-image: var(--chart-wash-pie-extra), var(--chart-wash-card);
+  background-color: var(--surface);
 }
 
 .overview-pie-chart-wrap {
@@ -1537,7 +1640,8 @@ button {
   align-items: stretch;
   justify-content: space-around;
   gap: 0;
-  background: var(--surface);
+  background-color: var(--surface);
+  background-image: var(--chart-wash-nav);
   border-top: 1px solid var(--border);
   box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.07);
   box-sizing: border-box;
