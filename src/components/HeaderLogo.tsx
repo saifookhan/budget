@@ -29,7 +29,7 @@ export default function HeaderLogo({ label, homeTo = '/overview' }: HeaderLogoPr
     >
       <svg
         className="app-header-logo"
-        viewBox="0 5 318 31"
+        viewBox="0 3 318 35"
         preserveAspectRatio="xMinYMid meet"
         role="img"
         aria-hidden
@@ -41,7 +41,7 @@ export default function HeaderLogo({ label, homeTo = '/overview' }: HeaderLogoPr
             <stop offset="100%" stopColor="var(--success)" stopOpacity={0.95} />
           </linearGradient>
         </defs>
-        <g className="app-header-logo-mark" transform="translate(15 20)">
+        <g className="app-header-logo-mark" transform="translate(15 20) scale(1.1)">
           {HIVE.map((p, i) => (
             <path
               key={i}

@@ -4,7 +4,7 @@
   --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
   /* Fixed px so logo SVG and header actions share one exact raster height */
-  --header-logo-height: 32px;
+  --header-logo-height: 40px;
   --mobile-tab-bar-height: 3.75rem;
 }
 
@@ -118,7 +118,7 @@ body {
 .page-title {
   margin-top: 0;
   margin-bottom: 0.35rem;
-  font-size: clamp(1.5rem, 4vw, 1.85rem);
+  font-size: clamp(1.65rem, 4.5vw, 2.05rem);
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -362,9 +362,9 @@ button {
   font-family: var(--font-sans);
   font-style: normal;
   font-weight: 600;
-  font-size: 15.5px;
+  font-size: 19px;
   fill: currentColor;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.055em;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -416,7 +416,7 @@ button {
 
 @media (max-width: 480px) {
   :root {
-    --header-logo-height: 30px;
+    --header-logo-height: 36px;
   }
 
   .app-header {
@@ -425,8 +425,8 @@ button {
   }
 
   .app-header-logo-wordmark {
-    font-size: 14.25px;
-    letter-spacing: 0.055em;
+    font-size: 17px;
+    letter-spacing: 0.05em;
   }
 }
 
@@ -744,6 +744,10 @@ button {
 .overview-page-title {
   margin-top: 0;
   margin-bottom: 0.35rem;
+  font-size: clamp(1.65rem, 4.5vw, 2.05rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .overview-page-subtitle {
