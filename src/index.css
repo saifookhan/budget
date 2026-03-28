@@ -216,10 +216,10 @@ body {
 .page-title {
   margin-top: 0;
   margin-bottom: 0.35rem;
-  font-size: clamp(1.65rem, 4.5vw, 2.05rem);
+  font-size: clamp(1.15rem, 2.8vw, 1.35rem);
   font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .page-lead {
@@ -430,6 +430,7 @@ button {
 .app-header-logo-link {
   display: flex;
   align-items: center;
+  gap: 0.45rem;
   height: var(--header-logo-height);
   min-height: var(--header-logo-height);
   max-height: var(--header-logo-height);
@@ -450,14 +451,6 @@ button {
   border-radius: 6px;
 }
 
-.app-header-logo {
-  display: block;
-  height: var(--header-logo-height);
-  width: auto;
-  max-width: 100%;
-  max-height: var(--header-logo-height);
-}
-
 .app-header-logo-mark {
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.22));
 }
@@ -469,23 +462,48 @@ button {
   paint-order: stroke fill;
 }
 
-.app-header-logo-wordmark {
-  font-family: var(--font-sans);
-  font-style: normal;
-  font-weight: 600;
-  font-size: 19px;
-  fill: currentColor;
-  letter-spacing: 0.055em;
-  -webkit-font-smoothing: antialiased;
+.app-header .app-title a {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0;
 }
 
-.app-header .app-title a {
+.app-header-logo-mark-svg {
   display: block;
+  width: 36px;
+  height: var(--header-logo-height);
+  flex-shrink: 0;
+}
+
+.app-header-wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+.app-header-wordmark-line1 {
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: currentColor;
   white-space: nowrap;
-  padding: 0;
+}
+
+.app-header-wordmark-line2 {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: currentColor;
+  align-self: center;
+  margin-top: 2px;
+  white-space: nowrap;
 }
 
 .app-header .header-actions {
@@ -535,9 +553,18 @@ button {
     padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
   }
 
-  .app-header-logo-wordmark {
-    font-size: 17px;
-    letter-spacing: 0.05em;
+  .app-header-logo-mark-svg {
+    width: 32px;
+  }
+
+  .app-header-wordmark-line1 {
+    font-size: 0.58rem;
+    letter-spacing: 0.07em;
+  }
+
+  .app-header-wordmark-line2 {
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
   }
 }
 
@@ -566,7 +593,7 @@ button {
   touch-action: manipulation;
   text-decoration: none;
   border-radius: 10px;
-  transition: background 0.18s ease, transform 0.1s ease;
+  transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.16s ease;
 }
 
 .header-settings-link:hover {
@@ -574,7 +601,7 @@ button {
 }
 
 .header-settings-link:active {
-  transform: scale(0.97);
+  opacity: 0.78;
 }
 
 .header-settings-link.active {
@@ -610,7 +637,7 @@ button {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   border-radius: 10px;
-  transition: background 0.18s ease, transform 0.1s ease;
+  transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.16s ease;
 }
 
 .header-chat-block:hover {
@@ -618,7 +645,7 @@ button {
 }
 
 .header-chat-block:active {
-  transform: scale(0.97);
+  opacity: 0.78;
 }
 
 .header-chat-block.active {
@@ -884,10 +911,10 @@ button {
 .overview-page-title {
   margin-top: 0;
   margin-bottom: 0.35rem;
-  font-size: clamp(1.65rem, 4.5vw, 2.05rem);
+  font-size: clamp(1.15rem, 2.8vw, 1.35rem);
   font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .overview-page-subtitle {
@@ -908,11 +935,11 @@ button {
 }
 
 .overview-section-title {
-  margin: 0 0 0.5rem;
-  font-size: 1.05rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--text);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
 }
 
 .overview-section-intro {
@@ -939,9 +966,10 @@ button {
 
 .overview-flow-heading {
   margin: 0 0 0.35rem;
-  font-size: 1.05rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--text);
+  letter-spacing: 0.01em;
 }
 
 .overview-flow-total {
@@ -1053,7 +1081,7 @@ button {
   color: var(--text-muted);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s ease, opacity 0.12s ease;
 }
 
 .overview-chart-toggle button:hover {
@@ -1062,7 +1090,7 @@ button {
 }
 
 .overview-chart-toggle button:active {
-  transform: scale(0.98);
+  opacity: 0.82;
 }
 
 .overview-chart-toggle button[aria-pressed='true'] {
@@ -1129,17 +1157,17 @@ button {
 
 .overview-box-heading {
   margin: 0 0 0.35rem;
-  font-size: 1.05rem;
+  font-size: 0.92rem;
   font-weight: 600;
   line-height: 1.25;
 }
 
 .overview-box-heading--wallet {
-  font-size: 1rem;
+  font-size: 0.88rem;
 }
 
 .overview-box-figure {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   margin: 0;
   line-height: 1.2;
@@ -1333,10 +1361,9 @@ button {
   border-radius: var(--radius-sm);
   font-weight: 600;
   transition:
-    transform 0.12s ease,
-    box-shadow 0.18s ease,
-    background 0.18s ease,
-    opacity 0.15s ease;
+    box-shadow 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.18s ease;
 }
 
 .btn:focus-visible {
@@ -1344,8 +1371,8 @@ button {
   outline-offset: 2px;
 }
 
-.btn:active {
-  transform: translateY(1px) scale(0.992);
+.btn:active:not(:disabled) {
+  transition-duration: 0.1s;
 }
 
 .btn-primary {
@@ -1357,8 +1384,8 @@ button {
   box-shadow: var(--shadow-hover);
 }
 
-.btn-primary:active {
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.14);
+.btn-primary:active:not(:disabled) {
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.11);
 }
 
 .btn-ghost {
@@ -1371,9 +1398,8 @@ button {
   color: var(--danger);
 }
 
-.btn-ghost:active {
-  background: var(--danger-soft);
-  transform: translateY(1px) scale(0.992);
+.btn-ghost:active:not(:disabled) {
+  opacity: 0.88;
 }
 
 .btn-link {
@@ -1690,8 +1716,7 @@ button {
 }
 .home-login-card .btn-primary:active:not(:disabled),
 .home-login-card .contact-send:active {
-  box-shadow: inset 0 2px 8px rgba(90, 15, 46, 0.2);
-  transform: translateY(1px) scale(0.992);
+  box-shadow: inset 0 2px 10px rgba(90, 15, 46, 0.16);
 }
 .home-login-card .btn-link,
 .home-login-card .auth-footer a {
@@ -1784,7 +1809,8 @@ button {
 }
 
 .contact-fab:active {
-  transform: scale(0.96);
+  transform: scale(0.97);
+  transition-duration: 0.08s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
@@ -1887,8 +1913,7 @@ button {
 }
 .contact-send:active {
   opacity: 1;
-  transform: translateY(1px) scale(0.99);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 1100px) {
@@ -1937,7 +1962,7 @@ button {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   border-radius: 10px;
-  transition: color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  transition: color 0.18s ease, background 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.12s ease;
 }
 
 .app-bottom-nav-item:hover {
@@ -1946,7 +1971,7 @@ button {
 }
 
 .app-bottom-nav-item:active {
-  transform: scale(0.96);
+  opacity: 0.82;
 }
 
 .app-bottom-nav-item.active {

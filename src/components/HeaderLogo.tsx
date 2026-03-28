@@ -2,7 +2,10 @@ import { useId } from 'react'
 import { Link } from 'react-router-dom'
 
 type HeaderLogoProps = {
-  label: string
+  /** Full name for accessibility (e.g. "The money hive") */
+  ariaLabel: string
+  line1: string
+  line2: string
   homeTo?: string
 }
 
@@ -16,7 +19,7 @@ const HIVE = [
   { tx: 6.062, ty: 3.5 },
 ] as const
 
-export default function HeaderLogo({ label, homeTo = '/overview' }: HeaderLogoProps) {
+export default function HeaderLogo({ ariaLabel, line1, line2, homeTo = '/overview' }: HeaderLogoProps) {
   const rawId = useId()
   const gradId = `hive-grad-${rawId.replace(/:/g, '')}`
 
@@ -24,13 +27,13 @@ export default function HeaderLogo({ label, homeTo = '/overview' }: HeaderLogoPr
     <Link
       to={homeTo}
       className="app-header-logo-link"
-      aria-label={label}
-      title={label}
+      aria-label={ariaLabel}
+      title={ariaLabel}
     >
       <svg
-        className="app-header-logo"
-        viewBox="0 3 318 35"
-        preserveAspectRatio="xMinYMid meet"
+        className="app-header-logo-mark-svg"
+        viewBox="-4 0 44 38"
+        preserveAspectRatio="xMidYMid meet"
         role="img"
         aria-hidden
       >
@@ -41,7 +44,7 @@ export default function HeaderLogo({ label, homeTo = '/overview' }: HeaderLogoPr
             <stop offset="100%" stopColor="var(--success)" stopOpacity={0.95} />
           </linearGradient>
         </defs>
-        <g className="app-header-logo-mark" transform="translate(15 20) scale(1.1)">
+        <g className="app-header-logo-mark" transform="translate(18 19) scale(1.1)">
           {HIVE.map((p, i) => (
             <path
               key={i}
@@ -53,10 +56,11 @@ export default function HeaderLogo({ label, homeTo = '/overview' }: HeaderLogoPr
             />
           ))}
         </g>
-        <text className="app-header-logo-wordmark" x={42} y={26} dominantBaseline="middle">
-          {label.toLocaleUpperCase()}
-        </text>
       </svg>
+      <span className="app-header-wordmark">
+        <span className="app-header-wordmark-line1">{line1}</span>
+        <span className="app-header-wordmark-line2">{line2}</span>
+      </span>
     </Link>
   )
 }

@@ -3,6 +3,8 @@ import type { LanguageCode } from './types'
 const translations: Record<LanguageCode, Record<string, string>> = {
   en: {
     'app.headerBrand': 'The money hive',
+    'app.wordmarkLine1': 'THE MONEY',
+    'app.wordmarkLine2': 'HIVE',
     'nav.keepOpen': 'Pin',
     'nav.keepOpenOn': 'Keep side menu open',
     'nav.keepOpenOff': 'Side menu slides away',
@@ -260,6 +262,8 @@ const translations: Record<LanguageCode, Record<string, string>> = {
   },
   it: {
     'app.headerBrand': 'The money hive',
+    'app.wordmarkLine1': 'THE MONEY',
+    'app.wordmarkLine2': 'HIVE',
     'nav.keepOpen': 'Pin',
     'nav.keepOpenOn': 'Menu laterale sempre aperto',
     'nav.keepOpenOff': 'Menu laterale a scomparsa',
@@ -505,6 +509,8 @@ const translations: Record<LanguageCode, Record<string, string>> = {
   },
   de: {
     'app.headerBrand': 'The money hive',
+    'app.wordmarkLine1': 'THE MONEY',
+    'app.wordmarkLine2': 'HIVE',
     'nav.keepOpen': 'Pin',
     'nav.keepOpenOn': 'Seitenmenü bleibt offen',
     'nav.keepOpenOff': 'Seitenmenü ausblendbar',
@@ -737,6 +743,8 @@ const translations: Record<LanguageCode, Record<string, string>> = {
   },
   fr: {
     'app.headerBrand': 'The money hive',
+    'app.wordmarkLine1': 'THE MONEY',
+    'app.wordmarkLine2': 'HIVE',
     'nav.keepOpen': 'Pin',
     'nav.keepOpenOn': 'Menu latéral toujours ouvert',
     'nav.keepOpenOff': 'Menu latéral coulissant',
@@ -968,6 +976,8 @@ const translations: Record<LanguageCode, Record<string, string>> = {
   },
   es: {
     'app.headerBrand': 'The money hive',
+    'app.wordmarkLine1': 'THE MONEY',
+    'app.wordmarkLine2': 'HIVE',
     'nav.keepOpen': 'Pin',
     'nav.keepOpenOn': 'Menú lateral siempre abierto',
     'nav.keepOpenOff': 'Menú lateral deslizante',

@@ -226,7 +226,11 @@ function AppShell() {
       )}
       <header className="app-header">
         <div className="app-title">
-          <HeaderLogo label={T('app.headerBrand')} />
+          <HeaderLogo
+            ariaLabel={T('app.headerBrand')}
+            line1={T('app.wordmarkLine1')}
+            line2={T('app.wordmarkLine2')}
+          />
         </div>
         <div className="header-actions" aria-label={T('nav.quickActions')}>
           <NavLink
