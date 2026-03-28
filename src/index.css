@@ -8,91 +8,91 @@
   --mobile-tab-bar-height: 3.75rem;
 }
 
-/* Wine night — bordeaux froid, crema, oro */
+/* Wine night — bordeaux profondo + magenta, oro sui positivi */
 [data-theme="neonBlack"] {
-  --bg: #3d0a1f;
-  --bg-soft: #4a0c24;
+  --bg: #2b0716;
+  --bg-soft: #35081c;
   --surface: #5a0f2e;
-  --card: #52142c;
+  --card: #4a0d27;
   --text: #f5efea;
-  --text-muted: rgba(214, 165, 181, 0.82);
-  --accent: #c9a96e;
-  --accent-soft: rgba(201, 169, 110, 0.28);
+  --text-muted: rgba(214, 165, 181, 0.88);
+  --accent: #8c1c5b;
+  --accent-soft: rgba(140, 28, 91, 0.38);
   --success: #c9a96e;
   --success-soft: rgba(201, 169, 110, 0.22);
   --danger: #d6a5b5;
-  --danger-soft: rgba(214, 165, 181, 0.18);
-  --border: rgba(214, 165, 181, 0.28);
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.35), 0 0 28px rgba(201, 169, 110, 0.08);
-  --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 36px rgba(201, 169, 110, 0.12);
+  --danger-soft: rgba(214, 165, 181, 0.22);
+  --border: rgba(140, 28, 91, 0.42);
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.4), 0 0 32px rgba(140, 28, 91, 0.14);
+  --shadow-hover: 0 4px 22px rgba(0, 0, 0, 0.48), 0 0 40px rgba(140, 28, 91, 0.2);
 }
 [data-theme="neonBlack"] .settings-page-card select,
 [data-theme="neonBlack"] .settings-page-card .theme-dropdown {
   color: #5a0f2e;
   background: #f5efea;
-  border: 1px solid rgba(214, 165, 181, 0.55);
+  border: 1px solid rgba(140, 28, 91, 0.28);
 }
 [data-theme="neonBlack"] .settings-page-card select option {
   color: #5a0f2e;
   background: #f5efea;
 }
 
-/* Magenta — stessa palette, accento magenta su bordeaux */
+/* Magenta — bordeaux + magenta dominanti */
 [data-theme="neonRainbow"] {
-  --bg: #3d0a1f;
-  --bg-soft: #4a0c24;
-  --surface: #5a0f2e;
-  --card: #52142c;
+  --bg: #2b0716;
+  --bg-soft: #3d0a1f;
+  --surface: #621838;
+  --card: #541530;
   --text: #f5efea;
-  --text-muted: rgba(245, 239, 234, 0.65);
+  --text-muted: rgba(214, 165, 181, 0.86);
   --accent: #8c1c5b;
-  --accent-soft: rgba(140, 28, 91, 0.32);
+  --accent-soft: rgba(140, 28, 91, 0.42);
   --success: #c9a96e;
-  --success-soft: rgba(201, 169, 110, 0.2);
+  --success-soft: rgba(201, 169, 110, 0.24);
   --danger: #d6a5b5;
-  --danger-soft: rgba(214, 165, 181, 0.2);
-  --border: rgba(201, 169, 110, 0.32);
-  --shadow: 0 2px 12px rgba(0, 0, 0, 0.35), 0 0 28px rgba(140, 28, 91, 0.1);
-  --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 36px rgba(140, 28, 91, 0.14);
+  --danger-soft: rgba(214, 165, 181, 0.24);
+  --border: rgba(140, 28, 91, 0.5);
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.42), 0 0 36px rgba(140, 28, 91, 0.18);
+  --shadow-hover: 0 4px 22px rgba(0, 0, 0, 0.5), 0 0 44px rgba(140, 28, 91, 0.26);
 }
 [data-theme="neonRainbow"] .settings-page-card select,
 [data-theme="neonRainbow"] .settings-page-card .theme-dropdown {
   color: #5a0f2e;
   background: #f5efea;
-  border: 1px solid rgba(214, 165, 181, 0.55);
+  border: 1px solid rgba(140, 28, 91, 0.32);
 }
 [data-theme="neonRainbow"] .settings-page-card select option {
   color: #5a0f2e;
   background: #f5efea;
 }
 
-/* Crème — beige caldo, testo bordeaux, oro accento */
+/* Crème — fondo rosato, bordeaux testo, magenta accento */
 [data-theme="neonClear"] {
-  --bg: #f5efea;
-  --bg-soft: #ebe2da;
-  --surface: #fffdfb;
-  --card: #fffcfa;
-  --text: #5a0f2e;
-  --text-muted: rgba(90, 15, 46, 0.58);
-  --accent: #c9a96e;
-  --accent-soft: rgba(201, 169, 110, 0.22);
-  --success: #8c1c5b;
-  --success-soft: rgba(140, 28, 91, 0.1);
+  --bg: #f0e6e8;
+  --bg-soft: #e5d6da;
+  --surface: #faf4f5;
+  --card: #fff9fa;
+  --text: #4a0c24;
+  --text-muted: rgba(74, 12, 36, 0.62);
+  --accent: #8c1c5b;
+  --accent-soft: rgba(140, 28, 91, 0.16);
+  --success: #5a0f2e;
+  --success-soft: rgba(90, 15, 46, 0.1);
   --danger: #7a2848;
-  --danger-soft: rgba(122, 40, 72, 0.12);
-  --border: rgba(214, 165, 181, 0.55);
-  --shadow: 0 2px 12px rgba(90, 15, 46, 0.06);
-  --shadow-hover: 0 4px 20px rgba(90, 15, 46, 0.1);
+  --danger-soft: rgba(122, 40, 72, 0.14);
+  --border: rgba(140, 28, 91, 0.22);
+  --shadow: 0 2px 12px rgba(90, 15, 46, 0.08), 0 0 0 1px rgba(140, 28, 91, 0.04);
+  --shadow-hover: 0 4px 20px rgba(90, 15, 46, 0.12), 0 0 24px rgba(140, 28, 91, 0.08);
 }
 [data-theme="neonClear"] .settings-page-card select,
 [data-theme="neonClear"] .settings-page-card .theme-dropdown {
-  color: #5a0f2e;
-  background: #fffcfa;
-  border: 1px solid var(--border);
+  color: #4a0c24;
+  background: #fff9fa;
+  border: 1px solid rgba(140, 28, 91, 0.28);
 }
 [data-theme="neonClear"] .settings-page-card select option {
-  color: #5a0f2e;
-  background: #fffcfa;
+  color: #4a0c24;
+  background: #fff9fa;
 }
 
 * {
@@ -1203,15 +1203,17 @@ button {
   padding: 3rem 2rem;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(165deg, #3d0a1f 0%, #5a0f2e 42%, #4a0c24 100%);
+  background: linear-gradient(165deg, #2b0716 0%, #5a0f2e 38%, #621838 72%, #3d0a1f 100%);
 }
 
 .home-hero-pattern {
   position: absolute;
   inset: 0;
-  opacity: 0.4;
-  background-image: radial-gradient(circle at 1px 1px, rgba(201, 169, 110, 0.45) 1px, transparent 0);
-  background-size: 28px 28px;
+  opacity: 0.45;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(201, 169, 110, 0.38) 1px, transparent 0),
+    radial-gradient(circle at 14px 14px, rgba(140, 28, 91, 0.22) 1px, transparent 0);
+  background-size: 28px 28px, 28px 28px;
   pointer-events: none;
 }
 
@@ -1230,7 +1232,7 @@ button {
   text-transform: uppercase;
   color: #d6a5b5;
   margin: 0 0 1rem 0;
-  text-shadow: 0 0 18px rgba(201, 169, 110, 0.35);
+  text-shadow: 0 0 20px rgba(140, 28, 91, 0.35);
 }
 
 .home-title {
@@ -1241,16 +1243,16 @@ button {
   color: #f5efea;
   margin: 0;
   line-height: 1.05;
-  text-shadow: 0 0 36px rgba(201, 169, 110, 0.2);
+  text-shadow: 0 0 40px rgba(140, 28, 91, 0.28), 0 0 24px rgba(201, 169, 110, 0.12);
 }
 
 .home-title-rule {
   width: 56px;
   height: 4px;
   margin: 1.25rem auto 1.5rem;
-  background: linear-gradient(90deg, #c9a96e, #dcc598);
+  background: linear-gradient(90deg, #8c1c5b, #c9a96e, #dcc598);
   border-radius: 2px;
-  box-shadow: 0 0 16px rgba(201, 169, 110, 0.45), 0 0 32px rgba(140, 28, 91, 0.25);
+  box-shadow: 0 0 18px rgba(140, 28, 91, 0.5), 0 0 24px rgba(201, 169, 110, 0.3);
 }
 
 .home-tagline {
@@ -1268,7 +1270,7 @@ button {
   align-items: flex-start;
   justify-content: center;
   padding: 2rem 1.5rem;
-  background: linear-gradient(180deg, #2d0818 0%, #3d0a1f 100%);
+  background: linear-gradient(180deg, #2b0716 0%, #3d0a1f 55%, #4a0d27 100%);
 }
 
 .home-login-card.auth-card.card {
@@ -1276,14 +1278,14 @@ button {
   max-width: 360px;
   padding: 1.75rem 1.5rem;
   border-radius: var(--radius);
-  background: linear-gradient(180deg, #4a0c24 0%, #3d0a1f 100%);
-  border: 1px solid rgba(201, 169, 110, 0.35);
-  box-shadow: 0 0 0 1px rgba(214, 165, 181, 0.12), 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 40px rgba(140, 28, 91, 0.12);
+  background: linear-gradient(180deg, #541530 0%, #3d0a1f 100%);
+  border: 1px solid rgba(140, 28, 91, 0.48);
+  box-shadow: 0 0 0 1px rgba(140, 28, 91, 0.15), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 48px rgba(140, 28, 91, 0.16);
 }
 
 .home-login-card .auth-title {
   color: #f5efea;
-  text-shadow: 0 0 20px rgba(201, 169, 110, 0.2);
+  text-shadow: 0 0 24px rgba(140, 28, 91, 0.35);
 }
 .home-login-card .muted {
   color: rgba(214, 165, 181, 0.88);
@@ -1305,20 +1307,20 @@ button {
 }
 .home-login-card .contact-input:focus,
 .home-login-card input:focus {
-  border-color: #c9a96e;
-  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.22), 0 0 18px rgba(140, 28, 91, 0.15);
+  border-color: #8c1c5b;
+  box-shadow: 0 0 0 3px rgba(140, 28, 91, 0.28), 0 0 20px rgba(140, 28, 91, 0.2);
   outline: none;
 }
 .home-login-card .btn-primary,
 .home-login-card .contact-send {
-  background: linear-gradient(135deg, #c9a96e 0%, #dcc598 100%);
-  color: #5a0f2e;
+  background: linear-gradient(135deg, #8c1c5b 0%, #6d1548 100%);
+  color: #f5efea;
   border: none;
-  box-shadow: 0 0 18px rgba(201, 169, 110, 0.35);
+  box-shadow: 0 0 22px rgba(140, 28, 91, 0.45), 0 0 12px rgba(201, 169, 110, 0.15);
 }
 .home-login-card .btn-primary:hover:not(:disabled),
 .home-login-card .contact-send:hover {
-  box-shadow: 0 0 26px rgba(201, 169, 110, 0.45);
+  box-shadow: 0 0 32px rgba(140, 28, 91, 0.55), 0 0 16px rgba(201, 169, 110, 0.2);
   opacity: 1;
 }
 .home-login-card .btn-link,
