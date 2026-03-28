@@ -560,19 +560,16 @@ button {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--text-muted);
+  color: var(--danger);
   font-family: inherit;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   text-decoration: none;
 }
 
-.header-settings-link:hover {
-  color: var(--accent);
-}
-
+.header-settings-link:hover,
 .header-settings-link.active {
-  color: var(--accent);
+  filter: brightness(1.1);
 }
 
 .header-chat-block {
@@ -608,8 +605,12 @@ button {
   color: var(--accent);
 }
 
-.header-logout-block:hover {
+.header-chat-block.header-logout-block {
   color: var(--danger);
+}
+
+.header-logout-block:hover {
+  filter: brightness(1.1);
 }
 
 .header-logout-block:focus-visible {
