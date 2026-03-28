@@ -66,32 +66,42 @@
   background: #f5efea;
 }
 
-/* Crème — wash bordeaux sul fondo, oro su bottoni/link */
+/* Crème — stesso bordeaux “da wine night” sulle scritte, oro su CTA */
 [data-theme="neonClear"] {
   --bg: #e8d9dd;
   --bg-soft: #dbc9cf;
   --surface: #f6f0f1;
   --card: #fff8f9;
-  --text: #5a0f2e;
-  --text-muted: rgba(90, 15, 46, 0.68);
+  /* come --card / superfici degli altri temi */
+  --text: #451020;
+  --text-muted: rgba(69, 16, 32, 0.72);
   --accent: #c9a96e;
   --accent-soft: rgba(201, 169, 110, 0.22);
-  --success: #5a0f2e;
-  --success-soft: rgba(90, 15, 46, 0.12);
+  --success: #451020;
+  --success-soft: rgba(69, 16, 32, 0.12);
   --danger: #7a2848;
   --danger-soft: rgba(122, 40, 72, 0.14);
-  --border: rgba(90, 15, 46, 0.12);
+  --border: rgba(90, 15, 46, 0.14);
   --shadow: 0 2px 12px rgba(90, 15, 46, 0.1), 0 0 0 1px rgba(90, 15, 46, 0.06);
   --shadow-hover: 0 4px 20px rgba(90, 15, 46, 0.14), 0 0 28px rgba(201, 169, 110, 0.12);
 }
+
+[data-theme="neonClear"] h1,
+[data-theme="neonClear"] h2,
+[data-theme="neonClear"] h3,
+[data-theme="neonClear"] .page-title,
+[data-theme="neonClear"] .overview-page-title {
+  color: #3d0a1f;
+}
+
 [data-theme="neonClear"] .settings-page-card select,
 [data-theme="neonClear"] .settings-page-card .theme-dropdown {
-  color: #5a0f2e;
+  color: #451020;
   background: #fff8f9;
-  border: 1px solid rgba(90, 15, 46, 0.18);
+  border: 1px solid rgba(69, 16, 32, 0.2);
 }
 [data-theme="neonClear"] .settings-page-card select option {
-  color: #5a0f2e;
+  color: #451020;
   background: #fff8f9;
 }
 
