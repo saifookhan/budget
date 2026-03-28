@@ -3,6 +3,8 @@
   --radius-sm: 10px;
   --font-sans: 'DM Sans', system-ui, sans-serif;
   --font-display: 'Fraunces', Georgia, serif;
+  /* Wordmark / logo only — high-contrast elegant serif */
+  --font-logo: 'Cormorant Garamond', 'Times New Roman', Times, serif;
   --mobile-tab-bar-height: 3.75rem;
 }
 
@@ -329,23 +331,29 @@ button {
 
 .app-header-logo {
   display: block;
-  height: 1.85rem;
+  height: 2rem;
   width: auto;
   max-width: 100%;
 }
 
-.app-header-logo-mark path {
-  fill: var(--accent);
-  opacity: 0.9;
+.app-header-logo-mark {
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.22));
+}
+
+.app-header-logo-hex {
+  stroke: var(--bg);
+  stroke-width: 0.45;
+  stroke-opacity: 0.28;
+  paint-order: stroke fill;
 }
 
 .app-header-logo-wordmark {
-  font-family: var(--font-display);
+  font-family: var(--font-logo);
   font-style: italic;
-  font-weight: 500;
-  font-size: 15.75px;
+  font-weight: 600;
+  font-size: 17.5px;
   fill: currentColor;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.1em;
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
 }
@@ -398,9 +406,13 @@ button {
     padding-left: 1.25rem;
     padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
   }
+  .app-header-logo {
+    height: 1.88rem;
+  }
+
   .app-header-logo-wordmark {
-    font-size: 14.25px;
-    letter-spacing: 0.06em;
+    font-size: 15px;
+    letter-spacing: 0.08em;
   }
 }
 

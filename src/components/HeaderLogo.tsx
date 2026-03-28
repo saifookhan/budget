@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import { Link } from 'react-router-dom'
 
 type HeaderLogoProps = {
@@ -5,10 +6,20 @@ type HeaderLogoProps = {
   homeTo?: string
 }
 
-/** Flat-top hex centered at origin, circumradius ~9 */
-const HEX = 'M0-9L7.794-4.5L7.794 4.5L0 9L-7.794 4.5L-7.794-4.5Z'
+/** Flat-top hex, circumradius 7 — three cells in a tight honeycomb triangle */
+const HEX = 'M0-7L6.062-3.5L6.062 3.5L0 7L-6.062 3.5L-6.062-3.5Z'
+
+/** Centers at mutual distance √3·R (touching); triangle pointing up */
+const HIVE = [
+  { tx: 0, ty: -7 },
+  { tx: -6.062, ty: 3.5 },
+  { tx: 6.062, ty: 3.5 },
+] as const
 
 export default function HeaderLogo({ label, homeTo = '/overview' }: HeaderLogoProps) {
+  const rawId = useId()
+  const gradId = `hive-grad-${rawId.replace(/:/g, '')}`
+
   return (
     <Link
       to={homeTo}
@@ -18,17 +29,32 @@ export default function HeaderLogo({ label, homeTo = '/overview' }: HeaderLogoPr
     >
       <svg
         className="app-header-logo"
-        viewBox="0 0 272 36"
-        width={272}
-        height={36}
+        viewBox="0 0 288 40"
+        width={288}
+        height={40}
         role="img"
         aria-hidden
       >
-        <g className="app-header-logo-mark" transform="translate(16 18)">
-          <path d={HEX} transform="translate(-7.794 0)" />
-          <path d={HEX} transform="translate(7.794 0)" />
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="22" y2="28" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="var(--accent)" />
+            <stop offset="52%" stopColor="var(--accent)" stopOpacity={0.88} />
+            <stop offset="100%" stopColor="var(--success)" stopOpacity={0.95} />
+          </linearGradient>
+        </defs>
+        <g className="app-header-logo-mark" transform="translate(15 20)">
+          {HIVE.map((p, i) => (
+            <path
+              key={i}
+              d={HEX}
+              transform={`translate(${p.tx} ${p.ty})`}
+              fill={`url(#${gradId})`}
+              className="app-header-logo-hex"
+              strokeLinejoin="round"
+            />
+          ))}
         </g>
-        <text className="app-header-logo-wordmark" x={40} y={25} dominantBaseline="middle">
+        <text className="app-header-logo-wordmark" x={42} y={26} dominantBaseline="middle">
           {label}
         </text>
       </svg>
