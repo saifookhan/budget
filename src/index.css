@@ -557,7 +557,7 @@ button {
   box-sizing: border-box;
   overflow: hidden;
   flex-shrink: 0;
-  background: none;
+  background: transparent;
   border: none;
   cursor: pointer;
   color: var(--danger);
@@ -565,11 +565,25 @@ button {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   text-decoration: none;
+  border-radius: 10px;
+  transition: background 0.18s ease, transform 0.1s ease;
 }
 
-.header-settings-link:hover,
+.header-settings-link:hover {
+  background: var(--danger-soft);
+}
+
+.header-settings-link:active {
+  transform: scale(0.97);
+}
+
 .header-settings-link.active {
-  filter: brightness(1.1);
+  background: var(--danger-soft);
+}
+
+.header-settings-link:focus-visible {
+  outline: 2px solid var(--danger);
+  outline-offset: 2px;
 }
 
 .header-chat-block {
@@ -588,35 +602,38 @@ button {
   box-sizing: border-box;
   overflow: hidden;
   flex-shrink: 0;
-  background: none;
+  background: transparent;
   border: none;
   cursor: pointer;
-  color: var(--text-muted);
+  color: var(--danger);
   font-family: inherit;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  border-radius: 10px;
+  transition: background 0.18s ease, transform 0.1s ease;
 }
 
 .header-chat-block:hover {
-  color: var(--accent);
+  background: var(--danger-soft);
+}
+
+.header-chat-block:active {
+  transform: scale(0.97);
 }
 
 .header-chat-block.active {
-  color: var(--accent);
+  background: var(--danger-soft);
 }
 
-.header-chat-block.header-logout-block {
-  color: var(--danger);
-}
-
-.header-logout-block:hover {
-  filter: brightness(1.1);
+.header-chat-block:focus-visible {
+  outline: 2px solid var(--danger);
+  outline-offset: 2px;
 }
 
 .header-logout-block:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--danger);
   outline-offset: 2px;
-  border-radius: 6px;
+  border-radius: 10px;
 }
 
 .header-chat-emoji {
@@ -1036,15 +1053,21 @@ button {
   color: var(--text-muted);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
 }
 
 .overview-chart-toggle button:hover {
   color: var(--text);
+  background: var(--danger-soft);
+}
+
+.overview-chart-toggle button:active {
+  transform: scale(0.98);
 }
 
 .overview-chart-toggle button[aria-pressed='true'] {
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: var(--danger-soft);
+  color: var(--danger);
 }
 
 .overview-category-bars {
@@ -1309,20 +1332,33 @@ button {
   padding: 0.55rem 1.15rem;
   border-radius: var(--radius-sm);
   font-weight: 600;
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    opacity 0.15s ease;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .btn:active {
-  transform: scale(0.98);
+  transform: translateY(1px) scale(0.992);
 }
 
 .btn-primary {
   background: var(--accent);
-  color: white;
+  color: var(--bg);
 }
 
 .btn-primary:hover {
   box-shadow: var(--shadow-hover);
+}
+
+.btn-primary:active {
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.14);
 }
 
 .btn-ghost {
@@ -1331,7 +1367,13 @@ button {
 }
 
 .btn-ghost:hover {
-  background: var(--border);
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.btn-ghost:active {
+  background: var(--danger-soft);
+  transform: translateY(1px) scale(0.992);
 }
 
 .btn-link {
@@ -1342,10 +1384,23 @@ button {
   font-weight: inherit;
   text-decoration: underline;
   cursor: pointer;
+  transition: opacity 0.15s ease, color 0.15s ease;
 }
 
 .btn-link:hover {
   text-decoration: none;
+  color: var(--danger);
+}
+
+.btn-link:active {
+  opacity: 0.88;
+  transform: none;
+}
+
+.btn-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .form-group {
@@ -1633,6 +1688,11 @@ button {
   box-shadow: 0 0 30px rgba(201, 169, 110, 0.55), 0 0 20px rgba(140, 28, 91, 0.1);
   opacity: 1;
 }
+.home-login-card .btn-primary:active:not(:disabled),
+.home-login-card .contact-send:active {
+  box-shadow: inset 0 2px 8px rgba(90, 15, 46, 0.2);
+  transform: translateY(1px) scale(0.992);
+}
 .home-login-card .btn-link,
 .home-login-card .auth-footer a {
   color: #f5b8d0;
@@ -1719,8 +1779,13 @@ button {
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .contact-fab:hover {
-  transform: scale(1.05);
+  transform: scale(1.04);
   box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+.contact-fab:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
 .contact-panel {
@@ -1815,8 +1880,16 @@ button {
   color: var(--bg);
   font-size: 0.9rem;
   cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.12s ease, box-shadow 0.12s ease;
 }
-.contact-send:hover { opacity: 0.9; }
+.contact-send:hover {
+  opacity: 0.95;
+}
+.contact-send:active {
+  opacity: 1;
+  transform: translateY(1px) scale(0.99);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
+}
 
 @media (max-width: 1100px) {
   .contact-fab { right: max(1rem, env(safe-area-inset-right)); }
@@ -1863,10 +1936,22 @@ button {
   font-weight: 600;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  border-radius: 10px;
+  transition: color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+}
+
+.app-bottom-nav-item:hover {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.app-bottom-nav-item:active {
+  transform: scale(0.96);
 }
 
 .app-bottom-nav-item.active {
-  color: var(--accent);
+  color: var(--danger);
+  background: var(--danger-soft);
 }
 
 .app-bottom-nav-icon {
