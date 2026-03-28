@@ -3,7 +3,8 @@
   --radius-sm: 10px;
   --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --header-logo-height: 2rem;
+  /* Fixed px so logo SVG and header actions share one exact raster height */
+  --header-logo-height: 32px;
   --mobile-tab-bar-height: 3.75rem;
 }
 
@@ -296,6 +297,7 @@ button {
   gap: 0;
   margin-top: 1.5rem;
   margin-bottom: 2rem;
+  height: var(--header-logo-height);
   min-height: var(--header-logo-height);
   padding: 0 0.75rem 0 1rem;
 }
@@ -303,7 +305,9 @@ button {
 .app-header .app-title {
   flex: 1 1 0;
   min-width: 0;
+  height: var(--header-logo-height);
   min-height: var(--header-logo-height);
+  max-height: var(--header-logo-height);
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -313,7 +317,11 @@ button {
 }
 
 .app-header-logo-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  height: var(--header-logo-height);
+  min-height: var(--header-logo-height);
+  max-height: var(--header-logo-height);
   min-width: 0;
   overflow: hidden;
   color: inherit;
@@ -336,6 +344,7 @@ button {
   height: var(--header-logo-height);
   width: auto;
   max-width: 100%;
+  max-height: var(--header-logo-height);
 }
 
 .app-header-logo-mark {
@@ -373,8 +382,9 @@ button {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  align-self: center;
   height: var(--header-logo-height);
+  min-height: var(--header-logo-height);
+  max-height: var(--header-logo-height);
   gap: 0.35rem;
   margin-left: 4px;
 }
@@ -406,7 +416,7 @@ button {
 
 @media (max-width: 480px) {
   :root {
-    --header-logo-height: 1.88rem;
+    --header-logo-height: 30px;
   }
 
   .app-header {
@@ -425,14 +435,17 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.06rem;
+  gap: 0;
   margin-top: 0;
   padding: 0 0.35rem;
-  height: 100%;
+  height: var(--header-logo-height);
+  min-height: var(--header-logo-height);
   max-height: var(--header-logo-height);
   min-width: 44px;
   max-width: 5.75rem;
   box-sizing: border-box;
+  overflow: hidden;
+  flex-shrink: 0;
   background: none;
   border: none;
   cursor: pointer;
@@ -456,14 +469,17 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.06rem;
+  gap: 0;
   margin-top: 0;
   padding: 0 0.35rem;
-  height: 100%;
+  height: var(--header-logo-height);
+  min-height: var(--header-logo-height);
   max-height: var(--header-logo-height);
   min-width: 44px;
   max-width: 5.75rem;
   box-sizing: border-box;
+  overflow: hidden;
+  flex-shrink: 0;
   background: none;
   border: none;
   cursor: pointer;
@@ -482,18 +498,20 @@ button {
 }
 
 .header-chat-emoji {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .header-chat-tagline {
   display: block;
-  font-size: 0.5rem;
+  font-size: 0.45rem;
   font-weight: 700;
-  line-height: 1.05;
+  line-height: 1;
   text-align: center;
   max-width: 100%;
   hyphens: auto;
+  flex-shrink: 0;
 }
 
 .past-expenses-overlay {

@@ -29,9 +29,8 @@ export default function HeaderLogo({ label, homeTo = '/overview' }: HeaderLogoPr
     >
       <svg
         className="app-header-logo"
-        viewBox="0 0 318 40"
-        width={318}
-        height={40}
+        viewBox="0 5 318 31"
+        preserveAspectRatio="xMinYMid meet"
         role="img"
         aria-hidden
       >
