@@ -13,6 +13,7 @@ import Signup from './pages/Signup'
 import ResetPassword from './pages/ResetPassword'
 import HomePage from './pages/HomePage'
 import ContactChat from './ContactChat'
+import HeaderLogo from './components/HeaderLogo'
 import { AuthProvider, useAuth } from './auth/AuthContext'
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { getStoredTheme, setStoredTheme, applyTheme, type ThemeId } from './theme'
@@ -225,7 +226,7 @@ function AppShell() {
       )}
       <header className="app-header">
         <div className="app-title">
-          <span className="app-header-page-name">{T('app.headerBrand')}</span>
+          <HeaderLogo label={T('app.headerBrand')} />
         </div>
         <div className="header-actions" aria-label={T('nav.quickActions')}>
           <NavLink
