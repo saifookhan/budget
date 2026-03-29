@@ -1993,20 +1993,46 @@ button {
   justify-content: center;
   gap: 0.1rem;
   min-height: 3rem;
-  padding: 0.3rem 0.15rem;
+  padding: 0.35rem 0.2rem;
   text-decoration: none;
   color: var(--text-muted);
   font-size: 0.58rem;
   font-weight: 600;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  border-radius: 10px;
-  transition: color 0.18s ease, background 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.12s ease;
+  background: transparent;
+  position: relative;
+  isolation: isolate;
+  transition: color 0.18s ease, opacity 0.12s ease;
 }
 
-.app-bottom-nav-item:hover {
+/* Cerchio bordeaux dietro l’icona (centrato in orizzontale, leggermente sopra il centro per il testo sotto) */
+.app-bottom-nav-item::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  width: 2.35rem;
+  height: 2.35rem;
+  transform: translate(-50%, calc(-50% - 0.42rem));
+  border-radius: 50%;
+  background: transparent;
+  transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.app-bottom-nav-item > * {
+  position: relative;
+  z-index: 1;
+}
+
+.app-bottom-nav-item:not(.active):hover {
   color: var(--danger);
-  background: var(--danger-soft);
+}
+
+.app-bottom-nav-item:not(.active):hover::before {
+  background: color-mix(in srgb, var(--danger-soft) 65%, transparent);
 }
 
 .app-bottom-nav-item:focus:not(:focus-visible) {
@@ -2019,11 +2045,15 @@ button {
 }
 
 .app-bottom-nav-item:active {
-  opacity: 0.96;
+  opacity: 0.94;
 }
 
 .app-bottom-nav-item.active {
   color: var(--danger);
+  font-weight: 700;
+}
+
+.app-bottom-nav-item.active::before {
   background: var(--danger-soft);
 }
 

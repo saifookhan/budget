@@ -311,19 +311,19 @@ function AppShell() {
       <nav className="app-bottom-nav" aria-label={T('nav.bottomNav')}>
         <NavLink to="/overview" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
           <span className="app-bottom-nav-icon" aria-hidden>📊</span>
-          <span className="app-bottom-nav-label">{T('nav.overview')}</span>
+          <span className="app-bottom-nav-label">{T('nav.bottomTabOverview')}</span>
         </NavLink>
         <NavLink to="/accounts" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
           <span className="app-bottom-nav-icon" aria-hidden>💰</span>
-          <span className="app-bottom-nav-label">{T('accounts.title')}</span>
+          <span className="app-bottom-nav-label">{T('nav.bottomTabWallet')}</span>
         </NavLink>
         <NavLink to="/subscriptions" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
           <span className="app-bottom-nav-icon" aria-hidden>🔄</span>
-          <span className="app-bottom-nav-label">{T('nav.subscriptions')}</span>
+          <span className="app-bottom-nav-label">{T('nav.bottomTabSubscriptions')}</span>
         </NavLink>
         <NavLink to="/savings" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
           <span className="app-bottom-nav-icon" aria-hidden>📈</span>
-          <span className="app-bottom-nav-label">{T('nav.savings')}</span>
+          <span className="app-bottom-nav-label">{T('nav.bottomTabSavings')}</span>
         </NavLink>
         <button
           type="button"
@@ -332,7 +332,7 @@ function AppShell() {
           aria-label={T('expenses.bottomNavNewExpense')}
         >
           <span className="app-bottom-nav-icon" aria-hidden>➕</span>
-          <span className="app-bottom-nav-label">{T('expenses.bottomNavNewExpense')}</span>
+          <span className="app-bottom-nav-label">{T('nav.bottomTabAdd')}</span>
         </button>
       </nav>
       <ContactChat open={contactOpen} onOpenChange={setContactOpen} />
