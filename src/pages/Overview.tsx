@@ -12,21 +12,7 @@ import {
   isMonthKey,
 } from '../utils'
 
-const SHOW_MONEY_IN_WALLETS_KEY = 'overview-show-money-in-wallets'
 const CATEGORY_VIEW_KEY = 'overview-category-chart-view'
-
-function getStoredShowMoneyInWallets(): boolean {
-  try {
-    return localStorage.getItem(SHOW_MONEY_IN_WALLETS_KEY) === '1'
-  } catch {}
-  return false
-}
-
-function setStoredShowMoneyInWallets(value: boolean) {
-  try {
-    localStorage.setItem(SHOW_MONEY_IN_WALLETS_KEY, value ? '1' : '0')
-  } catch {}
-}
 
 function getStoredCategoryView(): 'pie' | 'bar' {
   try {
@@ -59,7 +45,6 @@ function useOverview() {
     totalSavings,
     carryOverFromLastMonth,
     byCategory,
-    byAccount,
     totalSubscriptionAmount,
     appliedSubscriptionAmount,
   } = useMemo(() => {
@@ -97,24 +82,15 @@ function useOverview() {
       byCategory[key] = (byCategory[key] ?? 0) + t.amount
     })
 
-    const byAccount: Record<string, { expense: number; saving: number }> = {}
-    ;[...expenses, ...savings].forEach((t) => {
-      const key = t.accountId ?? 'No account'
-      if (!byAccount[key]) byAccount[key] = { expense: 0, saving: 0 }
-      if (t.type === 'expense') byAccount[key].expense += t.amount
-      else byAccount[key].saving += t.amount
-    })
-
     return {
       totalExpenses,
       totalSavings,
       carryOverFromLastMonth,
       byCategory,
-      byAccount,
       totalSubscriptionAmount,
       appliedSubscriptionAmount,
     }
-  }, [state.transactions, state.recurring, state.monthlyIncome, state.incomeByMonth, monthKey, prevMonthKey])
+  }, [state.transactions, state.recurring, state.incomeByMonth, monthKey, prevMonthKey])
 
   const income = state.monthlyIncome
   const currency = state.currency
@@ -125,26 +101,6 @@ function useOverview() {
   const categoryNames = Object.fromEntries(
     state.categories.map((c) => [c.id, c.name])
   )
-  const accountNames = Object.fromEntries(
-    state.accounts.map((a) => [a.id, a.name])
-  )
-
-  const accountAvailable = useMemo(() => {
-    const out: Record<string, number> = {}
-    state.accounts.forEach((a) => {
-      const start = a.balance ?? 0
-      const spent = byAccount[a.id]?.expense ?? 0
-      const saved = byAccount[a.id]?.saving ?? 0
-      out[a.id] = start - spent - saved
-    })
-    return out
-  }, [state.accounts, byAccount])
-
-  const totalInAccounts = state.accounts.reduce(
-    (sum, a) => sum + (accountAvailable[a.id] ?? 0),
-    0
-  )
-
   return {
     currency,
     income,
@@ -155,14 +111,8 @@ function useOverview() {
     left,
     leftReal,
     totalSubscriptionAmount,
-    totalInAccounts,
     byCategory,
-    byAccount,
-    accountAvailable,
     categoryNames,
-    accountNames,
-    categories: state.categories,
-    accounts: state.accounts,
   }
 }
 
@@ -234,14 +184,7 @@ export default function Overview({ theme }: OverviewProps) {
   const data = useOverview()
   const chartTheme = theme ?? getStoredTheme()
   const chartColors = useMemo(() => getChartColorsForTheme(chartTheme), [chartTheme])
-  const [showMoneyInWallets, setShowMoneyInWallets] = useState(getStoredShowMoneyInWallets)
   const [categoryView, setCategoryView] = useState<'pie' | 'bar'>(getStoredCategoryView)
-
-  const handleShowMoneyInWalletsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked
-    setShowMoneyInWallets(checked)
-    setStoredShowMoneyInWallets(checked)
-  }
 
   const setCategoryChartView = useCallback((v: 'pie' | 'bar') => {
     setCategoryView(v)
@@ -278,237 +221,25 @@ export default function Overview({ theme }: OverviewProps) {
   return (
     <div className="overview-page">
       <h1 className="overview-page-title">{t('overview.title')}</h1>
-
-      <section className="overview-section" aria-label={t('overview.sectionSummary')}>
-        <div className="overview-option-row">
-          <label className="overview-checkbox-label">
-            <input
-              type="checkbox"
-              checked={showMoneyInWallets}
-              onChange={handleShowMoneyInWalletsChange}
-              aria-label={t('overview.showMoneyInWalletsOption')}
-              aria-describedby="overview-show-money-in-wallets-desc"
-            />
-            <span id="overview-show-money-in-wallets-desc">{t('overview.showMoneyInWalletsOption')}</span>
-          </label>
-        </div>
-
-        <div className="card overview-summary-flow-card">
-          <h2 className="overview-flow-heading">{t('overview.monthFlow')}</h2>
-          <p className="muted overview-flow-total">
-            {t('overview.availableThisMonth')}:{' '}
-            <strong style={{ color: 'var(--text)' }}>
-              {formatCurrency(data.availableThisMonth, data.currency)}
-            </strong>
-            {data.carryOverFromLastMonth !== 0 && (
-              <>
-                {' '}
-                · {t('overview.carryOver')}: {formatCurrency(data.carryOverFromLastMonth, data.currency)}
-              </>
-            )}
-          </p>
-
-          {flowScale > 0 ? (
-            <div className="overview-stacked-track">
-              <svg
-                className="overview-stacked-svg"
-                viewBox="0 0 100 20"
-                preserveAspectRatio="none"
-                role="img"
-                aria-label={monthFlowAria}
-              >
-                <title>{monthFlowAria}</title>
-                {wSpent > 0 && <rect x={0} y={0} width={wSpent} height={20} fill={spentColor} />}
-                {wSaved > 0 && <rect x={wSpent} y={0} width={wSaved} height={20} fill={savedColor} />}
-                {wLeft > 0 && (
-                  <rect x={wSpent + wSaved} y={0} width={wLeft} height={20} fill="var(--success)" />
-                )}
-              </svg>
-            </div>
-          ) : (
-            <p className="muted" style={{ margin: '0.5rem 0 0' }}>
-              {data.income === 0 ? (
-                <Link to="/accounts" className="overview-to-wallet-link">
-                  {t('overview.setIncomeHint')}
-                </Link>
-              ) : (
-                t('emptyStates.noSpendingYet')
-              )}
-            </p>
-          )}
-
-          <ul className="overview-flow-legend">
-            <li className="overview-flow-legend-item">
-              <div className="overview-flow-legend-top">
-                <span className="overview-flow-swatch" style={{ background: spentColor }} aria-hidden />
-                <span className="overview-flow-legend-label">{t('overview.spent')}</span>
-              </div>
-              <p className="overview-flow-legend-value">{formatCurrency(data.totalExpenses, data.currency)}</p>
-            </li>
-            <li className="overview-flow-legend-item">
-              <div className="overview-flow-legend-top">
-                <span className="overview-flow-swatch" style={{ background: savedColor }} aria-hidden />
-                <span className="overview-flow-legend-label">{t('overview.saved')}</span>
-              </div>
-              <p className="overview-flow-legend-value">{formatCurrency(data.totalSavings, data.currency)}</p>
-            </li>
-            <li className="overview-flow-legend-item">
-              <div className="overview-flow-legend-top">
-                <span
-                  className="overview-flow-swatch"
-                  style={{ background: 'var(--success)' }}
-                  aria-hidden
-                />
-                <span className="overview-flow-legend-label">{t('overview.moneyLeft')}</span>
-              </div>
-              <p
-                className="overview-flow-legend-value"
-                style={{ color: data.leftReal >= 0 ? 'var(--success)' : 'var(--danger)' }}
-              >
-                {formatCurrency(data.leftReal, data.currency)}
-              </p>
-              {data.totalSubscriptionAmount > 0 && (
-                <span className="muted" style={{ fontSize: '0.78rem', fontWeight: 500 }}>
-                  {t('overview.subscriptionsThisMonth')}:{' '}
-                  {formatCurrency(data.totalSubscriptionAmount, data.currency)}
-                </span>
-              )}
-            </li>
-            {showMoneyInWallets && (
-              <li className="overview-flow-legend-item">
-                <div className="overview-flow-legend-top">
-                  <span
-                    className="overview-flow-swatch"
-                    style={{ background: chartColors[5] ?? chartColors[1] }}
-                    aria-hidden
-                  />
-                  <span className="overview-flow-legend-label">{t('overview.moneyInWallets')}</span>
-                </div>
-                <p
-                  className="overview-flow-legend-value"
-                  style={{ color: data.totalInAccounts >= 0 ? 'var(--success)' : 'var(--danger)' }}
-                >
-                  {formatCurrency(data.totalInAccounts, data.currency)}
-                </p>
-              </li>
-            )}
-          </ul>
-        </div>
-
-        <div className="overview-three-boxes">
-          <div className="card overview-box">
-            <h3 className="overview-box-heading">{t('overview.availableThisMonth')}</h3>
-            <p className="overview-box-figure">{formatCurrency(data.availableThisMonth, data.currency)}</p>
-            <p className="muted overview-box-detail">
-              {t('overview.income')}: {formatCurrency(data.income, data.currency)}
-              {data.carryOverFromLastMonth !== 0 && (
-                <> · {t('overview.carryOver')}: {formatCurrency(data.carryOverFromLastMonth, data.currency)}</>
-              )}
-            </p>
-            {data.income === 0 && (
-              <p className="overview-box-detail">
-                <Link to="/accounts" className="overview-to-wallet-link muted">
-                  {t('overview.setIncomeHint')}
-                </Link>
-              </p>
-            )}
-          </div>
-
-          <div className="card overview-box">
-            <h3 className="overview-box-heading">{t('overview.moneyLeft')}</h3>
-            <p
-              className="overview-box-figure"
-              style={{ color: data.leftReal >= 0 ? 'var(--success)' : 'var(--danger)' }}
-            >
-              {formatCurrency(data.leftReal, data.currency)}
-            </p>
-            <p className="muted overview-box-detail">
-              {t('overview.spent')}: {formatCurrency(data.totalExpenses, data.currency)} · {t('overview.saved')}:{' '}
-              {formatCurrency(data.totalSavings, data.currency)}
-              {data.totalSubscriptionAmount > 0 && (
-                <>
-                  {' '}
-                  · {t('overview.subscriptionsThisMonth')}:{' '}
-                  {formatCurrency(data.totalSubscriptionAmount, data.currency)}
-                </>
-              )}
-            </p>
-          </div>
-
-          {showMoneyInWallets && (
-            <div className="card overview-box">
-              <h3 className="overview-box-heading">{t('overview.moneyInWallets')}</h3>
-              <p
-                className="overview-box-figure"
-                style={{ color: data.totalInAccounts >= 0 ? 'var(--success)' : 'var(--danger)' }}
-              >
-                {formatCurrency(data.totalInAccounts, data.currency)}
-              </p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {data.accounts.length > 0 && (
-        <section className="overview-section" aria-labelledby="overview-section-wallets">
-          <h2 id="overview-section-wallets" className="overview-section-title">
-            {t('overview.sectionWallets')}
-          </h2>
-          <div className="overview-accounts-grid">
-            {data.accounts.map((a) => {
-              const available = data.accountAvailable[a.id] ?? 0
-              const start = a.balance ?? 0
-              const spent = data.byAccount[a.id]?.expense ?? 0
-              const saved = data.byAccount[a.id]?.saving ?? 0
-              return (
-                <div key={a.id} className="card overview-box">
-                  <h3 className="overview-box-heading overview-box-heading--wallet">{a.name}</h3>
-                  {a.purpose && <p className="muted overview-wallet-purpose">{a.purpose}</p>}
-                  <p
-                    className="overview-box-figure overview-box-figure--wallet"
-                    style={{ color: available >= 0 ? 'var(--success)' : 'var(--danger)' }}
-                  >
-                    {a.balance != null ? formatCurrency(available, data.currency) : '—'}
-                  </p>
-                  {(spent > 0 || saved > 0 || start > 0) && (
-                    <p className="muted overview-wallet-breakdown">
-                      {t('overview.starting')} {formatCurrency(start, data.currency)} · {t('overview.spent')}{' '}
-                      {formatCurrency(spent, data.currency)} · {t('overview.saved')} {formatCurrency(saved, data.currency)}
-                    </p>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </section>
-      )}
+      <p className="overview-page-lead muted" id="overview-intro">
+        {t('overview.intro')}
+      </p>
 
       {!categoryPie ? (
-        <section className="overview-section" aria-labelledby="overview-section-spending">
-          <h2 id="overview-section-spending" className="overview-section-title">
-            {t('overview.sectionSpending')}
-          </h2>
+        <section className="overview-section" aria-labelledby="overview-intro">
           <div className="card">
-            <h3 className="overview-box-heading">{t('overview.spendingByCategory')}</h3>
             <p className="muted" style={{ margin: 0 }}>
               {t('emptyStates.noSpendingYet')}
             </p>
             <p style={{ marginTop: '0.75rem', marginBottom: 0 }}>
-              <Link to="/" className="btn btn-primary">
+              <Link to="/expenses" className="btn btn-primary">
                 {t('expenses.addButton')}
               </Link>
             </p>
           </div>
         </section>
       ) : (
-        <section className="overview-section" aria-labelledby="overview-section-spending">
-          <h2 id="overview-section-spending" className="overview-section-title">
-            {t('overview.sectionSpending')}
-          </h2>
-          <p className="overview-section-intro muted" style={{ marginTop: '-0.25rem' }}>
-            {t('overview.chartSectionIntro')}
-          </p>
-
+        <section className="overview-section" aria-labelledby="overview-intro">
           <div className="overview-chart-toolbar" role="group" aria-label={t('overview.chartType')}>
             <span className="overview-chart-toolbar-label">{t('overview.chartType')}</span>
             <div className="overview-chart-toggle">
@@ -648,26 +379,90 @@ export default function Overview({ theme }: OverviewProps) {
         </section>
       )}
 
-      {Object.keys(data.byAccount).length > 0 && (
-        <section className="overview-section" aria-labelledby="overview-section-by-wallet">
-          <h2 id="overview-section-by-wallet" className="overview-section-title">
-            {t('overview.byAccount')}
-          </h2>
-          <div className="card overview-by-wallet-card">
-            <ul className="overview-by-wallet-list">
-              {Object.entries(data.byAccount).map(([accId, totals]) => (
-                <li key={accId} className="overview-by-wallet-row">
-                  <strong>{data.accountNames[accId] ?? t('overview.noAccount')}</strong>
-                  <div className="muted overview-by-wallet-detail">
-                    {t('nav.expenses')}: {formatCurrency(totals.expense, data.currency)} · {t('nav.savings')}:{' '}
-                    {formatCurrency(totals.saving, data.currency)}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      )}
+      <section className="overview-section overview-section--month-flow" aria-label={t('overview.monthFlow')}>
+        <div className="card overview-summary-flow-card">
+          <p className="muted overview-flow-total">
+            {t('overview.availableThisMonth')}:{' '}
+            <strong style={{ color: 'var(--text)' }}>
+              {formatCurrency(data.availableThisMonth, data.currency)}
+            </strong>
+            {data.carryOverFromLastMonth !== 0 && (
+              <>
+                {' '}
+                · {t('overview.carryOver')}: {formatCurrency(data.carryOverFromLastMonth, data.currency)}
+              </>
+            )}
+          </p>
+
+          {flowScale > 0 ? (
+            <div className="overview-stacked-track">
+              <svg
+                className="overview-stacked-svg"
+                viewBox="0 0 100 20"
+                preserveAspectRatio="none"
+                role="img"
+                aria-label={monthFlowAria}
+              >
+                <title>{monthFlowAria}</title>
+                {wSpent > 0 && <rect x={0} y={0} width={wSpent} height={20} fill={spentColor} />}
+                {wSaved > 0 && <rect x={wSpent} y={0} width={wSaved} height={20} fill={savedColor} />}
+                {wLeft > 0 && (
+                  <rect x={wSpent + wSaved} y={0} width={wLeft} height={20} fill="var(--success)" />
+                )}
+              </svg>
+            </div>
+          ) : (
+            <p className="muted" style={{ margin: '0.5rem 0 0' }}>
+              {data.income === 0 ? (
+                <Link to="/accounts" className="overview-to-wallet-link">
+                  {t('overview.setIncomeHint')}
+                </Link>
+              ) : (
+                t('emptyStates.noSpendingYet')
+              )}
+            </p>
+          )}
+
+          <ul className="overview-flow-legend">
+            <li className="overview-flow-legend-item">
+              <div className="overview-flow-legend-top">
+                <span className="overview-flow-swatch" style={{ background: spentColor }} aria-hidden />
+                <span className="overview-flow-legend-label">{t('overview.spent')}</span>
+              </div>
+              <p className="overview-flow-legend-value">{formatCurrency(data.totalExpenses, data.currency)}</p>
+            </li>
+            <li className="overview-flow-legend-item">
+              <div className="overview-flow-legend-top">
+                <span className="overview-flow-swatch" style={{ background: savedColor }} aria-hidden />
+                <span className="overview-flow-legend-label">{t('overview.saved')}</span>
+              </div>
+              <p className="overview-flow-legend-value">{formatCurrency(data.totalSavings, data.currency)}</p>
+            </li>
+            <li className="overview-flow-legend-item">
+              <div className="overview-flow-legend-top">
+                <span
+                  className="overview-flow-swatch"
+                  style={{ background: 'var(--success)' }}
+                  aria-hidden
+                />
+                <span className="overview-flow-legend-label">{t('overview.moneyLeft')}</span>
+              </div>
+              <p
+                className="overview-flow-legend-value"
+                style={{ color: data.leftReal >= 0 ? 'var(--success)' : 'var(--danger)' }}
+              >
+                {formatCurrency(data.leftReal, data.currency)}
+              </p>
+              {data.totalSubscriptionAmount > 0 && (
+                <span className="muted" style={{ fontSize: '0.78rem', fontWeight: 500 }}>
+                  {t('overview.subscriptionsThisMonth')}:{' '}
+                  {formatCurrency(data.totalSubscriptionAmount, data.currency)}
+                </span>
+              )}
+            </li>
+          </ul>
+        </div>
+      </section>
     </div>
   )
 }

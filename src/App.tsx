@@ -4,9 +4,10 @@ import Overview from './pages/Overview'
 import Accounts from './pages/Accounts'
 import Expenses from './pages/Spending'
 import AllExpenses from './pages/AllExpenses'
-import Subscriptions from './pages/Subscriptions'
-import Savings from './pages/Savings'
+import Plan from './pages/Plan'
 import PastOverviews from './pages/PastOverviews'
+import Community from './pages/Community'
+import AppHome from './pages/AppHome'
 import Settings from './pages/Settings'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -230,6 +231,7 @@ function AppShell() {
             ariaLabel={T('app.headerBrand')}
             line1={T('app.wordmarkLine1')}
             line2={T('app.wordmarkLine2')}
+            homeTo="/"
           />
         </div>
         <div className="header-actions" aria-label={T('nav.quickActions')}>
@@ -274,16 +276,19 @@ function AppShell() {
         </div>
       </header>
       <Routes>
-        <Route path="/" element={<Expenses />} />
+        <Route path="/" element={<AppHome />} />
+        <Route path="/expenses" element={<Expenses />} />
         <Route path="/overview" element={<Overview key={overviewKey} theme={theme} />} />
         <Route path="/income" element={<Navigate to="/accounts" replace />} />
         <Route path="/past" element={<PastOverviews />} />
         <Route path="/accounts" element={<Accounts />} />
-        <Route path="/categories" element={<Navigate to="/" replace />} />
-        <Route path="/spending" element={<Navigate to="/" replace />} />
+        <Route path="/categories" element={<Navigate to="/expenses" replace />} />
+        <Route path="/spending" element={<Navigate to="/expenses" replace />} />
         <Route path="/expenses-report" element={<AllExpenses />} />
-        <Route path="/subscriptions" element={<Subscriptions />} />
-        <Route path="/savings" element={<Savings />} />
+        <Route path="/plan" element={<Plan />} />
+        <Route path="/subscriptions" element={<Navigate to="/plan" replace />} />
+        <Route path="/savings" element={<Navigate to="/plan?tab=savings" replace />} />
+        <Route path="/community" element={<Community />} />
         <Route
           path="/settings"
           element={
@@ -309,6 +314,10 @@ function AppShell() {
         />
       </Routes>
       <nav className="app-bottom-nav" aria-label={T('nav.bottomNav')}>
+        <NavLink end to="/" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
+          <span className="app-bottom-nav-icon" aria-hidden>🏠</span>
+          <span className="app-bottom-nav-label">{T('nav.bottomTabHome')}</span>
+        </NavLink>
         <NavLink to="/overview" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
           <span className="app-bottom-nav-icon" aria-hidden>📊</span>
           <span className="app-bottom-nav-label">{T('nav.bottomTabOverview')}</span>
@@ -317,18 +326,18 @@ function AppShell() {
           <span className="app-bottom-nav-icon" aria-hidden>💰</span>
           <span className="app-bottom-nav-label">{T('nav.bottomTabWallet')}</span>
         </NavLink>
-        <NavLink to="/subscriptions" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
-          <span className="app-bottom-nav-icon" aria-hidden>🔄</span>
-          <span className="app-bottom-nav-label">{T('nav.bottomTabSubscriptions')}</span>
+        <NavLink to="/plan" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
+          <span className="app-bottom-nav-icon" aria-hidden>📅</span>
+          <span className="app-bottom-nav-label">{T('nav.bottomTabPlan')}</span>
         </NavLink>
-        <NavLink to="/savings" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
-          <span className="app-bottom-nav-icon" aria-hidden>📈</span>
-          <span className="app-bottom-nav-label">{T('nav.bottomTabSavings')}</span>
+        <NavLink to="/community" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
+          <span className="app-bottom-nav-icon" aria-hidden>🐝</span>
+          <span className="app-bottom-nav-label">{T('nav.bottomTabCommunity')}</span>
         </NavLink>
         <button
           type="button"
           className="app-bottom-nav-item app-bottom-nav-item--btn"
-          onClick={() => navigate('/', { state: { focusAdd: true } })}
+          onClick={() => navigate('/expenses', { state: { focusAdd: true } })}
           aria-label={T('expenses.bottomNavNewExpense')}
         >
           <span className="app-bottom-nav-icon" aria-hidden>➕</span>

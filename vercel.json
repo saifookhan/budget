@@ -5,6 +5,8 @@
   "outputDirectory": "dist",
   "framework": null,
   "rewrites": [
+    { "source": "/expenses", "destination": "/index.html" },
+    { "source": "/community", "destination": "/index.html" },
     { "source": "/categories", "destination": "/index.html" },
     { "source": "/income", "destination": "/index.html" },
     { "source": "/overview", "destination": "/index.html" },
@@ -12,6 +14,7 @@
     { "source": "/accounts", "destination": "/index.html" },
     { "source": "/spending", "destination": "/index.html" },
     { "source": "/expenses-report", "destination": "/index.html" },
+    { "source": "/plan", "destination": "/index.html" },
     { "source": "/subscriptions", "destination": "/index.html" },
     { "source": "/savings", "destination": "/index.html" },
     { "source": "/settings", "destination": "/index.html" },

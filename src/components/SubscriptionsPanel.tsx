@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react'
-import { getState, updateState, id } from '../store'
+import { useState, useEffect, useMemo, useCallback } from 'react'
+import { getState, updateState, id, subscribe } from '../store'
 import { useTranslation } from '../LanguageContext'
 import { formatCurrency } from '../utils'
-import type { RecurringItem } from '../types'
+import type { BudgetState, RecurringItem } from '../types'
 
-export default function Subscriptions() {
+export default function SubscriptionsPanel() {
   const { t } = useTranslation()
-  const state = getState()
-  const [recurring, setRecurring] = useState<RecurringItem[]>([])
+  const [state, setState] = useState<BudgetState>(() => getState())
   const [editingId, setEditingId] = useState<string | null>(null)
   const [label, setLabel] = useState('')
   const [amount, setAmount] = useState('')
@@ -16,8 +15,16 @@ export default function Subscriptions() {
   const [dayOfMonth, setDayOfMonth] = useState('1')
 
   useEffect(() => {
-    setRecurring(getState().recurring.filter((r) => r.type === 'subscription'))
+    setState(getState())
   }, [])
+  useEffect(() => {
+    return subscribe(() => setState(getState()))
+  }, [])
+
+  const recurring = useMemo(
+    () => state.recurring.filter((r) => r.type === 'subscription'),
+    [state.recurring]
+  )
 
   const startEdit = (r: RecurringItem) => {
     setEditingId(r.id)
@@ -28,14 +35,18 @@ export default function Subscriptions() {
     setDayOfMonth(String(r.dayOfMonth))
   }
 
-  const cancelEdit = () => {
+  const cancelEdit = useCallback(() => {
     setEditingId(null)
     setLabel('')
     setAmount('')
     setCategoryId('')
     setAccountId('')
     setDayOfMonth('1')
-  }
+  }, [])
+
+  useEffect(() => {
+    if (editingId && !recurring.some((r) => r.id === editingId)) cancelEdit()
+  }, [editingId, recurring, cancelEdit])
 
   const save = (e: React.FormEvent) => {
     e.preventDefault()
@@ -43,7 +54,7 @@ export default function Subscriptions() {
     if (!(num > 0) || !label.trim()) return
     const day = Math.min(31, Math.max(1, parseInt(dayOfMonth, 10) || 1))
     if (editingId) {
-      const next = updateState((s) => ({
+      updateState((s) => ({
         ...s,
         recurring: s.recurring.map((r) =>
           r.id === editingId
@@ -58,10 +69,9 @@ export default function Subscriptions() {
             : r
         ),
       }))
-      setRecurring(next.recurring.filter((r) => r.type === 'subscription'))
       cancelEdit()
     } else {
-      const next = updateState((s) => ({
+      updateState((s) => ({
         ...s,
         recurring: [
           ...s.recurring,
@@ -76,7 +86,6 @@ export default function Subscriptions() {
           },
         ],
       }))
-      setRecurring(next.recurring.filter((r) => r.type === 'subscription'))
       setLabel('')
       setAmount('')
       setDayOfMonth('1')
@@ -86,11 +95,10 @@ export default function Subscriptions() {
   const remove = (recId: string) => {
     if (!confirm(t('subscriptions.removeConfirm'))) return
     if (editingId === recId) cancelEdit()
-    const next = updateState((s) => ({
+    updateState((s) => ({
       ...s,
       recurring: s.recurring.filter((r) => r.id !== recId),
     }))
-    setRecurring(next.recurring.filter((r) => r.type === 'subscription'))
   }
 
   const categoryNames = Object.fromEntries(state.categories.map((c) => [c.id, c.name]))
@@ -98,10 +106,7 @@ export default function Subscriptions() {
   const totalPerMonth = recurring.reduce((s, r) => s + r.amount, 0)
 
   return (
-    <div className="page-content">
-      <h1 className="page-title">{t('subscriptions.title')}</h1>
-      <p className="muted page-lead">{t('subscriptions.subtitle')}</p>
-
+    <div className="subscriptions-panel">
       <form onSubmit={save} className="card" style={{ marginBottom: '1rem' }}>
         <h2 className="section-title">
           {editingId ? t('subscriptions.editSubscription') : t('subscriptions.addSubscription')}
@@ -142,27 +147,23 @@ export default function Subscriptions() {
         </div>
         <div className="form-group">
           <label htmlFor="sub-category">{t('subscriptions.category')}</label>
-          <select
-            id="sub-category"
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-          >
+          <select id="sub-category" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
             <option value="">{t('common.select')}</option>
             {state.categories.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
             ))}
           </select>
         </div>
         <div className="form-group">
           <label htmlFor="sub-account">{t('subscriptions.account')}</label>
-          <select
-            id="sub-account"
-            value={accountId}
-            onChange={(e) => setAccountId(e.target.value)}
-          >
+          <select id="sub-account" value={accountId} onChange={(e) => setAccountId(e.target.value)}>
             <option value="">{t('common.select')}</option>
             {state.accounts.map((a) => (
-              <option key={a.id} value={a.id}>{a.name}</option>
+              <option key={a.id} value={a.id}>
+                {a.name}
+              </option>
             ))}
           </select>
         </div>
@@ -182,7 +183,8 @@ export default function Subscriptions() {
         <div className="card">
           <h2 className="section-title">{t('subscriptions.monthlyList')}</h2>
           <p className="muted" style={{ marginBottom: '0.75rem' }}>
-            {t('subscriptions.totalPerMonth')}: <strong>{formatCurrency(totalPerMonth)}</strong> {t('subscriptions.perMonth')}
+            {t('subscriptions.totalPerMonth')}: <strong>{formatCurrency(totalPerMonth)}</strong>{' '}
+            {t('subscriptions.perMonth')}
           </p>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {recurring.map((r) => (
@@ -201,13 +203,18 @@ export default function Subscriptions() {
                   <span className="muted" style={{ marginLeft: '0.5rem' }}>
                     {categoryNames[r.categoryId ?? ''] && `· ${categoryNames[r.categoryId!]}`}
                     {accountNames[r.accountId ?? ''] && ` · ${accountNames[r.accountId!]}`}
-                    {' · '}{t('subscriptions.day')} {r.dayOfMonth}
+                    {' · '}
+                    {t('subscriptions.day')} {r.dayOfMonth}
                   </span>
                 </div>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <span className="amount-negative">{formatCurrency(r.amount)}/mo</span>
-                  <button type="button" className="btn btn-ghost" onClick={() => startEdit(r)} aria-label={t('common.edit')}>{t('common.edit')}</button>
-                  <button type="button" className="btn btn-ghost" onClick={() => remove(r.id)} aria-label="Remove">✕</button>
+                  <button type="button" className="btn btn-ghost" onClick={() => startEdit(r)} aria-label={t('common.edit')}>
+                    {t('common.edit')}
+                  </button>
+                  <button type="button" className="btn btn-ghost" onClick={() => remove(r.id)} aria-label="Remove">
+                    ✕
+                  </button>
                 </span>
               </li>
             ))}

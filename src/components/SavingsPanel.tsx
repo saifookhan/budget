@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { getState, updateState, id } from '../store'
+import { getState, updateState, id, subscribe } from '../store'
 import { useTranslation } from '../LanguageContext'
 import { formatCurrency, getCurrentMonthKey } from '../utils'
-import type { SavingsGoal, SavingsGoalType, RecurringItem } from '../types'
+import type { BudgetState, SavingsGoal, SavingsGoalType, RecurringItem } from '../types'
 
 function monthsBetween(start: string, endKey: string): number {
   const [sy, sm] = start.split('-').map(Number)
@@ -10,10 +10,9 @@ function monthsBetween(start: string, endKey: string): number {
   return (ey - sy) * 12 + (em - sm) + 1
 }
 
-export default function Savings() {
+export default function SavingsPanel() {
   const { t } = useTranslation()
-  const state = getState()
-  const [goals, setGoals] = useState<SavingsGoal[]>([])
+  const [state, setState] = useState<BudgetState>(() => getState())
   const [name, setName] = useState('')
   const [monthlyAmount, setMonthlyAmount] = useState('')
   const [accountId, setAccountId] = useState('')
@@ -21,7 +20,10 @@ export default function Savings() {
   const monthKey = getCurrentMonthKey()
 
   useEffect(() => {
-    setGoals(getState().savingsGoals)
+    setState(getState())
+  }, [])
+  useEffect(() => {
+    return subscribe(() => setState(getState()))
   }, [])
 
   const add = (e: React.FormEvent) => {
@@ -31,7 +33,7 @@ export default function Savings() {
     const startDate = new Date().toISOString().slice(0, 10)
     const recurringId = id()
     const goalId = id()
-    const next = updateState((s) => {
+    updateState((s) => {
       const recurring: RecurringItem = {
         id: recurringId,
         label: name.trim(),
@@ -55,7 +57,6 @@ export default function Savings() {
         savingsGoals: [...s.savingsGoals, goal],
       }
     })
-    setGoals(next.savingsGoals)
     setName('')
     setMonthlyAmount('')
     setAccountId('')
@@ -63,19 +64,18 @@ export default function Savings() {
   }
 
   const remove = (goalId: string) => {
-    const goal = goals.find((g) => g.id === goalId)
+    const goal = state.savingsGoals.find((g) => g.id === goalId)
     if (!goal || !confirm(t('savings.removeConfirm'))) return
-    const next = updateState((s) => ({
+    updateState((s) => ({
       ...s,
       savingsGoals: s.savingsGoals.filter((g) => g.id !== goalId),
       recurring: s.recurring.filter((r) => r.id !== goal.recurringId),
     }))
-    setGoals(next.savingsGoals)
   }
 
   const accountNames = Object.fromEntries(state.accounts.map((a) => [a.id, a.name]))
-  const savingsGoals = goals.filter((g) => g.goalType !== 'investment')
-  const investmentGoals = goals.filter((g) => g.goalType === 'investment')
+  const savingsGoals = state.savingsGoals.filter((g) => g.goalType !== 'investment')
+  const investmentGoals = state.savingsGoals.filter((g) => g.goalType === 'investment')
 
   const renderGoal = (g: SavingsGoal, soFarLabel: string) => {
     const startKey = g.startDate.slice(0, 7)
@@ -89,7 +89,15 @@ export default function Savings() {
           borderBottom: '1px solid var(--border)',
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            flexWrap: 'wrap',
+            gap: '0.5rem',
+          }}
+        >
           <div>
             <strong>{g.name}</strong>
             <span className="muted" style={{ marginLeft: '0.5rem' }}>
@@ -116,10 +124,7 @@ export default function Savings() {
   }
 
   return (
-    <div className="page-content">
-      <h1 className="page-title">{t('savings.title')}</h1>
-      <p className="muted page-lead">{t('savings.subtitle')}</p>
-
+    <div className="savings-panel">
       <form onSubmit={add} className="card" style={{ marginBottom: '1rem' }}>
         <h2 className="section-title">{t('savings.addGoal')}</h2>
         <div className="form-group">
@@ -127,7 +132,15 @@ export default function Savings() {
           <select
             value={goalType}
             onChange={(e) => setGoalType(e.target.value as SavingsGoalType)}
-            style={{ padding: '0.35rem 0.6rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)', width: '100%', maxWidth: '16rem' }}
+            style={{
+              padding: '0.35rem 0.6rem',
+              borderRadius: 'var(--radius-sm)',
+              border: '1px solid var(--border)',
+              background: 'var(--surface)',
+              color: 'var(--text)',
+              width: '100%',
+              maxWidth: '16rem',
+            }}
           >
             <option value="savings">{t('savings.typeSavings')}</option>
             <option value="investment">{t('savings.typeInvestment')}</option>
@@ -158,14 +171,12 @@ export default function Savings() {
         </div>
         <div className="form-group">
           <label htmlFor="sav-account">{t('savings.accountOptional')}</label>
-          <select
-            id="sav-account"
-            value={accountId}
-            onChange={(e) => setAccountId(e.target.value)}
-          >
+          <select id="sav-account" value={accountId} onChange={(e) => setAccountId(e.target.value)}>
             <option value="">{t('common.select')}</option>
             {state.accounts.map((a) => (
-              <option key={a.id} value={a.id}>{a.name}</option>
+              <option key={a.id} value={a.id}>
+                {a.name}
+              </option>
             ))}
           </select>
         </div>

@@ -19,7 +19,7 @@ const HIVE = [
   { tx: 6.062, ty: 3.5 },
 ] as const
 
-export default function HeaderLogo({ ariaLabel, line1, line2, homeTo = '/overview' }: HeaderLogoProps) {
+export default function HeaderLogo({ ariaLabel, line1, line2, homeTo = '/' }: HeaderLogoProps) {
   const rawId = useId()
   const gradId = `hive-grad-${rawId.replace(/:/g, '')}`
 

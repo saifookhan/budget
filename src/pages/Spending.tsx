@@ -62,10 +62,11 @@ export default function Expenses() {
   useEffect(() => {
     if ((location.state as { focusAdd?: boolean })?.focusAdd) {
       navigate('.', { replace: true, state: {} })
-      const form = document.getElementById('expenses-add-form')
+      window.scrollTo(0, 0)
       const input = document.getElementById('sp-amount') as HTMLInputElement | null
-      form?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      setTimeout(() => input?.focus(), 350)
+      requestAnimationFrame(() => {
+        input?.focus({ preventScroll: true })
+      })
     }
   }, [location.state, navigate])
 

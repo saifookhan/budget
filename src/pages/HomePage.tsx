@@ -6,7 +6,7 @@ export default function HomePage() {
       <div className="home-hero">
         <div className="home-hero-inner">
           <p className="home-eyebrow">Your money, your chance to change</p>
-          <h1 className="home-title">My Budget</h1>
+          <h1 className="home-title">The money hive</h1>
           <div className="home-title-rule" aria-hidden />
           <p className="home-tagline">
             Track income, spending, and subscriptions in one place—simple, clear, and yours.
