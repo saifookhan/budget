@@ -1,21 +1,22 @@
-import { useState, useEffect } from 'react'
+import { lazy, Suspense, useState, useEffect } from 'react'
 import { Routes, Route, NavLink, Navigate, useLocation, useNavigate } from 'react-router-dom'
-import Overview from './pages/Overview'
-import Accounts from './pages/Accounts'
-import Expenses from './pages/Spending'
-import AllExpenses from './pages/AllExpenses'
-import Plan from './pages/Plan'
-import PastOverviews from './pages/PastOverviews'
-import Community from './pages/Community'
-import AppHome from './pages/AppHome'
-import Settings from './pages/Settings'
+
+const Overview = lazy(() => import('./pages/Overview'))
+const Accounts = lazy(() => import('./pages/Accounts'))
+const Expenses = lazy(() => import('./pages/Spending'))
+const AllExpenses = lazy(() => import('./pages/AllExpenses'))
+const Plan = lazy(() => import('./pages/Plan'))
+const PastOverviews = lazy(() => import('./pages/PastOverviews'))
+const Community = lazy(() => import('./pages/Community'))
+const AppHome = lazy(() => import('./pages/AppHome'))
+const Settings = lazy(() => import('./pages/Settings'))
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import ResetPassword from './pages/ResetPassword'
 import HomePage from './pages/HomePage'
 import ContactChat from './ContactChat'
 import HeaderLogo from './components/HeaderLogo'
-import { HiveMarkSvg } from './components/HiveMarkSvg'
+import { BeeMarkSvg } from './components/BeeMarkSvg'
 import { AuthProvider, useAuth } from './auth/AuthContext'
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { getStoredTheme, setStoredTheme, applyTheme, type ThemeId } from './theme'
@@ -276,6 +277,13 @@ function AppShell() {
           </button>
         </div>
       </header>
+      <Suspense
+        fallback={
+          <div className="page-content app-route-fallback" role="status" aria-live="polite">
+            <p className="muted">{T('common.loading')}</p>
+          </div>
+        }
+      >
       <Routes>
         <Route path="/app" element={<AppHome />} />
         <Route path="/expenses" element={<Expenses />} />
@@ -315,6 +323,7 @@ function AppShell() {
         />
         <Route path="/" element={<Navigate to="/app" replace />} />
       </Routes>
+      </Suspense>
       <nav className="app-bottom-nav" aria-label={T('nav.bottomNav')}>
         <NavLink end to="/app" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
           <span className="app-bottom-nav-icon" aria-hidden>🏠</span>
@@ -328,15 +337,15 @@ function AppShell() {
           <span className="app-bottom-nav-icon" aria-hidden>💰</span>
           <span className="app-bottom-nav-label">{T('nav.bottomTabWallet')}</span>
         </NavLink>
+        <NavLink to="/community" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
+          <span className="app-bottom-nav-icon app-bottom-nav-bee-icon" aria-hidden>
+            <BeeMarkSvg scale={0.88} svgClassName="app-bottom-nav-bee-svg" />
+          </span>
+          <span className="app-bottom-nav-label">{T('nav.bottomTabCommunity')}</span>
+        </NavLink>
         <NavLink to="/plan" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
           <span className="app-bottom-nav-icon" aria-hidden>📅</span>
           <span className="app-bottom-nav-label">{T('nav.bottomTabPlan')}</span>
-        </NavLink>
-        <NavLink to="/community" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
-          <span className="app-bottom-nav-icon app-bottom-nav-hive-icon" aria-hidden>
-            <HiveMarkSvg scale={0.92} svgClassName="app-bottom-nav-hive-svg" />
-          </span>
-          <span className="app-bottom-nav-label">{T('nav.bottomTabCommunity')}</span>
         </NavLink>
         <button
           type="button"

@@ -8,7 +8,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.title': 'Home',
     'appHome.subtitle': 'Your Money Hive hub — open any section below.',
     'appHome.heroEyebrow': 'The Money Hive',
-    'appHome.heroTitle': 'Welcome back',
+    'appHome.heroTitle': 'Your money, finally clear',
     'appHome.heroTagline':
       'Jump into your budget — log expenses, scan the month, tune wallets, or say hi in the community.',
     'appHome.quickLinks': 'Where to next',
@@ -16,7 +16,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.tileExpenses': 'Add or edit one-off expenses.',
     'appHome.tileWallet': 'Income, wallets, balances, and transfers.',
     'appHome.tilePlan': 'Recurring charges, subscriptions, and monthly savings goals.',
-    'appHome.tileCommunity': 'Meet others and swap money tips.',
+    'appHome.tileCommunity': 'Swap budget and money ideas with others.',
     'plan.navTitle': 'Monthly plan',
     'plan.title': 'Monthly plan',
     'plan.subtitle':
@@ -42,7 +42,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'nav.bottomTabWallet': 'Wallet',
     'nav.bottomTabPlan': 'Plan',
     'nav.bottomTabAdd': 'Add',
-    'nav.bottomTabCommunity': 'Meet',
+    'nav.bottomTabCommunity': 'Ideas',
     'nav.bottomTabHome': 'Home',
     'nav.wallet': 'Wallet',
     'nav.past': 'Past',
@@ -259,42 +259,55 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'savings.removeConfirm': 'Remove this goal?',
     'savings.savedSoFar': 'Saved so far',
     'savings.accountOptional': 'Account (optional)',
-    'community.title': 'Meet the hive',
+    'community.title': 'Ideas & budget',
     'community.subtitle':
-      'Like a dating app, but for money habits: discover people, swap honest tips, and learn from each other — no flirting, just smarter budgets.',
-    'community.demoBanner': 'Demo profiles — real members and 1:1 chat will connect here soon.',
-    'community.discoverTitle': 'Discover',
-    'community.pass': 'Pass',
-    'community.connect': 'Swap tips',
-    'community.connectToast':
-      'Noted! For now open the 💬 chat in the header — direct messages between members are on the way.',
-    'community.emptyDeck': 'You\'ve seen everyone for now.',
-    'community.again': 'Shuffle again',
-    'community.tipsTitle': 'Icebreakers',
+      'A place to exchange practical money ideas: what works in your budget, what failed, and what you want to try next. We’re building toward threads and replies; for now you’ll find conversation starters, ideas to try, and short voices from the community.',
+    'community.demoBanner':
+      'Today: prompts you can reuse in real life, ideas to experiment with, and curated member stories. Next: post your own tips and join discussions. Questions or suggestions? Open Help (💬) — it shapes what we build.',
+    'community.sectionStartersTitle': 'Prompts to trade ideas',
+    'community.sectionStartersIntro':
+      'Use these with friends, partners, coworkers, or an online group — they’re meant to open a real swap about money, not small talk.',
+    'community.sectionIdeasTitle': 'Ideas worth trying',
+    'community.sectionIdeasIntro': 'Short tactics you can test this week — steal, adapt, or share back what worked.',
+    'community.hiveTip1Title': 'Subscription audit Sunday',
+    'community.hiveTip1Body':
+      'Pick one Sunday a quarter, list every recurring charge, cancel or downgrade what you don’t use. Most people find one “ghost” bill.',
+    'community.hiveTip2Title': 'Name the goal in the app',
+    'community.hiveTip2Body':
+      'Whether it’s “trip” or “buffer”, a label makes the goal feel real. Saying no to extras gets easier when the “yes” has a name.',
+    'community.hiveTip3Title': 'Fun money, same total',
+    'community.hiveTip3Body':
+      'Couples: two small “no-questions” pots keep peace. Housemates: agree how you split groceries vs takeout so no one babysits the spreadsheet.',
+    'community.hiveTip4Title': 'Pay future-you first',
+    'community.hiveTip4Body':
+      'On payday, move savings or debt payments before shopping. Even a tiny auto-transfer builds the habit before lifestyle creep.',
+    'community.sectionVoicesTitle': 'How others approach money',
+    'community.sectionVoicesIntro':
+      'Short snapshots from members (curated for now). When we open posting, this is where shared experiences will live.',
+    'community.story1Tag': 'Debt snowball',
+    'community.story1Byline': 'Jordan · paying things off slowly',
+    'community.story1Body':
+      'I list mood next to spends on heavy weeks. Seeing “tired + takeout” in one row helped me plan cheaper comfort food instead.',
+    'community.story2Tag': 'Couples',
+    'community.story2Byline': 'Rina · shared vet & groceries',
+    'community.story2Body':
+      'We use one pot for dog + groceries and “fun” pockets each. Arguing dropped when “whose turn” wasn’t ambiguous anymore.',
+    'community.story3Tag': 'Subscriptions',
+    'community.story3Byline': 'Alex · streaming spring clean',
+    'community.story3Body':
+      'January audit: three small streamers gone, one bundle upgraded. Took 20 minutes, saved enough for a nicer emergency top-up.',
+    'community.sectionNextTitle': 'What’s next',
+    'community.sectionNextIntro':
+      'We’re working on safe ways to publish tips, comment, and follow threads. Get a nudge when the first version ships — no spam.',
+    'community.messagesCta': 'Notify me when discussions open',
+    'community.messagesToast':
+      'Saved. We’ll ping you in the app when community discussions go live — until then, Help (💬) is the best place to share ideas.',
+    'community.helpHint':
+      'Have a budget hack, a worry, or a feature idea? Open Help (💬) in the header — we read it all.',
+    'community.tipsTitle': 'Conversation starters',
     'community.tip1': 'Ask which app they use to track daily spending.',
     'community.tip2': 'Share one subscription you cancelled and what you replaced it with.',
     'community.tip3': 'Compare how you split rent, food, or fun money with housemates or partners.',
-    'community.iceLabel': 'A tip they\'d share',
-    'community.p1.name': 'Alex',
-    'community.p1.meta': '30s · side projects & index funds',
-    'community.p1.bio':
-      'Logs every subscription, hates waste. Loves comparing minimalist budget setups and weekend “no-spend” challenges.',
-    'community.p1.ice': 'Tip: audit streaming every January — easiest money back.',
-    'community.p2.name': 'Sofia',
-    'community.p2.meta': '20s · first real salary',
-    'community.p2.bio':
-      'Building her first emergency fund. Wants relatable advice, not lectures — bonus if you also love cheap coffee.',
-    'community.p2.ice': 'Tip: automate a small transfer on payday before you scroll shops.',
-    'community.p3.name': 'Jordan',
-    'community.p3.meta': 'Debt-free journey',
-    'community.p3.bio':
-      'Paid off cards slowly and tracks mood + spending. Happy to vent about impulse buys and celebrate small wins.',
-    'community.p3.ice': 'Tip: name your goal in the app — makes “no” easier in stores.',
-    'community.p4.name': 'Rina',
-    'community.p4.meta': 'Couple + one dog',
-    'community.p4.bio':
-      'Splits groceries and vet bills with a shared “hive” spreadsheet. Swaps meal-prep ideas that actually save.',
-    'community.p4.ice': 'Tip: one “fun money” pot each — fewer arguments, same total.',
     'past.title': 'Past overviews',
     'past.subtitle': 'See income, spending and savings for previous months.',
     'past.expensesForMonthTitle': 'All expenses for',
@@ -332,7 +345,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.title': 'Home',
     'appHome.subtitle': 'Il tuo centro Money Hive — apri la sezione che ti serve.',
     'appHome.heroEyebrow': 'The Money Hive',
-    'appHome.heroTitle': 'Bentornato',
+    'appHome.heroTitle': 'I tuoi soldi, finalmente chiari',
     'appHome.heroTagline':
       'Entra nel tuo budget: spese, mese, conti o un saluto in community — tutto da qui.',
     'appHome.quickLinks': 'Dove vuoi andare',
@@ -340,7 +353,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.tileExpenses': 'Aggiungi o modifica le spese singole.',
     'appHome.tileWallet': 'Entrate, conti, saldi e trasferimenti.',
     'appHome.tilePlan': 'Abbonamenti, costi ricorrenti e obiettivi di risparmio mensili.',
-    'appHome.tileCommunity': 'Incontra altri e scambia consigli sui soldi.',
+    'appHome.tileCommunity': 'Scambia idee su budget e finanza con altri.',
     'plan.navTitle': 'Piano mensile',
     'plan.title': 'Piano mensile',
     'plan.subtitle':
@@ -366,7 +379,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'nav.bottomTabWallet': 'Conti',
     'nav.bottomTabPlan': 'Piano',
     'nav.bottomTabAdd': 'Spesa',
-    'nav.bottomTabCommunity': 'Incontri',
+    'nav.bottomTabCommunity': 'Idee',
     'nav.bottomTabHome': 'Home',
     'nav.wallet': 'Portafoglio',
     'nav.past': 'Passato',
@@ -559,42 +572,55 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'savings.removeConfirm': 'Rimuovere questo obiettivo?',
     'savings.savedSoFar': 'Risparmiato finora',
     'savings.accountOptional': 'Conto (opzionale)',
-    'community.title': 'Incontra l\'alveare',
+    'community.title': 'Idee e budget',
     'community.subtitle':
-      'Come un dating app, ma sulle abitudini con i soldi: scopri persone, scambiate consigli veri e crescete insieme — zero flirt, solo budget più lucidi.',
-    'community.demoBanner': 'Profili dimostrativi — presto qui ci saranno iscritti veri e chat 1:1.',
-    'community.discoverTitle': 'Scopri',
-    'community.pass': 'Salta',
-    'community.connect': 'Scambia consigli',
-    'community.connectToast':
-      'Segnato! Per ora apri la chat 💬 in alto — i messaggi diretti tra utenti arriveranno presto.',
-    'community.emptyDeck': 'Per ora hai visto tutti.',
-    'community.again': 'Rivedi i profili',
-    'community.tipsTitle': 'Per rompere il ghiaccio',
+      'Un posto per scambiarsi idee concrete su soldi e budget: cosa ti funziona, cosa no e cosa vuoi provare dopo. Stiamo costruendo discussioni e risposte; per ora trovi spunti per parlare, idee da testare e voci brevi dalla community.',
+    'community.demoBanner':
+      'Oggi: domande da riusare nella vita reale, idee da sperimentare e storie curate dei membri. Poi: pubblicare i tuoi consigli e partecipare alle discussioni. Dubbi o suggerimenti? Apri Aiuto (💬) — ci orienta su cosa costruire.',
+    'community.sectionStartersTitle': 'Spunti per scambiare idee',
+    'community.sectionStartersIntro':
+      'Usali con amici, partner, colleghi o un gruppo online: servono ad aprire uno scambio vero sul denaro, non il chiacchiericcio.',
+    'community.sectionIdeasTitle': 'Idee da provare',
+    'community.sectionIdeasIntro': 'Tattiche brevi da testare questa settimana — prendile, adattale o racconta cosa ha funzionato.',
+    'community.hiveTip1Title': 'Domenica degli abbonamenti',
+    'community.hiveTip1Body':
+      'Scegli una domenica a trimestre, elenca ogni addebito ricorrente, elimina o riduci ciò che non usi. Molti trovano una voce “fantasma”.',
+    'community.hiveTip2Title': 'Dai un nome all’obiettivo',
+    'community.hiveTip2Body':
+      'Che sia “viaggio” o “cuscinetto”, l’etichetta rende l’obiettivo concreto. Dire di no agli extra è più facile quando il sì ha un nome.',
+    'community.hiveTip3Title': 'Soldi svago, stesso totale',
+    'community.hiveTip3Body':
+      'In coppia: due piccoli fondi “senza domande”. In casa: definite come dividete spesa vs asporto così nessuno controlla l’altro sul foglio.',
+    'community.hiveTip4Title': 'Prima il te futuro',
+    'community.hiveTip4Body':
+      'A stipendio, sposta risparmi o debiti prima di spendere. Anche un bonifico automatico piccolo crea l’abitudine prima che aumentino le uscite.',
+    'community.sectionVoicesTitle': 'Come gli altri gestiscono i soldi',
+    'community.sectionVoicesIntro':
+      'Scorci da membri (per ora curati). Quando apriremo le pubblicazioni, qui ci saranno esperienze condivise.',
+    'community.story1Tag': 'Debiti',
+    'community.story1Byline': 'Jordan · piano lungo',
+    'community.story1Body':
+      'Affianco umore e spese nelle settimane pesanti. Vedere “stanca + takeout” sulla stessa riga mi ha spinta a organizzare confort food più economici.',
+    'community.story2Tag': 'Coppia',
+    'community.story2Byline': 'Rina · cane e spesa',
+    'community.story2Body':
+      'Un fondo per cane e spesa e due “svago” individuali. Le discussioni sono calate quando non era più “a chi tocca”.',
+    'community.story3Tag': 'Abbonamenti',
+    'community.story3Byline': 'Alex · reset streaming',
+    'community.story3Body':
+      'Audit di gennaio: tre servizi in meno, un pacchetto meglio. 20 minuti per un top-up di emergenza più comodo.',
+    'community.sectionNextTitle': 'Cosa arriva dopo',
+    'community.sectionNextIntro':
+      'Stiamo lavorando a modi sicuri per pubblicare consigli, commentare e seguire discussioni. Ricevi un avviso quando parte la prima versione — niente spam.',
+    'community.messagesCta': 'Avvisami quando aprono le discussioni',
+    'community.messagesToast':
+      'Salvato. Ti avviseremo in app quando le discussioni in community saranno attive — fino ad allora Aiuto (💬) è il posto migliore per condividere idee.',
+    'community.helpHint':
+      'Hai un trucco di budget, un dubbio o un’idea per l’app? Apri Aiuto (💬) in alto — leggiamo tutto.',
+    'community.tipsTitle': 'Spunti di conversazione',
     'community.tip1': 'Chiedi che app usano per tracciare le spese giornaliere.',
     'community.tip2': 'Racconta un abbonamento che hai tolto e con cosa lo hai sostituito.',
     'community.tip3': 'Confrontate come dividete affitto, spesa o “soldi svago” con coinquilini o partner.',
-    'community.iceLabel': 'Un consiglio che condividerebbe',
-    'community.p1.name': 'Alex',
-    'community.p1.meta': '30 anni · progetti extra & fondi indicizzati',
-    'community.p1.bio':
-      'Segna ogni abbonamento, odia sprechi. Ama confrontare setup minimalisti per il budget e le sfide “zero spese” nel weekend.',
-    'community.p1.ice': 'Consiglio: controlla streaming a gennaio — soldi facili.',
-    'community.p2.name': 'Sofia',
-    'community.p2.meta': '20 anni · primo stipendio “vero”',
-    'community.p2.bio':
-      'Sta costruendo il fondo emergenza. Vuole consigli umani, non lezioni — bonus se ami il caffè economico.',
-    'community.p2.ice': 'Consiglio: bonifico automatico a stipendio, prima di aprire gli shop online.',
-    'community.p3.name': 'Jordan',
-    'community.p3.meta': 'Percorso uscita dai debiti',
-    'community.p3.bio':
-      'Ha saldato le carte piano piano e tiene umore + spese. Felice di sfogarsi sugli acquisti impulsivi e festegiare piccole vittorie.',
-    'community.p3.ice': 'Consiglio: dai un nome all\'obiettivo nell\'app — il “no” in negozio è più facile.',
-    'community.p4.name': 'Rina',
-    'community.p4.meta': 'Coppia + un cane',
-    'community.p4.bio':
-      'Divide spesa e veterinario con un foglio “hive” condiviso. Scambia idee meal-prep che risparmiano davvero.',
-    'community.p4.ice': 'Consiglio: un fondo “svago” a testa — meno litigi, stesso totale.',
     'past.title': 'Panoramiche passate',
     'past.subtitle': 'Vedi entrate, spese e risparmi dei mesi precedenti.',
     'past.expensesForMonthTitle': 'Tutte le spese di',
@@ -642,7 +668,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.title': 'Start',
     'appHome.subtitle': 'Dein Money-Hive-Zentrum — wähle einen Bereich.',
     'appHome.heroEyebrow': 'The Money Hive',
-    'appHome.heroTitle': 'Willkommen zurück',
+    'appHome.heroTitle': 'Dein Geld, endlich klar',
     'appHome.heroTagline':
       'Eintauchen in dein Budget: Ausgaben, Monat, Konten oder Community — alles von hier.',
     'appHome.quickLinks': 'Wohin als Nächstes',
@@ -650,7 +676,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.tileExpenses': 'Einmalige Ausgaben erfassen oder bearbeiten.',
     'appHome.tileWallet': 'Einnahmen, Konten, Salden und Überweisungen.',
     'appHome.tilePlan': 'Wiederkehrende Kosten, Abos und monatliche Sparziele.',
-    'appHome.tileCommunity': 'Leute treffen und Geld-Tipps tauschen.',
+    'appHome.tileCommunity': 'Budget- und Geld-Ideen mit anderen tauschen.',
     'plan.navTitle': 'Monatsplan',
     'plan.title': 'Monatsplan',
     'plan.subtitle':
@@ -676,7 +702,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'nav.bottomTabWallet': 'Konten',
     'nav.bottomTabPlan': 'Plan',
     'nav.bottomTabAdd': 'Neu',
-    'nav.bottomTabCommunity': 'Treffen',
+    'nav.bottomTabCommunity': 'Ideen',
     'nav.bottomTabHome': 'Start',
     'nav.wallet': 'Geldbörsen',
     'nav.past': 'Vergangenheit',
@@ -861,42 +887,55 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'savings.removeConfirm': 'Dieses Ziel entfernen?',
     'savings.savedSoFar': 'Bisher gespart',
     'savings.accountOptional': 'Konto (optional)',
-    'community.title': 'Lerne den Hive kennen',
+    'community.title': 'Ideen & Budget',
     'community.subtitle':
-      'Wie eine Dating-App, aber für Geldgewohnheiten: Leute entdecken, ehrliche Tipps tauschen — kein Flirten, nur klügere Budgets.',
-    'community.demoBanner': 'Demo-Profile — echte Nutzer:innen und 1:1-Chat kommen bald.',
-    'community.discoverTitle': 'Entdecken',
-    'community.pass': 'Weiter',
-    'community.connect': 'Tipps tauschen',
-    'community.connectToast':
-      'Notiert! Bis dahin: Chat (💬) oben öffnen — Direktnachrichten folgen.',
-    'community.emptyDeck': 'Das war\'s vorerst.',
-    'community.again': 'Nochmal mischen',
-    'community.tipsTitle': 'Gesprächseinstiege',
+      'Ein Ort zum Austausch praktischer Geld-Ideen: was in deinem Budget funktioniert, was nicht und was du als Nächstes testen willst. Wir bauen an Threads und Antworten; vorerst gibt es Gesprächsanstöße, Ideen zum Ausprobieren und kurze Stimmen aus der Community.',
+    'community.demoBanner':
+      'Heute: Fragen fürs echte Leben, Ideen zum Ausprobieren und kuratierte Geschichten von Mitgliedern. Als Nächstes: eigene Tipps posten und mitdiskutieren. Fragen oder Vorschläge? Öffne Hilfe (💬) — das steuert, was wir bauen.',
+    'community.sectionStartersTitle': 'Fragen zum Ideenaustausch',
+    'community.sectionStartersIntro':
+      'Nutze sie mit Freund:innen, Partner:innen, Kolleg:innen oder in einer Gruppe — sie sollen echte Gespräche über Geld starten, keinen Smalltalk.',
+    'community.sectionIdeasTitle': 'Ideen zum Ausprobieren',
+    'community.sectionIdeasIntro': 'Kurze Taktiken für diese Woche — übernehmen, anpassen oder zurückgeben, was geklappt hat.',
+    'community.hiveTip1Title': 'Abo-Check am Sonntag',
+    'community.hiveTip1Body':
+      'Ein Sonntag pro Quartal: alle Lastschriften auflisten, kündigen oder runterstufen, was du nicht nutzt. Die meisten finden eine „Geister“-Position.',
+    'community.hiveTip2Title': 'Ziel in der App benennen',
+    'community.hiveTip2Body':
+      'Ob „Urlaub“ oder „Polster“ — eine Bezeichnung macht das Ziel greifbar. Nein zu Extras fällt leichter, wenn das Ja einen Namen hat.',
+    'community.hiveTip3Title': 'Spaßgeld, gleiche Summe',
+    'community.hiveTip3Body':
+      'Paare: zwei kleine Töpfe „ohne Fragen“. WG: klar festlegen, wie ihr Einkauf vs. Lieferung teilt — dann kontrolliert niemand die Tabelle.',
+    'community.hiveTip4Title': 'Zuerst das zukünftige Ich',
+    'community.hiveTip4Body':
+      'Am Zahltag zuerst sparen oder Schulden bedienen, bevor du shopst. Schon ein kleiner Dauerauftrag trainiert die Gewohnheit vor dem Lifestyle-Creep.',
+    'community.sectionVoicesTitle': 'So gehen andere mit Geld um',
+    'community.sectionVoicesIntro':
+      'Kurze Schnappschüsse von Mitgliedern (vorerst kuratiert). Wenn Posting offen ist, leben geteilte Erfahrungen hier.',
+    'community.story1Tag': 'Schneeball-Schulden',
+    'community.story1Byline': 'Jordan · Schritt für Schritt',
+    'community.story1Body':
+      'Ich notiere Stimmung neben Ausgaben in harten Wochen. „Müde + Lieferessen“ in einer Zeile hat mir geholfen, günstigeren Trost zu planen.',
+    'community.story2Tag': 'Paare',
+    'community.story2Byline': 'Rina · Tierarzt & Einkauf',
+    'community.story2Body':
+      'Ein Topf für Hund + Einkauf und je ein Spaß-Topf. Streit ging runter, weil „wer dran ist“ klar war.',
+    'community.story3Tag': 'Abos',
+    'community.story3Byline': 'Alex · Streaming-Frühjahrsputz',
+    'community.story3Body':
+      'Januar-Check: drei kleine Anbieter weg, ein Paket besser. 20 Minuten — genug für ein besseres Notfallpolster.',
+    'community.sectionNextTitle': 'Was als Nächstes kommt',
+    'community.sectionNextIntro':
+      'Wir arbeiten an sicheren Wegen, Tipps zu veröffentlichen, zu kommentieren und Threads zu folgen. Lass dich benachrichtigen, wenn die erste Version live ist — kein Spam.',
+    'community.messagesCta': 'Benachrichtigen, wenn Diskussionen starten',
+    'community.messagesToast':
+      'Gespeichert. Wir melden uns in der App, sobald Community-Diskussionen live sind — bis dahin ist Hilfe (💬) der beste Ort für Ideen.',
+    'community.helpHint':
+      'Budget-Hack, Sorge oder Feature-Idee? Öffne Hilfe (💬) in der Kopfzeile — wir lesen alles.',
+    'community.tipsTitle': 'Gesprächsanstöße',
     'community.tip1': 'Frag, welche App sie für Alltagsausgaben nutzen.',
     'community.tip2': 'Erzähl ein Abo, das du gekündigt hast — und womit du es ersetzt hast.',
     'community.tip3': 'Vergleicht Miete, Essen oder „Fun Money“ mit Mitbewohner:innen oder Partner:innen.',
-    'community.iceLabel': 'Ein Tipp von ihnen',
-    'community.p1.name': 'Alex',
-    'community.p1.meta': '30er · Nebenprojekte & ETFs',
-    'community.p1.bio':
-      'Trägt jedes Abo ein, hasst Verschwendung. Vergleicht gern minimalistische Budget-Setups und „No-Spend“-Wochenenden.',
-    'community.p1.ice': 'Tipp: Streaming jeden Januar checken — schnelles Ersparnis.',
-    'community.p2.name': 'Sofia',
-    'community.p2.meta': '20er · erstes richtiges Gehalt',
-    'community.p2.bio':
-      'Baut einen Notgroschen auf. Will echte Tipps ohne Moralpredigt — Bonus für günstigen Kaffee.',
-    'community.p2.ice': 'Tipp: kleine Überweisung am Zahltag automatisieren, bevor du shopst.',
-    'community.p3.name': 'Jordan',
-    'community.p3.meta': 'Schulden runterfahren',
-    'community.p3.bio':
-      'Karten abbezahlt, Stimmung + Ausgaben im Blick. Dampf ablassen über Impulskäufe? Gerne.',
-    'community.p3.ice': 'Tipp: Ziel in der App benennen — „Nein“ im Laden fällt leichter.',
-    'community.p4.name': 'Rina',
-    'community.p4.meta': 'Paar + Hund',
-    'community.p4.bio':
-      'Teilt Einkauf und Tierarzt mit einem gemeinsamen „Hive“-Sheet. Tauscht Meal-Prep-Ideen, die wirklich sparen.',
-    'community.p4.ice': 'Tipp: je ein „Spaßgeld“-Topf — weniger Streit, gleiche Summe.',
     'past.title': 'Vergangene Übersichten',
     'past.subtitle': 'Einnahmen, Ausgaben und Ersparnisse vergangener Monate anzeigen.',
     'past.expensesForMonthTitle': 'Alle Ausgaben für',
@@ -939,7 +978,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.title': 'Accueil',
     'appHome.subtitle': 'Ton centre Money Hive — ouvre une section ci-dessous.',
     'appHome.heroEyebrow': 'The Money Hive',
-    'appHome.heroTitle': 'Content de te revoir',
+    'appHome.heroTitle': 'Ton argent, enfin clair',
     'appHome.heroTagline':
       'Plonge dans ton budget : dépenses, mois, comptes ou un coucou à la communauté.',
     'appHome.quickLinks': 'Par où commencer',
@@ -947,7 +986,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.tileExpenses': 'Ajouter ou modifier des dépenses ponctuelles.',
     'appHome.tileWallet': 'Revenus, comptes, soldes et virements.',
     'appHome.tilePlan': 'Charges récurrentes, abonnements et objectifs d’épargne mensuels.',
-    'appHome.tileCommunity': 'Rencontrer d\'autres personnes et échanger des conseils.',
+    'appHome.tileCommunity': 'Échanger des idées budget et argent avec d’autres.',
     'plan.navTitle': 'Plan du mois',
     'plan.title': 'Plan du mois',
     'plan.subtitle':
@@ -973,7 +1012,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'nav.bottomTabWallet': 'Comptes',
     'nav.bottomTabPlan': 'Plan',
     'nav.bottomTabAdd': 'Ajouter',
-    'nav.bottomTabCommunity': 'Rencontre',
+    'nav.bottomTabCommunity': 'Idées',
     'nav.bottomTabHome': 'Accueil',
     'nav.wallet': 'Portefeuilles',
     'nav.past': 'Passé',
@@ -1159,42 +1198,55 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'savings.removeConfirm': 'Supprimer cet objectif ?',
     'savings.savedSoFar': 'Épargné jusqu\'ici',
     'savings.accountOptional': 'Compte (optionnel)',
-    'community.title': 'Rencontre la ruche',
+    'community.title': 'Idées & budget',
     'community.subtitle':
-      'Comme une appli de rencontres, mais pour l’argent : découvre des personnes, échange des vrais conseils — pas de drague, que des budgets plus clairs.',
-    'community.demoBanner': 'Profils démo — vrais membres et chat 1:1 arrivent bientôt.',
-    'community.discoverTitle': 'Découvrir',
-    'community.pass': 'Passer',
-    'community.connect': 'Échanger des tips',
-    'community.connectToast':
-      'Noté ! Pour l’instant ouvre le chat 💬 en haut — les messages directs arrivent.',
-    'community.emptyDeck': 'Tu as tout vu pour l’instant.',
-    'community.again': 'Revoir les profils',
-    'community.tipsTitle': 'Pour briser la glace',
+      'Un endroit pour échanger des idées concrètes sur l’argent : ce qui marche dans ton budget, ce qui coince et ce que tu veux tester ensuite. On construit fils de discussion et réponses ; pour l’instant : accroches, idées à essayer et voix courtes de la communauté.',
+    'community.demoBanner':
+      'Aujourd’hui : questions réutilisables dans la vraie vie, idées à tester et histoires de membres (curatées). Ensuite : publier tes propres conseils et discuter. Questions ou idées ? Ouvre Aide (💬) — ça guide ce qu’on développe.',
+    'community.sectionStartersTitle': 'Accroches pour échanger',
+    'community.sectionStartersIntro':
+      'À utiliser avec des ami·e·s, ton/ta partenaire, des collègues ou un groupe en ligne — le but est d’ouvrir un vrai échange sur l’argent, pas la conversation légère.',
+    'community.sectionIdeasTitle': 'Idées à essayer',
+    'community.sectionIdeasIntro': 'Petites tactiques pour cette semaine — reprends, adapte ou raconte ce qui a marché.',
+    'community.hiveTip1Title': 'Dimanche des abonnements',
+    'community.hiveTip1Body':
+      'Un dimanche par trimestre : liste chaque prélèvement, résilie ou rétrograde ce que tu n’utilises pas. Souvent une ligne « fantôme ».',
+    'community.hiveTip2Title': 'Nomme l’objectif dans l’app',
+    'community.hiveTip2Body':
+      '« Voyage » ou « coussin » : un libellé rend l’objectif concret. Dire non aux extras est plus facile quand le oui a un nom.',
+    'community.hiveTip3Title': 'Argent fun, même total',
+    'community.hiveTip3Body':
+      'En couple : deux petits pots « sans questions ». En coloc : fixez comment vous partagez courses vs livraison pour éviter le contrôle du tableau.',
+    'community.hiveTip4Title': 'D’abord le toi du futur',
+    'community.hiveTip4Body':
+      'Le jour de paie, épargne ou dettes avant les achats. Même un petit virement auto installe l’habitude avant l’inflation du style de vie.',
+    'community.sectionVoicesTitle': 'Comment les autres gèrent l’argent',
+    'community.sectionVoicesIntro':
+      'Instantanés de membres (curatés pour l’instant). Quand on ouvrira la publication, les expériences partagées vivront ici.',
+    'community.story1Tag': 'Boule de neige dettes',
+    'community.story1Byline': 'Jordan · remboursement doux',
+    'community.story1Body':
+      'Je note l’humeur à côté des dépenses les semaines dures. Voir « fatiguée + livraison » sur une ligne m’a aidée à prévoir du réconfort moins cher.',
+    'community.story2Tag': 'Couples',
+    'community.story2Byline': 'Rina · véto & courses',
+    'community.story2Body':
+      'Un pot chien + courses et des poches « plaisir » chacun·e. Moins de disputes quand ce n’était plus « à qui le tour ».',
+    'community.story3Tag': 'Abonnements',
+    'community.story3Byline': 'Alex · grand ménage streaming',
+    'community.story3Body':
+      'Audit de janvier : trois petits services en moins, un bundle mieux. 20 minutes pour un coussin d’urgence plus confortable.',
+    'community.sectionNextTitle': 'La suite',
+    'community.sectionNextIntro':
+      'On travaille sur des façons sûres de publier des conseils, commenter et suivre des fils. Reçois une notif quand la première version arrive — pas de spam.',
+    'community.messagesCta': 'Me prévenir quand les discussions ouvrent',
+    'community.messagesToast':
+      'Enregistré. On te préviendra dans l’app quand les discussions communautaires seront là — d’ici là, Aide (💬) est le meilleur endroit pour partager des idées.',
+    'community.helpHint':
+      'Un truc budget, une inquiétude ou une idée de fonction ? Ouvre Aide (💬) dans l’en-tête — on lit tout.',
+    'community.tipsTitle': 'Accroches conversation',
     'community.tip1': 'Demande quelle appli elle utilise pour suivre les dépenses du quotidien.',
     'community.tip2': 'Raconte un abo que tu as résilié et par quoi tu l’as remplacé.',
     'community.tip3': 'Comparez comment vous partagez loyer, courses ou « argent plaisir » avec colocs ou partenaire.',
-    'community.iceLabel': 'Un conseil qu’iel partagerait',
-    'community.p1.name': 'Alex',
-    'community.p1.meta': '30 ans · projets & trackers',
-    'community.p1.bio':
-      'Note chaque abo, déteste le gaspillage. Aime comparer des setups budget minimalistes et les week-ends « zéro dépense ».',
-    'community.p1.ice': 'Astuce : auditer le streaming en janvier — gain facile.',
-    'community.p2.name': 'Sofia',
-    'community.p2.meta': '20 ans · premier vrai salaire',
-    'community.p2.bio':
-      'Construit son fonds d’urgence. Veut des conseils humains, pas des leçons — bonus si tu aimes le café pas cher.',
-    'community.p2.ice': 'Astuce : virement auto le jour de paie avant de scroller les shops.',
-    'community.p3.name': 'Jordan',
-    'community.p3.meta': 'Sortie des dettes',
-    'community.p3.bio':
-      'A remboursé les cartes petit à petit, suit humeur + dépenses. OK pour parler achats impulsifs et petites victoires.',
-    'community.p3.ice': 'Astuce : nommer son objectif dans l’app — le « non » en magasin est plus simple.',
-    'community.p4.name': 'Rina',
-    'community.p4.meta': 'Couple + chien',
-    'community.p4.bio':
-      'Partage courses et véto avec un tableur « hive ». Échange des idées meal-prep qui économisent vraiment.',
-    'community.p4.ice': 'Astuce : un pot « plaisir » chacun·e — moins de disputes, même total.',
     'past.title': 'Aperçus passés',
     'past.subtitle': 'Voir revenus, dépenses et épargne des mois précédents.',
     'past.expensesForMonthTitle': 'Toutes les dépenses pour',
@@ -1235,7 +1287,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.title': 'Inicio',
     'appHome.subtitle': 'Tu centro Money Hive — abre la sección que necesites.',
     'appHome.heroEyebrow': 'The Money Hive',
-    'appHome.heroTitle': 'Bienvenido de nuevo',
+    'appHome.heroTitle': 'Tu dinero, por fin claro',
     'appHome.heroTagline':
       'Entra en tu presupuesto: gastos, mes, cuentas o un hola en la comunidad.',
     'appHome.quickLinks': 'A dónde ir',
@@ -1243,7 +1295,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.tileExpenses': 'Añade o edita gastos puntuales.',
     'appHome.tileWallet': 'Ingresos, cuentas, saldos y transferencias.',
     'appHome.tilePlan': 'Cargos recurrentes, suscripciones y metas de ahorro mensuales.',
-    'appHome.tileCommunity': 'Conoce gente e intercambia consejos.',
+    'appHome.tileCommunity': 'Intercambia ideas de presupuesto y dinero con otros.',
     'plan.navTitle': 'Plan mensual',
     'plan.title': 'Plan mensual',
     'plan.subtitle':
@@ -1269,7 +1321,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'nav.bottomTabWallet': 'Cuentas',
     'nav.bottomTabPlan': 'Plan',
     'nav.bottomTabAdd': 'Añadir',
-    'nav.bottomTabCommunity': 'Conoce',
+    'nav.bottomTabCommunity': 'Ideas',
     'nav.bottomTabHome': 'Inicio',
     'nav.wallet': 'Monederos',
     'nav.past': 'Pasado',
@@ -1455,42 +1507,55 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'savings.removeConfirm': '¿Eliminar este objetivo?',
     'savings.savedSoFar': 'Ahorrado hasta ahora',
     'savings.accountOptional': 'Cuenta (opcional)',
-    'community.title': 'Conoce la colmena',
+    'community.title': 'Ideas y presupuesto',
     'community.subtitle':
-      'Como una app de citas, pero para hábitos con el dinero: descubre gente, intercambia consejos de verdad — sin ligar, solo presupuestos más claros.',
-    'community.demoBanner': 'Perfiles demo — pronto habrá miembros reales y chat 1:1.',
-    'community.discoverTitle': 'Descubrir',
-    'community.pass': 'Saltar',
-    'community.connect': 'Intercambiar tips',
-    'community.connectToast':
-      '¡Anotado! Por ahora abre el chat 💬 arriba — los mensajes directos vienen en camino.',
-    'community.emptyDeck': 'Por ahora los has visto todos.',
-    'community.again': 'Ver otra vez',
-    'community.tipsTitle': 'Para romper el hielo',
+      'Un espacio para intercambiar ideas prácticas sobre dinero: qué te funciona en el presupuesto, qué no y qué quieres probar después. Estamos construyendo hilos y respuestas; por ahora hay preguntas para conversar, ideas para experimentar y voces breves de la comunidad.',
+    'community.demoBanner':
+      'Hoy: preguntas que puedes usar en la vida real, ideas para probar e historias de miembros (curadas). Después: publicar tus propios consejos y debatir. ¿Dudas o sugerencias? Abre Ayuda (💬) — nos guía qué construir.',
+    'community.sectionStartersTitle': 'Preguntas para intercambiar ideas',
+    'community.sectionStartersIntro':
+      'Úsalas con amigos, pareja, compañeros de piso o un grupo online: están pensadas para abrir un intercambio real sobre dinero, no charla superficial.',
+    'community.sectionIdeasTitle': 'Ideas para probar',
+    'community.sectionIdeasIntro': 'Tácticas breves para esta semana — copia, adapta o cuenta qué te funcionó.',
+    'community.hiveTip1Title': 'Domingo de suscripciones',
+    'community.hiveTip1Body':
+      'Un domingo por trimestre: lista cada cargo recurrente, cancela o baja lo que no usas. Mucha gente encuentra un cargo «fantasma».',
+    'community.hiveTip2Title': 'Ponle nombre a la meta en la app',
+    'community.hiveTip2Body':
+      '«Viaje» o «colchón»: la etiqueta hace la meta real. Decir no a extras es más fácil cuando el sí tiene nombre.',
+    'community.hiveTip3Title': 'Diversión, mismo total',
+    'community.hiveTip3Body':
+      'Pareja: dos bolsillos pequeños «sin preguntas». Piso: acordad cómo repartís compras vs delivery para no vigilar la hoja.',
+    'community.hiveTip4Title': 'Primero el tú del futuro',
+    'community.hiveTip4Body':
+      'El día de paga, ahorro o deudas antes de gastar. Hasta una transferencia automática pequeña crea el hábito antes del lifestyle creep.',
+    'community.sectionVoicesTitle': 'Cómo otras personas manejan el dinero',
+    'community.sectionVoicesIntro':
+      'Retratos breves de miembros (curados por ahora). Cuando abramos publicar, aquí vivirán las experiencias compartidas.',
+    'community.story1Tag': 'Bola de nieve deudas',
+    'community.story1Byline': 'Jordan · pagando despacio',
+    'community.story1Body':
+      'Anoto el ánimo junto al gasto en semanas duras. Ver «cansada + delivery» en una fila me ayudó a planear consuelo más barato.',
+    'community.story2Tag': 'Parejas',
+    'community.story2Byline': 'Rina · vet y compras',
+    'community.story2Body':
+      'Un fondo para perro y compras y «diversión» cada uno. Menos discusiones cuando ya no era «a quién le toca».',
+    'community.story3Tag': 'Suscripciones',
+    'community.story3Byline': 'Alex · limpieza de streaming',
+    'community.story3Body':
+      'Auditoría de enero: tres servicios menos, un paquete mejor. 20 minutos para un colchón de emergencia más cómodo.',
+    'community.sectionNextTitle': 'Qué viene después',
+    'community.sectionNextIntro':
+      'Estamos trabajando en formas seguras de publicar consejos, comentar y seguir hilos. Recibe un aviso cuando salga la primera versión — sin spam.',
+    'community.messagesCta': 'Avísame cuando abran las discusiones',
+    'community.messagesToast':
+      'Guardado. Te avisaremos en la app cuando haya discusiones en la comunidad — hasta entonces Ayuda (💬) es el mejor sitio para compartir ideas.',
+    'community.helpHint':
+      '¿Truco de presupuesto, duda o idea para la app? Abre Ayuda (💬) en la cabecera — lo leemos todo.',
+    'community.tipsTitle': 'Rompehielos',
     'community.tip1': 'Pregunta qué app usan para el gasto diario.',
     'community.tip2': 'Cuenta una suscripción que cancelaste y con qué la sustituiste.',
     'community.tip3': 'Comparad cómo repartís alquiler, comida o «dinero diversión» con compañeros o pareja.',
-    'community.iceLabel': 'Un tip que compartiría',
-    'community.p1.name': 'Alex',
-    'community.p1.meta': '30s · proyectos y fondos',
-    'community.p1.bio':
-      'Anota cada suscripción, odia el desperdicio. Le encanta comparar setups de presupuesto y retos de finde sin gastar.',
-    'community.p1.ice': 'Tip: revisa el streaming en enero — dinero fácil.',
-    'community.p2.name': 'Sofia',
-    'community.p2.meta': '20s · primer sueldo “de verdad”',
-    'community.p2.bio':
-      'Arma su fondo de emergencia. Quiere consejos humanos, no sermones — bonus si amas el café barato.',
-    'community.p2.ice': 'Tip: transferencia automática el día de paga antes de mirar tiendas.',
-    'community.p3.name': 'Jordan',
-    'community.p3.meta': 'Salida de deudas',
-    'community.p3.bio':
-      'Pagó tarjetas poco a poco y lleva humor + gastos. Feliz de hablar de compras impulsivas y mini logros.',
-    'community.p3.ice': 'Tip: pon nombre a la meta en la app — el “no” en la tienda cuesta menos.',
-    'community.p4.name': 'Rina',
-    'community.p4.meta': 'Pareja + perro',
-    'community.p4.bio':
-      'Reparte compras y vet con una hoja “hive”. Intercambia meal-prep que sí ahorra.',
-    'community.p4.ice': 'Tip: un fondo de “diversión” cada uno — menos peleas, mismo total.',
     'past.title': 'Resúmenes pasados',
     'past.subtitle': 'Ver ingresos, gastos y ahorros de meses anteriores.',
     'past.expensesForMonthTitle': 'Todos los gastos de',

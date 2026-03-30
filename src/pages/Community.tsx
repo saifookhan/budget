@@ -1,51 +1,31 @@
 import { useState, useEffect } from 'react'
+import { BeeMarkSvg } from '../components/BeeMarkSvg'
+import { HIVE_TIP_IDS, STORY_IDS, type HiveTipId, type StoryId } from '../data/communityContent'
 import { useTranslation } from '../LanguageContext'
 
-const PROFILE_IDS = [1, 2, 3, 4] as const
-
-const AVATAR_GRADIENTS = [
-  'linear-gradient(145deg, #c9a96e 0%, #8c1c5b 88%)',
-  'linear-gradient(145deg, #e8c4c8 0%, #5a0f2e 88%)',
-  'linear-gradient(145deg, #c4b896 0%, #50182f 85%)',
-  'linear-gradient(145deg, #dcc598 0%, #751a48 82%)',
-]
-
-type ProfileId = (typeof PROFILE_IDS)[number]
-
-function ProfileCard({
-  pid,
-  variant,
-}: {
-  pid: ProfileId
-  variant: 'front' | 'back'
-}) {
+function HiveTipCard({ id }: { id: HiveTipId }) {
   const { t } = useTranslation()
-  const g = AVATAR_GRADIENTS[pid - 1] ?? AVATAR_GRADIENTS[0]
-  const name = t(`community.p${pid}.name`)
-  const initial = name.trim().charAt(0).toUpperCase() || '?'
-
   return (
-    <article
-      className={`community-profile-card${variant === 'back' ? ' community-profile-card--back' : ''}`}
-      aria-hidden={variant === 'back'}
-    >
-      <div className="community-profile-avatar" style={{ background: g }}>
-        <span>{initial}</span>
-      </div>
-      <h3 className="community-profile-name">{name}</h3>
-      <p className="community-profile-meta">{t(`community.p${pid}.meta`)}</p>
-      <p className="community-profile-bio">{t(`community.p${pid}.bio`)}</p>
-      <blockquote className="community-profile-ice">
-        <span className="community-profile-ice-label">{t('community.iceLabel')}</span>
-        {t(`community.p${pid}.ice`)}
-      </blockquote>
+    <article className="community-hive-tip-card card">
+      <h3 className="community-hive-tip-title">{t(`community.hiveTip${id}Title`)}</h3>
+      <p className="community-hive-tip-body">{t(`community.hiveTip${id}Body`)}</p>
+    </article>
+  )
+}
+
+function StoryCard({ id }: { id: StoryId }) {
+  const { t } = useTranslation()
+  return (
+    <article className="community-story-card card">
+      <span className="community-story-tag">{t(`community.story${id}Tag`)}</span>
+      <p className="community-story-byline">{t(`community.story${id}Byline`)}</p>
+      <p className="community-story-body">{t(`community.story${id}Body`)}</p>
     </article>
   )
 }
 
 export default function Community() {
   const { t } = useTranslation()
-  const [index, setIndex] = useState(0)
   const [toast, setToast] = useState<string | null>(null)
 
   useEffect(() => {
@@ -54,63 +34,74 @@ export default function Community() {
     return () => window.clearTimeout(id)
   }, [toast])
 
-  const atEnd = index >= PROFILE_IDS.length
-  const currentId = !atEnd ? PROFILE_IDS[index] : null
-  const nextId = !atEnd && index + 1 < PROFILE_IDS.length ? PROFILE_IDS[index + 1] : null
-
-  const pass = () => setIndex((i) => i + 1)
-  const connect = () => {
-    setToast(t('community.connectToast'))
-    setIndex((i) => i + 1)
-  }
-  const reset = () => setIndex(0)
+  const messagesNotify = () => setToast(t('community.messagesToast'))
 
   return (
     <div className="page-content community-page">
-      <h1 className="page-title">{t('community.title')}</h1>
+      <h1 className="page-title community-page-title">
+        <span className="community-page-title-mark" aria-hidden>
+          <BeeMarkSvg scale={1} svgClassName="community-page-title-bee-svg" />
+        </span>
+        {t('community.title')}
+      </h1>
       <p className="muted page-lead">{t('community.subtitle')}</p>
 
       <p className="community-demo-banner" role="note">
         {t('community.demoBanner')}
       </p>
 
-      <h2 className="section-title community-discover-heading">{t('community.discoverTitle')}</h2>
+      <section className="community-section" aria-labelledby="community-starters-heading">
+        <h2 id="community-starters-heading" className="section-title">
+          {t('community.sectionStartersTitle')}
+        </h2>
+        <p className="muted community-section-intro">{t('community.sectionStartersIntro')}</p>
+        <div className="card community-tips-card community-starters-card">
+          <ul className="community-tips-list">
+            <li>{t('community.tip1')}</li>
+            <li>{t('community.tip2')}</li>
+            <li>{t('community.tip3')}</li>
+          </ul>
+        </div>
+      </section>
 
-      <div className="community-deck-wrap">
-        {!atEnd && currentId != null ? (
-          <div className="community-deck">
-            {nextId != null ? <ProfileCard pid={nextId} variant="back" /> : null}
-            <ProfileCard pid={currentId} variant="front" />
-          </div>
-        ) : (
-          <div className="community-deck-empty card">
-            <p className="community-deck-empty-text">{t('community.emptyDeck')}</p>
-            <button type="button" className="btn btn-primary" onClick={reset}>
-              {t('community.again')}
-            </button>
-          </div>
-        )}
-
-        {!atEnd && currentId != null ? (
-          <div className="community-deck-actions">
-            <button type="button" className="btn btn-ghost community-action-pass" onClick={pass}>
-              {t('community.pass')}
-            </button>
-            <button type="button" className="btn btn-primary community-action-connect" onClick={connect}>
-              {t('community.connect')}
-            </button>
-          </div>
-        ) : null}
-      </div>
-
-      <div className="card community-tips-card">
-        <h2 className="section-title">{t('community.tipsTitle')}</h2>
-        <ul className="community-tips-list">
-          <li>{t('community.tip1')}</li>
-          <li>{t('community.tip2')}</li>
-          <li>{t('community.tip3')}</li>
+      <section className="community-section" aria-labelledby="community-ideas-heading">
+        <h2 id="community-ideas-heading" className="section-title">
+          {t('community.sectionIdeasTitle')}
+        </h2>
+        <p className="muted community-section-intro">{t('community.sectionIdeasIntro')}</p>
+        <ul className="community-hive-tip-grid">
+          {HIVE_TIP_IDS.map((id) => (
+            <li key={id}>
+              <HiveTipCard id={id} />
+            </li>
+          ))}
         </ul>
-      </div>
+      </section>
+
+      <section className="community-section" aria-labelledby="community-voices-heading">
+        <h2 id="community-voices-heading" className="section-title">
+          {t('community.sectionVoicesTitle')}
+        </h2>
+        <p className="muted community-section-intro">{t('community.sectionVoicesIntro')}</p>
+        <div className="community-story-stack">
+          {STORY_IDS.map((id) => (
+            <StoryCard key={id} id={id} />
+          ))}
+        </div>
+      </section>
+
+      <section className="community-section" aria-labelledby="community-next-heading">
+        <h2 id="community-next-heading" className="section-title">
+          {t('community.sectionNextTitle')}
+        </h2>
+        <div className="card community-messages-card community-next-card">
+          <p className="community-messages-intro">{t('community.sectionNextIntro')}</p>
+          <button type="button" className="btn btn-primary community-messages-cta" onClick={messagesNotify}>
+            {t('community.messagesCta')}
+          </button>
+          <p className="muted community-help-hint">{t('community.helpHint')}</p>
+        </div>
+      </section>
 
       {toast ? (
         <div className="community-toast" role="status" aria-live="polite">

@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
-import { HiveMarkSvg } from '../components/HiveMarkSvg'
+import { BeeMarkSvg } from '../components/BeeMarkSvg'
 import { useTranslation } from '../LanguageContext'
 
 type Tile = {
   to: string
   icon: string
-  /** Use branded hive SVG (same contours as header) instead of emoji */
-  hiveMark?: boolean
+  /** Bee icon for Meet / Community */
+  beeMark?: boolean
   titleKey: string
   descKey: string
 }
@@ -15,8 +15,8 @@ const TILES: Tile[] = [
   { to: '/overview', icon: '📊', titleKey: 'nav.overview', descKey: 'appHome.tileOverview' },
   { to: '/expenses', icon: '📝', titleKey: 'expenses.title', descKey: 'appHome.tileExpenses' },
   { to: '/accounts', icon: '💰', titleKey: 'accounts.title', descKey: 'appHome.tileWallet' },
+  { to: '/community', icon: '🐝', beeMark: true, titleKey: 'community.title', descKey: 'appHome.tileCommunity' },
   { to: '/plan', icon: '📅', titleKey: 'plan.navTitle', descKey: 'appHome.tilePlan' },
-  { to: '/community', icon: '🐝', hiveMark: true, titleKey: 'community.title', descKey: 'appHome.tileCommunity' },
 ]
 
 export default function AppHome() {
@@ -41,8 +41,8 @@ export default function AppHome() {
             <li key={tile.to}>
               <Link to={tile.to} className="app-home-tile card">
                 <span className="app-home-tile-icon" aria-hidden>
-                  {tile.hiveMark ? (
-                    <HiveMarkSvg scale={0.95} svgClassName="app-home-tile-hive-svg" />
+                  {tile.beeMark ? (
+                    <BeeMarkSvg scale={0.92} svgClassName="app-home-tile-bee-svg" />
                   ) : (
                     tile.icon
                   )}
