@@ -1,4 +1,6 @@
 :root {
+  /* Logo alveare: contorno bordeaux (sovrascritto per tema scuro/chiaro) */
+  --hive-outline: #5a0f2e;
   --radius: 14px;
   --radius-sm: 10px;
   --radius-btn: 9px;
@@ -66,6 +68,7 @@
     rgba(184, 146, 104, 0.18) 75%,
     rgba(201, 169, 110, 0.22) 100%
   );
+  --hive-outline: #e8c4d4;
 }
 [data-theme="neonBlack"] .settings-page-card select,
 [data-theme="neonBlack"] .settings-page-card .theme-dropdown {
@@ -125,6 +128,7 @@
     rgba(155, 77, 114, 0.2) 78%,
     rgba(201, 169, 110, 0.22) 100%
   );
+  --hive-outline: #e8c4d4;
 }
 [data-theme="neonRainbow"] .settings-page-card select,
 [data-theme="neonRainbow"] .settings-page-card .theme-dropdown {
@@ -184,6 +188,7 @@
     rgba(220, 196, 152, 0.26) 78%,
     rgba(201, 169, 110, 0.28) 100%
   );
+  --hive-outline: #5a0f2e;
 }
 
 [data-theme="neonClear"] h1,
@@ -477,7 +482,7 @@ button {
   max-height: var(--header-logo-height);
   display: flex;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
   margin: 0;
   padding: 0 0.5rem 0 0;
   box-sizing: border-box;
@@ -491,7 +496,7 @@ button {
   min-height: var(--header-logo-height);
   max-height: var(--header-logo-height);
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
   color: inherit;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
@@ -507,14 +512,14 @@ button {
   border-radius: 6px;
 }
 
-.app-header-logo-mark {
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.22));
+.hive-mark-svg {
+  overflow: visible;
 }
 
 .app-header-logo-hex {
-  stroke: var(--bg);
-  stroke-width: 0.45;
-  stroke-opacity: 0.28;
+  stroke: var(--hive-outline);
+  stroke-width: 0.55;
+  stroke-linejoin: round;
   paint-order: stroke fill;
 }
 
@@ -523,7 +528,7 @@ button {
   align-items: center;
   min-width: 0;
   max-width: 100%;
-  overflow: hidden;
+  overflow: visible;
   padding: 0;
 }
 
@@ -532,6 +537,7 @@ button {
   width: 36px;
   height: var(--header-logo-height);
   flex-shrink: 0;
+  overflow: visible;
 }
 
 .app-header-wordmark {
@@ -1438,11 +1444,60 @@ button {
 
 /* Auth pages: squared, tight layout */
 .auth-page {
-  padding: 1rem;
-  align-items: center;
-  justify-content: center;
+  padding: 0;
+  align-items: stretch;
+  justify-content: flex-start;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
+}
+
+.auth-page-bar {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.auth-page-main {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+  min-height: 0;
+}
+
+.auth-theme-switch {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.auth-theme-switch-label {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.auth-theme-switch-select.theme-dropdown {
+  min-width: 10.5rem;
+  max-width: min(100vw - 7rem, 16rem);
+  padding: 0.4rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 0.88rem;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--border);
 }
 
 .auth-loading {
@@ -1534,6 +1589,23 @@ button {
   box-sizing: border-box;
 }
 
+.home-page-theme-bar {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.home-page-split {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .home-hero {
   flex: 1 1 auto;
   min-height: 40vh;
@@ -1562,6 +1634,23 @@ button {
   z-index: 1;
   max-width: 420px;
   text-align: center;
+}
+
+.home-hero-mark {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 1.25rem;
+}
+
+.home-hero-mark .app-header-logo-link {
+  height: auto;
+  min-height: 0;
+  max-height: none;
+}
+
+.home-hero-mark .app-header-logo-mark-svg {
+  width: 76px;
+  height: auto;
 }
 
 .home-eyebrow {
@@ -1700,6 +1789,34 @@ button {
   background: rgba(90, 15, 46, 0.4);
 }
 
+/* Logged-out homepage — Magenta (neonRainbow): hero e colonna login distinti dal Wine night */
+[data-theme="neonRainbow"] .home-hero {
+  background:
+    radial-gradient(ellipse 130% 92% at 92% 6%, rgba(230, 90, 160, 0.28) 0%, transparent 54%),
+    radial-gradient(ellipse 100% 72% at 8% 88%, rgba(140, 28, 91, 0.26) 0%, transparent 52%),
+    linear-gradient(165deg, var(--bg) 0%, var(--bg-soft) 30%, var(--surface) 58%, var(--card) 100%);
+}
+
+[data-theme="neonRainbow"] .home-hero-pattern {
+  opacity: 0.44;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(230, 120, 180, 0.34) 1px, transparent 0),
+    radial-gradient(circle at 14px 14px, rgba(200, 70, 120, 0.28) 1px, transparent 0);
+}
+
+[data-theme="neonRainbow"] .home-login-wrap {
+  background: linear-gradient(180deg, var(--bg-soft) 0%, var(--bg) 45%, #14050c 100%);
+}
+
+[data-theme="neonRainbow"] .home-login-card.auth-card.card {
+  background: linear-gradient(180deg, #6d1d45 0%, #4a102c 100%);
+  border: 1px solid rgba(230, 100, 160, 0.38);
+  box-shadow:
+    0 0 0 1px rgba(180, 50, 100, 0.16),
+    0 8px 32px rgba(0, 0, 0, 0.42),
+    0 0 42px rgba(230, 90, 140, 0.12);
+}
+
 /* Logged-out homepage: follow Crème (clear) theme when selected */
 [data-theme="neonClear"] .home-hero {
   background:
@@ -1825,7 +1942,7 @@ button {
 }
 
 @media (min-width: 900px) {
-  .home-page {
+  .home-page-split {
     flex-direction: row;
     align-items: stretch;
   }
@@ -2110,6 +2227,20 @@ button {
   line-height: 1;
 }
 
+.app-bottom-nav-hive-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.app-bottom-nav-hive-svg {
+  width: 1.28rem;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
 .community-card-body {
   margin: 0;
   font-size: 0.95rem;
@@ -2209,6 +2340,13 @@ button {
   font-size: 1.45rem;
   line-height: 1;
   flex-shrink: 0;
+}
+
+.app-home-tile-hive-svg {
+  width: 2.05rem;
+  height: auto;
+  display: block;
+  overflow: visible;
 }
 
 .app-home-tile-text {

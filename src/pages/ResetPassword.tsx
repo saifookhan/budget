@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
+import { AuthPageLayout } from '../components/AuthPageLayout'
 import { supabase } from '../supabase'
+import { t } from '../i18n'
+import { getState } from '../store'
 
 export default function ResetPassword() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const authLang = getState().language ?? 'en'
+  const themeLabel = t('nav.theme', authLang)
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -49,7 +54,7 @@ export default function ResetPassword() {
 
   if (notConfigured) {
     return (
-      <div className="auth-page">
+      <AuthPageLayout idPrefix="reset-password" themeLabel={themeLabel}>
         <div className="auth-card card">
           <h1 className="auth-title">Reset password</h1>
           <div className="auth-alert" role="alert">
@@ -59,23 +64,23 @@ export default function ResetPassword() {
             <Link to="/login">Back to login</Link>
           </p>
         </div>
-      </div>
+      </AuthPageLayout>
     )
   }
 
   if (checking) {
     return (
-      <div className="auth-page">
+      <AuthPageLayout idPrefix="reset-password" themeLabel={themeLabel}>
         <div className="auth-card card">
           <p className="muted" style={{ margin: 0 }}>Loading…</p>
         </div>
-      </div>
+      </AuthPageLayout>
     )
   }
 
   if (!user && !hasHash) {
     return (
-      <div className="auth-page">
+      <AuthPageLayout idPrefix="reset-password" themeLabel={themeLabel}>
         <div className="auth-card card">
           <h1 className="auth-title">Reset password</h1>
           <p className="muted">
@@ -85,25 +90,25 @@ export default function ResetPassword() {
             <Link to="/login">Back to login</Link>
           </p>
         </div>
-      </div>
+      </AuthPageLayout>
     )
   }
 
   if (done) {
     return (
-      <div className="auth-page">
+      <AuthPageLayout idPrefix="reset-password" themeLabel={themeLabel}>
         <div className="auth-card card">
           <h1 className="auth-title">Password updated</h1>
           <div className="auth-alert auth-alert-success" role="status">
             Your password has been updated. Redirecting you to the app…
           </div>
         </div>
-      </div>
+      </AuthPageLayout>
     )
   }
 
   return (
-    <div className="auth-page">
+    <AuthPageLayout idPrefix="reset-password" themeLabel={themeLabel}>
       <div className="auth-card card">
         <h1 className="auth-title">Set new password</h1>
         <p className="muted">
@@ -156,6 +161,6 @@ export default function ResetPassword() {
           <Link to="/login">Back to login</Link>
         </p>
       </div>
-    </div>
+    </AuthPageLayout>
   )
 }

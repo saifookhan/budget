@@ -45,7 +45,7 @@ export function LoginForm({ onSuccess, embedded, onForgotClick }: Props) {
     try {
       await signIn(email, password)
       if (onSuccess) onSuccess()
-      else navigate('/', { replace: true })
+      else navigate('/app', { replace: true })
     } finally {
       setLoading(false)
     }

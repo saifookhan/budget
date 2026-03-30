@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
+import { AuthPageLayout } from '../components/AuthPageLayout'
 import { supabase } from '../supabase'
 import { t } from '../i18n'
 import type { LanguageCode } from '../types'
@@ -53,7 +54,7 @@ export default function Signup() {
   const T = (key: string) => t(key, authLang)
 
   return (
-    <div className="auth-page">
+    <AuthPageLayout idPrefix="signup" themeLabel={T('nav.theme')}>
       <div className="auth-card card">
         <h1 className="auth-title">{T('auth.signUpTitle')}</h1>
         <p className="muted">
@@ -137,6 +138,6 @@ export default function Signup() {
           {T('auth.alreadyHaveAccount')} <Link to="/login">{T('auth.logIn')}</Link>
         </p>
       </div>
-    </div>
+    </AuthPageLayout>
   )
 }

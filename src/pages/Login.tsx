@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../supabase'
+import { AuthPageLayout } from '../components/AuthPageLayout'
 import { LoginForm } from '../LoginForm'
 import { t } from '../i18n'
 import type { LanguageCode } from '../types'
@@ -47,7 +48,7 @@ export default function Login() {
 
   if (showForgotPassword) {
     return (
-      <div className="auth-page">
+      <AuthPageLayout idPrefix="login-forgot" themeLabel={T('nav.theme')}>
         <div className="auth-card card">
           <h1 className="auth-title">{T('auth.resetPassword')}</h1>
           <p className="muted">
@@ -106,15 +107,15 @@ export default function Login() {
             </button>
           </p>
         </div>
-      </div>
+      </AuthPageLayout>
     )
   }
 
   return (
-    <div className="auth-page">
+    <AuthPageLayout idPrefix="login" themeLabel={T('nav.theme')}>
       <div className="auth-card card">
         <LoginForm onForgotClick={() => setShowForgotPassword(true)} />
       </div>
-    </div>
+    </AuthPageLayout>
   )
 }

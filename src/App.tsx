@@ -15,6 +15,7 @@ import ResetPassword from './pages/ResetPassword'
 import HomePage from './pages/HomePage'
 import ContactChat from './ContactChat'
 import HeaderLogo from './components/HeaderLogo'
+import { HiveMarkSvg } from './components/HiveMarkSvg'
 import { AuthProvider, useAuth } from './auth/AuthContext'
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { getStoredTheme, setStoredTheme, applyTheme, type ThemeId } from './theme'
@@ -231,7 +232,7 @@ function AppShell() {
             ariaLabel={T('app.headerBrand')}
             line1={T('app.wordmarkLine1')}
             line2={T('app.wordmarkLine2')}
-            homeTo="/"
+            homeTo="/app"
           />
         </div>
         <div className="header-actions" aria-label={T('nav.quickActions')}>
@@ -276,7 +277,7 @@ function AppShell() {
         </div>
       </header>
       <Routes>
-        <Route path="/" element={<AppHome />} />
+        <Route path="/app" element={<AppHome />} />
         <Route path="/expenses" element={<Expenses />} />
         <Route path="/overview" element={<Overview key={overviewKey} theme={theme} />} />
         <Route path="/income" element={<Navigate to="/accounts" replace />} />
@@ -312,9 +313,10 @@ function AppShell() {
             />
           }
         />
+        <Route path="/" element={<Navigate to="/app" replace />} />
       </Routes>
       <nav className="app-bottom-nav" aria-label={T('nav.bottomNav')}>
-        <NavLink end to="/" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
+        <NavLink end to="/app" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
           <span className="app-bottom-nav-icon" aria-hidden>🏠</span>
           <span className="app-bottom-nav-label">{T('nav.bottomTabHome')}</span>
         </NavLink>
@@ -331,7 +333,9 @@ function AppShell() {
           <span className="app-bottom-nav-label">{T('nav.bottomTabPlan')}</span>
         </NavLink>
         <NavLink to="/community" className={({ isActive }) => `app-bottom-nav-item${isActive ? ' active' : ''}`}>
-          <span className="app-bottom-nav-icon" aria-hidden>🐝</span>
+          <span className="app-bottom-nav-icon app-bottom-nav-hive-icon" aria-hidden>
+            <HiveMarkSvg scale={0.92} svgClassName="app-bottom-nav-hive-svg" />
+          </span>
           <span className="app-bottom-nav-label">{T('nav.bottomTabCommunity')}</span>
         </NavLink>
         <button
@@ -351,19 +355,6 @@ function AppShell() {
   )
 }
 
-function HomeOrApp() {
-  const { user, loading } = useAuth()
-  if (loading) {
-    return (
-      <div className="auth-page">
-        <div className="auth-loading">{t('common.loading', 'en')}</div>
-      </div>
-    )
-  }
-  if (!user) return <HomePage />
-  return <AppShell />
-}
-
 function App() {
   return (
     <AuthProvider>
@@ -371,7 +362,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/" element={<HomeOrApp />} />
+        <Route path="/" element={<HomePage />} />
         <Route
           path="/*"
           element={

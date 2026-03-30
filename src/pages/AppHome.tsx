@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom'
+import { HiveMarkSvg } from '../components/HiveMarkSvg'
 import { useTranslation } from '../LanguageContext'
 
 type Tile = {
   to: string
   icon: string
+  /** Use branded hive SVG (same contours as header) instead of emoji */
+  hiveMark?: boolean
   titleKey: string
   descKey: string
 }
@@ -13,7 +16,7 @@ const TILES: Tile[] = [
   { to: '/expenses', icon: '📝', titleKey: 'expenses.title', descKey: 'appHome.tileExpenses' },
   { to: '/accounts', icon: '💰', titleKey: 'accounts.title', descKey: 'appHome.tileWallet' },
   { to: '/plan', icon: '📅', titleKey: 'plan.navTitle', descKey: 'appHome.tilePlan' },
-  { to: '/community', icon: '🐝', titleKey: 'community.title', descKey: 'appHome.tileCommunity' },
+  { to: '/community', icon: '🐝', hiveMark: true, titleKey: 'community.title', descKey: 'appHome.tileCommunity' },
 ]
 
 export default function AppHome() {
@@ -38,7 +41,11 @@ export default function AppHome() {
             <li key={tile.to}>
               <Link to={tile.to} className="app-home-tile card">
                 <span className="app-home-tile-icon" aria-hidden>
-                  {tile.icon}
+                  {tile.hiveMark ? (
+                    <HiveMarkSvg scale={0.95} svgClassName="app-home-tile-hive-svg" />
+                  ) : (
+                    tile.icon
+                  )}
                 </span>
                 <span className="app-home-tile-text">
                   <span className="app-home-tile-title">{t(tile.titleKey)}</span>
