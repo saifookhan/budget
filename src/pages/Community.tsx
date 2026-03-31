@@ -1,26 +1,33 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { BeeMarkSvg } from '../components/BeeMarkSvg'
-import { HIVE_TIP_IDS, STORY_IDS, type HiveTipId, type StoryId } from '../data/communityContent'
+import { COMMUNITY_TIP_IDS, FORUM_CATEGORIES, type CommunityTipId, type ForumThreadId } from '../data/communityContent'
 import { useTranslation } from '../LanguageContext'
 
-function HiveTipCard({ id }: { id: HiveTipId }) {
+function SharedTipCard({ id }: { id: CommunityTipId }) {
   const { t } = useTranslation()
   return (
-    <article className="community-hive-tip-card card">
-      <h3 className="community-hive-tip-title">{t(`community.hiveTip${id}Title`)}</h3>
-      <p className="community-hive-tip-body">{t(`community.hiveTip${id}Body`)}</p>
+    <article className="community-tip-card card">
+      <h3 className="community-tip-title">{t(`community.sharedTip${id}Title`)}</h3>
+      <p className="community-tip-body">{t(`community.sharedTip${id}Body`)}</p>
     </article>
   )
 }
 
-function StoryCard({ id }: { id: StoryId }) {
+function ForumThreadRow({ id }: { id: ForumThreadId }) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   return (
-    <article className="community-story-card card">
-      <span className="community-story-tag">{t(`community.story${id}Tag`)}</span>
-      <p className="community-story-byline">{t(`community.story${id}Byline`)}</p>
-      <p className="community-story-body">{t(`community.story${id}Body`)}</p>
-    </article>
+    <li>
+      <button
+        type="button"
+        className="community-forum-thread"
+        onClick={() => navigate(`/community/thread/${id}`)}
+      >
+        <span className="community-forum-thread-title">{t(`community.forumThread${id}Title`)}</span>
+        <span className="community-forum-thread-meta">{t(`community.forumThread${id}Meta`)}</span>
+      </button>
+    </li>
   )
 }
 
@@ -46,6 +53,8 @@ export default function Community() {
       </h1>
       <p className="muted page-lead">{t('community.subtitle')}</p>
 
+      <p className="community-daily-rhyme">{t('community.dailyRhyme')}</p>
+
       <p className="community-demo-banner" role="note">
         {t('community.demoBanner')}
       </p>
@@ -69,23 +78,30 @@ export default function Community() {
           {t('community.sectionIdeasTitle')}
         </h2>
         <p className="muted community-section-intro">{t('community.sectionIdeasIntro')}</p>
-        <ul className="community-hive-tip-grid">
-          {HIVE_TIP_IDS.map((id) => (
+        <ul className="community-tip-grid">
+          {COMMUNITY_TIP_IDS.map((id) => (
             <li key={id}>
-              <HiveTipCard id={id} />
+              <SharedTipCard id={id} />
             </li>
           ))}
         </ul>
       </section>
 
-      <section className="community-section" aria-labelledby="community-voices-heading">
-        <h2 id="community-voices-heading" className="section-title">
-          {t('community.sectionVoicesTitle')}
+      <section className="community-section" aria-labelledby="community-forum-heading">
+        <h2 id="community-forum-heading" className="section-title">
+          {t('community.sectionForumTitle')}
         </h2>
-        <p className="muted community-section-intro">{t('community.sectionVoicesIntro')}</p>
-        <div className="community-story-stack">
-          {STORY_IDS.map((id) => (
-            <StoryCard key={id} id={id} />
+        <p className="muted community-section-intro">{t('community.sectionForumIntro')}</p>
+        <div className="community-forum-board">
+          {FORUM_CATEGORIES.map((cat) => (
+            <div key={cat.id} className="community-forum-category card">
+              <h3 className="community-forum-category-title">{t(`community.forumCat${cat.id}Title`)}</h3>
+              <ul className="community-forum-thread-list">
+                {cat.threadIds.map((threadId) => (
+                  <ForumThreadRow key={threadId} id={threadId} />
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
       </section>

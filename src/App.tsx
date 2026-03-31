@@ -8,6 +8,7 @@ const AllExpenses = lazy(() => import('./pages/AllExpenses'))
 const Plan = lazy(() => import('./pages/Plan'))
 const PastOverviews = lazy(() => import('./pages/PastOverviews'))
 const Community = lazy(() => import('./pages/Community'))
+const CommunityThread = lazy(() => import('./pages/CommunityThread'))
 const AppHome = lazy(() => import('./pages/AppHome'))
 const Settings = lazy(() => import('./pages/Settings'))
 import Login from './pages/Login'
@@ -298,6 +299,7 @@ function AppShell() {
         <Route path="/subscriptions" element={<Navigate to="/plan" replace />} />
         <Route path="/savings" element={<Navigate to="/plan?tab=savings" replace />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/community/thread/:threadId" element={<CommunityThread />} />
         <Route
           path="/settings"
           element={

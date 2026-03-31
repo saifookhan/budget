@@ -16,7 +16,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.tileExpenses': 'Add or edit one-off expenses.',
     'appHome.tileWallet': 'Income, wallets, balances, and transfers.',
     'appHome.tilePlan': 'Recurring charges, subscriptions, and monthly savings goals.',
-    'appHome.tileCommunity': 'Swap budget and money ideas with others.',
+    'appHome.tileCommunity': 'The community — budget ideas, voices, and space to grow together.',
     'plan.navTitle': 'Monthly plan',
     'plan.title': 'Monthly plan',
     'plan.subtitle':
@@ -42,7 +42,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'nav.bottomTabWallet': 'Wallet',
     'nav.bottomTabPlan': 'Plan',
     'nav.bottomTabAdd': 'Add',
-    'nav.bottomTabCommunity': 'Ideas',
+    'nav.bottomTabCommunity': 'Community',
     'nav.bottomTabHome': 'Home',
     'nav.wallet': 'Wallet',
     'nav.past': 'Past',
@@ -259,51 +259,76 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'savings.removeConfirm': 'Remove this goal?',
     'savings.savedSoFar': 'Saved so far',
     'savings.accountOptional': 'Account (optional)',
-    'community.title': 'Ideas & budget',
+    'community.title': 'Community',
     'community.subtitle':
-      'A place to exchange practical money ideas: what works in your budget, what failed, and what you want to try next. We’re building toward threads and replies; for now you’ll find conversation starters, ideas to try, and short voices from the community.',
+      'Practical money ideas — what works, what flopped, and what you’re trying next. Browse the live forum below, use the starters with people you trust, and reach us anytime in Help (💬).',
+    'community.dailyRhyme': 'A tip a day keeps money stress away.',
     'community.demoBanner':
-      'Today: prompts you can reuse in real life, ideas to experiment with, and curated member stories. Next: post your own tips and join discussions. Questions or suggestions? Open Help (💬) — it shapes what we build.',
-    'community.sectionStartersTitle': 'Prompts to trade ideas',
+      'Starters up top stay so new visitors never see a blank page — the forum below is live. Want to shape what comes next? Say hello in Help (💬).',
+    'community.sectionStartersTitle': 'Open a real conversation',
     'community.sectionStartersIntro':
-      'Use these with friends, partners, coworkers, or an online group — they’re meant to open a real swap about money, not small talk.',
-    'community.sectionIdeasTitle': 'Ideas worth trying',
-    'community.sectionIdeasIntro': 'Short tactics you can test this week — steal, adapt, or share back what worked.',
-    'community.hiveTip1Title': 'Subscription audit Sunday',
-    'community.hiveTip1Body':
+      'Three questions to use with people you trust — the kind that turn into an actual swap about budgets and habits, not small talk.',
+    'community.sectionIdeasTitle': 'Starter ideas for everyone',
+    'community.sectionIdeasIntro':
+      'Small habits worth trying. If one works for you, pass it on — that’s how a community learns.',
+    'community.sharedTip1Title': 'Subscription audit Sunday',
+    'community.sharedTip1Body':
       'Pick one Sunday a quarter, list every recurring charge, cancel or downgrade what you don’t use. Most people find one “ghost” bill.',
-    'community.hiveTip2Title': 'Name the goal in the app',
-    'community.hiveTip2Body':
+    'community.sharedTip2Title': 'Name the goal in the app',
+    'community.sharedTip2Body':
       'Whether it’s “trip” or “buffer”, a label makes the goal feel real. Saying no to extras gets easier when the “yes” has a name.',
-    'community.hiveTip3Title': 'Fun money, same total',
-    'community.hiveTip3Body':
+    'community.sharedTip3Title': 'Fun money, same total',
+    'community.sharedTip3Body':
       'Couples: two small “no-questions” pots keep peace. Housemates: agree how you split groceries vs takeout so no one babysits the spreadsheet.',
-    'community.hiveTip4Title': 'Pay future-you first',
-    'community.hiveTip4Body':
+    'community.sharedTip4Title': 'Pay future-you first',
+    'community.sharedTip4Body':
       'On payday, move savings or debt payments before shopping. Even a tiny auto-transfer builds the habit before lifestyle creep.',
-    'community.sectionVoicesTitle': 'How others approach money',
-    'community.sectionVoicesIntro':
-      'Short snapshots from members (curated for now). When we open posting, this is where shared experiences will live.',
-    'community.story1Tag': 'Debt snowball',
-    'community.story1Byline': 'Jordan · paying things off slowly',
-    'community.story1Body':
-      'I list mood next to spends on heavy weeks. Seeing “tired + takeout” in one row helped me plan cheaper comfort food instead.',
-    'community.story2Tag': 'Couples',
-    'community.story2Byline': 'Rina · shared vet & groceries',
-    'community.story2Body':
-      'We use one pot for dog + groceries and “fun” pockets each. Arguing dropped when “whose turn” wasn’t ambiguous anymore.',
-    'community.story3Tag': 'Subscriptions',
-    'community.story3Byline': 'Alex · streaming spring clean',
-    'community.story3Body':
-      'January audit: three small streamers gone, one bundle upgraded. Took 20 minutes, saved enough for a nicer emergency top-up.',
-    'community.sectionNextTitle': 'What’s next',
+    'community.sectionForumTitle': 'Forum',
+    'community.sectionForumIntro':
+      'Open any thread to read the conversation — sample opener and replies for now; tell us what to feature next in Help (💬).',
+    'community.forumCat1Title': 'Saving & debt',
+    'community.forumCat2Title': 'Households & couples',
+    'community.forumCat3Title': 'Apps & habits',
+    'community.forumThread1Title': 'Smallest money habit that actually stuck?',
+    'community.forumThread1Meta': '34 replies · today',
+    'community.forumThread2Title': 'Snowball vs avalanche — what worked?',
+    'community.forumThread2Meta': '12 replies · yesterday',
+    'community.forumThread3Title': 'Splitting groceries without the weekly fight',
+    'community.forumThread3Meta': '28 replies · 2 days ago',
+    'community.forumThread4Title': 'Fun-money rules that feel fair',
+    'community.forumThread4Meta': '19 replies · today',
+    'community.forumThread5Title': 'Which tracker do you open every day?',
+    'community.forumThread5Meta': '41 replies · yesterday',
+    'community.forumThread6Title': 'Subscription audit — share your checklist',
+    'community.forumThread6Meta': '8 replies · 3 days ago',
+    'community.forumBackToForum': '← Back to forum',
+    'community.forumRepliesHeading': 'Replies',
+    'community.forumOpenerLabel': 'Opening post',
+    'community.forumThread1Opener':
+      'I stopped chasing perfect budgets. A small auto-transfer on payday is boring — and it’s the only habit I never skipped. Anyone else go micro-first?',
+    'community.forumThread2Opener':
+      'We tried avalanche for the math but snowball for motivation. Paid the smallest balance first even when the rate was higher elsewhere — the win streak mattered more than the spreadsheet.',
+    'community.forumThread3Opener':
+      'Sunday night we write who buys what for the week — in Notes, not in the checkout line. Took two weeks to stick and the weekly fight mostly stopped.',
+    'community.forumThread4Opener':
+      'Joint pot for rent and bills, fixed “no questions” fun money each. If someone wants more, we talk — but the default isn’t a negotiation every time.',
+    'community.forumThread5Opener':
+      'I open this app every morning with coffee — categories beat one scary total. Curious what others actually open daily.',
+    'community.forumThread6Opener':
+      'One sheet: service, monthly cost, renewal date, keep/cancel. Last pass I dropped three streamers and upgraded one bundle — about 25 minutes, real cash back.',
+    'community.forumLiveReply1': 'Small beats huge resolutions. I needed that.',
+    'community.forumLiveReply2': 'Shared this with my partner. The fun-money split is basically our agreement now.',
+    'community.forumLiveReply3': 'Bookmarking before my next subscription audit — thanks everyone.',
+    'community.forumLiveFootnote':
+      'Composer and sign-in threads are on the roadmap — Help (💬) is the fastest way to add your voice today.',
+    'community.sectionNextTitle': 'Stay in the loop',
     'community.sectionNextIntro':
-      'We’re working on safe ways to publish tips, comment, and follow threads. Get a nudge when the first version ships — no spam.',
-    'community.messagesCta': 'Notify me when discussions open',
+      'Want new forum topics, features, or safer spaces? Leave a nudge — we won’t spam you.',
+    'community.messagesCta': 'Email me when there’s something new for the forum',
     'community.messagesToast':
-      'Saved. We’ll ping you in the app when community discussions go live — until then, Help (💬) is the best place to share ideas.',
+      'You’re on the list. Ideas or worries anytime: Help (💬) in the header.',
     'community.helpHint':
-      'Have a budget hack, a worry, or a feature idea? Open Help (💬) in the header — we read it all.',
+      'Suggestions, bugs, or stories for the forum? Help (💬) goes straight to us.',
     'community.tipsTitle': 'Conversation starters',
     'community.tip1': 'Ask which app they use to track daily spending.',
     'community.tip2': 'Share one subscription you cancelled and what you replaced it with.',
@@ -353,13 +378,13 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.tileExpenses': 'Aggiungi o modifica le spese singole.',
     'appHome.tileWallet': 'Entrate, conti, saldi e trasferimenti.',
     'appHome.tilePlan': 'Abbonamenti, costi ricorrenti e obiettivi di risparmio mensili.',
-    'appHome.tileCommunity': 'Scambia idee su budget e finanza con altri.',
-    'plan.navTitle': 'Piano mensile',
-    'plan.title': 'Piano mensile',
+    'appHome.tileCommunity': 'La comunità: idee su budget, voci e spazio che cresce insieme.',
+    'plan.navTitle': 'Planning mensile',
+    'plan.title': 'Planning mensile',
     'plan.subtitle':
       'Abbonamenti e bollette, più le quote che metti da parte ogni mese — tutto in un unico posto.',
     'plan.tabRecurring': 'Ricorrenti',
-    'plan.tabSavings': 'Risparmi e obiettivi',
+    'plan.tabSavings': 'Risparmi e investimenti',
     'plan.tabsAria': 'Ricorrenti e risparmi',
     'nav.keepOpen': 'Pin',
     'nav.keepOpenOn': 'Menu laterale sempre aperto',
@@ -379,7 +404,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'nav.bottomTabWallet': 'Conti',
     'nav.bottomTabPlan': 'Piano',
     'nav.bottomTabAdd': 'Spesa',
-    'nav.bottomTabCommunity': 'Idee',
+    'nav.bottomTabCommunity': 'Comunità',
     'nav.bottomTabHome': 'Home',
     'nav.wallet': 'Portafoglio',
     'nav.past': 'Passato',
@@ -572,51 +597,76 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'savings.removeConfirm': 'Rimuovere questo obiettivo?',
     'savings.savedSoFar': 'Risparmiato finora',
     'savings.accountOptional': 'Conto (opzionale)',
-    'community.title': 'Idee e budget',
+    'community.title': 'Comunità',
     'community.subtitle':
-      'Un posto per scambiarsi idee concrete su soldi e budget: cosa ti funziona, cosa no e cosa vuoi provare dopo. Stiamo costruendo discussioni e risposte; per ora trovi spunti per parlare, idee da testare e voci brevi dalla community.',
+      'Idee pratiche su soldi e budget: cosa funziona, cosa no e cosa stai provando. Scorri il forum live qui sotto, usa gli spunti con chi ti fidi e scrivici quando vuoi in Aiuto (💬).',
+    'community.dailyRhyme': 'Un consiglio al giorno toglie lo stress dei soldi di torno.',
     'community.demoBanner':
-      'Oggi: domande da riusare nella vita reale, idee da sperimentare e storie curate dei membri. Poi: pubblicare i tuoi consigli e partecipare alle discussioni. Dubbi o suggerimenti? Apri Aiuto (💬) — ci orienta su cosa costruire.',
-    'community.sectionStartersTitle': 'Spunti per scambiare idee',
+      'Gli spunti in alto restano così nessuno vede una pagina vuota — il forum qui sotto è live. Vuoi influenzare cosa arriva dopo? Scrivi in Aiuto (💬).',
+    'community.sectionStartersTitle': 'Apri una conversazione vera',
     'community.sectionStartersIntro':
-      'Usali con amici, partner, colleghi o un gruppo online: servono ad aprire uno scambio vero sul denaro, non il chiacchiericcio.',
-    'community.sectionIdeasTitle': 'Idee da provare',
-    'community.sectionIdeasIntro': 'Tattiche brevi da testare questa settimana — prendile, adattale o racconta cosa ha funzionato.',
-    'community.hiveTip1Title': 'Domenica degli abbonamenti',
-    'community.hiveTip1Body':
+      'Tre domande da usare con persone di fiducia — quelle che portano a uno scambio su abitudini e budget, non al chiacchiericcio.',
+    'community.sectionIdeasTitle': 'Idee di partenza per tutti',
+    'community.sectionIdeasIntro':
+      'Piccole abitudini da provare. Se una ti funziona, passala: è così che una comunità impara.',
+    'community.sharedTip1Title': 'Domenica degli abbonamenti',
+    'community.sharedTip1Body':
       'Scegli una domenica a trimestre, elenca ogni addebito ricorrente, elimina o riduci ciò che non usi. Molti trovano una voce “fantasma”.',
-    'community.hiveTip2Title': 'Dai un nome all’obiettivo',
-    'community.hiveTip2Body':
+    'community.sharedTip2Title': 'Dai un nome all’obiettivo',
+    'community.sharedTip2Body':
       'Che sia “viaggio” o “cuscinetto”, l’etichetta rende l’obiettivo concreto. Dire di no agli extra è più facile quando il sì ha un nome.',
-    'community.hiveTip3Title': 'Soldi svago, stesso totale',
-    'community.hiveTip3Body':
+    'community.sharedTip3Title': 'Soldi svago, stesso totale',
+    'community.sharedTip3Body':
       'In coppia: due piccoli fondi “senza domande”. In casa: definite come dividete spesa vs asporto così nessuno controlla l’altro sul foglio.',
-    'community.hiveTip4Title': 'Prima il te futuro',
-    'community.hiveTip4Body':
+    'community.sharedTip4Title': 'Prima il te futuro',
+    'community.sharedTip4Body':
       'A stipendio, sposta risparmi o debiti prima di spendere. Anche un bonifico automatico piccolo crea l’abitudine prima che aumentino le uscite.',
-    'community.sectionVoicesTitle': 'Come gli altri gestiscono i soldi',
-    'community.sectionVoicesIntro':
-      'Scorci da membri (per ora curati). Quando apriremo le pubblicazioni, qui ci saranno esperienze condivise.',
-    'community.story1Tag': 'Debiti',
-    'community.story1Byline': 'Jordan · piano lungo',
-    'community.story1Body':
-      'Affianco umore e spese nelle settimane pesanti. Vedere “stanca + takeout” sulla stessa riga mi ha spinta a organizzare confort food più economici.',
-    'community.story2Tag': 'Coppia',
-    'community.story2Byline': 'Rina · cane e spesa',
-    'community.story2Body':
-      'Un fondo per cane e spesa e due “svago” individuali. Le discussioni sono calate quando non era più “a chi tocca”.',
-    'community.story3Tag': 'Abbonamenti',
-    'community.story3Byline': 'Alex · reset streaming',
-    'community.story3Body':
-      'Audit di gennaio: tre servizi in meno, un pacchetto meglio. 20 minuti per un top-up di emergenza più comodo.',
-    'community.sectionNextTitle': 'Cosa arriva dopo',
+    'community.sectionForumTitle': 'Forum',
+    'community.sectionForumIntro':
+      'Apri un thread per leggere la discussione — per ora post iniziale e risposte di esempio; dimmi cosa mettere in evidenza in Aiuto (💬).',
+    'community.forumCat1Title': 'Risparmio e debiti',
+    'community.forumCat2Title': 'Casa e coppia',
+    'community.forumCat3Title': 'App e abitudini',
+    'community.forumThread1Title': 'Quale piccola abitudine sul denaro ti è rimasta?',
+    'community.forumThread1Meta': '34 risposte · oggi',
+    'community.forumThread2Title': 'Palla di neve vs valanga — cosa ha funzionato?',
+    'community.forumThread2Meta': '12 risposte · ieri',
+    'community.forumThread3Title': 'Dividere la spesa senza litigare ogni settimana',
+    'community.forumThread3Meta': '28 risposte · 2 giorni fa',
+    'community.forumThread4Title': 'Regole per lo “svago” che sembrano eque',
+    'community.forumThread4Meta': '19 risposte · oggi',
+    'community.forumThread5Title': 'Quale app apri ogni giorno per le uscite?',
+    'community.forumThread5Meta': '41 risposte · ieri',
+    'community.forumThread6Title': 'Audit abbonamenti — condividi la tua checklist',
+    'community.forumThread6Meta': '8 risposte · 3 giorni fa',
+    'community.forumBackToForum': '← Torna al forum',
+    'community.forumRepliesHeading': 'Risposte',
+    'community.forumOpenerLabel': 'Post iniziale',
+    'community.forumThread1Opener':
+      'Ho smesso di inseguire budget perfetti. Un bonifico piccolo a ogni stipendio è noioso — ed è l’unica abitudine che non ho mai saltato. Qualcuno parte micro come me?',
+    'community.forumThread2Opener':
+      'La valanga per i numeri, la palla di neve per la motivazione. Abbiamo pagato prima il saldo più piccolo anche se altrove il tasso era più alto — la serie di vittorie contava più del foglio.',
+    'community.forumThread3Opener':
+      'La domenica sera scriviamo chi compra cosa per la settimana — nelle Note, non alla cassa. Due settimane per farlo stickare e il litigio settimanale è quasi sparito.',
+    'community.forumThread4Opener':
+      'Fondo comune per affitto e bollette, stesso “svago senza domande” a testa. Se serve di più, parliamo — ma non rinegoziamo ogni volta.',
+    'community.forumThread5Opener':
+      'Apro quest’app ogni mattina col caffè — le categorie battono un totale unico che spaventa. Cosa aprite voi ogni giorno?',
+    'community.forumThread6Opener':
+      'Un foglio: servizio, costo mensile, rinnovo, tieni/chiudi. Ultimo giro: tre streaming in meno, un pacchetto meglio — 25 minuti, soldi veri indietro.',
+    'community.forumLiveReply1': 'Meglio piccolo che mega propositi. Mi serviva.',
+    'community.forumLiveReply2': 'L’ho condiviso col mio partner. La divisione dello svago è praticamente il nostro accordo adesso.',
+    'community.forumLiveReply3': 'Salvo prima del prossimo audit abbonamenti — grazie a tuttə.',
+    'community.forumLiveFootnote':
+      'Composer e thread con account sono in roadmap — Aiuto (💬) è il modo più veloce per far sentire la tua voce oggi.',
+    'community.sectionNextTitle': 'Resta aggiornatə',
     'community.sectionNextIntro':
-      'Stiamo lavorando a modi sicuri per pubblicare consigli, commentare e seguire discussioni. Ricevi un avviso quando parte la prima versione — niente spam.',
-    'community.messagesCta': 'Avvisami quando aprono le discussioni',
+      'Vuoi nuovi argomenti, funzioni o spazi più sicuri? Lascia un promemoria — niente spam.',
+    'community.messagesCta': 'Scrivimi quando c’è qualcosa di nuovo per il forum',
     'community.messagesToast':
-      'Salvato. Ti avviseremo in app quando le discussioni in community saranno attive — fino ad allora Aiuto (💬) è il posto migliore per condividere idee.',
+      'Sei in lista. Idee o dubbi quando vuoi: Aiuto (💬) in alto.',
     'community.helpHint':
-      'Hai un trucco di budget, un dubbio o un’idea per l’app? Apri Aiuto (💬) in alto — leggiamo tutto.',
+      'Suggerimenti, bug o storie per il forum? Aiuto (💬) arriva diretto a noi.',
     'community.tipsTitle': 'Spunti di conversazione',
     'community.tip1': 'Chiedi che app usano per tracciare le spese giornaliere.',
     'community.tip2': 'Racconta un abbonamento che hai tolto e con cosa lo hai sostituito.',
@@ -676,7 +726,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.tileExpenses': 'Einmalige Ausgaben erfassen oder bearbeiten.',
     'appHome.tileWallet': 'Einnahmen, Konten, Salden und Überweisungen.',
     'appHome.tilePlan': 'Wiederkehrende Kosten, Abos und monatliche Sparziele.',
-    'appHome.tileCommunity': 'Budget- und Geld-Ideen mit anderen tauschen.',
+    'appHome.tileCommunity': 'Die Community — Budget-Ideen, Stimmen und Raum zum gemeinsamen Wachsen.',
     'plan.navTitle': 'Monatsplan',
     'plan.title': 'Monatsplan',
     'plan.subtitle':
@@ -702,7 +752,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'nav.bottomTabWallet': 'Konten',
     'nav.bottomTabPlan': 'Plan',
     'nav.bottomTabAdd': 'Neu',
-    'nav.bottomTabCommunity': 'Ideen',
+    'nav.bottomTabCommunity': 'Community',
     'nav.bottomTabHome': 'Start',
     'nav.wallet': 'Geldbörsen',
     'nav.past': 'Vergangenheit',
@@ -887,51 +937,76 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'savings.removeConfirm': 'Dieses Ziel entfernen?',
     'savings.savedSoFar': 'Bisher gespart',
     'savings.accountOptional': 'Konto (optional)',
-    'community.title': 'Ideen & Budget',
+    'community.title': 'Community',
     'community.subtitle':
-      'Ein Ort zum Austausch praktischer Geld-Ideen: was in deinem Budget funktioniert, was nicht und was du als Nächstes testen willst. Wir bauen an Threads und Antworten; vorerst gibt es Gesprächsanstöße, Ideen zum Ausprobieren und kurze Stimmen aus der Community.',
+      'Praktische Geld-Ideen — was klappt, was nicht und was du als Nächstes testest. Unten das Live-Forum, Gesprächsanstöße für Vertrauenspersonen, und Hilfe (💬) jederzeit.',
+    'community.dailyRhyme': 'Ein Tipp am Tag hält Geldsorgen fern.',
     'community.demoBanner':
-      'Heute: Fragen fürs echte Leben, Ideen zum Ausprobieren und kuratierte Geschichten von Mitgliedern. Als Nächstes: eigene Tipps posten und mitdiskutieren. Fragen oder Vorschläge? Öffne Hilfe (💬) — das steuert, was wir bauen.',
-    'community.sectionStartersTitle': 'Fragen zum Ideenaustausch',
+      'Die Anstöße oben bleiben, damit niemand eine leere Seite sieht — das Forum unten ist live. Mitgestalten? Schreib in Hilfe (💬).',
+    'community.sectionStartersTitle': 'Echtes Gespräch eröffnen',
     'community.sectionStartersIntro':
-      'Nutze sie mit Freund:innen, Partner:innen, Kolleg:innen oder in einer Gruppe — sie sollen echte Gespräche über Geld starten, keinen Smalltalk.',
-    'community.sectionIdeasTitle': 'Ideen zum Ausprobieren',
-    'community.sectionIdeasIntro': 'Kurze Taktiken für diese Woche — übernehmen, anpassen oder zurückgeben, was geklappt hat.',
-    'community.hiveTip1Title': 'Abo-Check am Sonntag',
-    'community.hiveTip1Body':
+      'Drei Fragen für Menschen, denen du vertraust — damit aus Smalltalk ein echter Tausch über Budget und Gewohnheiten wird.',
+    'community.sectionIdeasTitle': 'Start-Ideen für alle',
+    'community.sectionIdeasIntro':
+      'Kleine Gewohnheiten zum Ausprobieren. Wenn eine bei dir wirkt, gib sie weiter — so lernt eine Community.',
+    'community.sharedTip1Title': 'Abo-Check am Sonntag',
+    'community.sharedTip1Body':
       'Ein Sonntag pro Quartal: alle Lastschriften auflisten, kündigen oder runterstufen, was du nicht nutzt. Die meisten finden eine „Geister“-Position.',
-    'community.hiveTip2Title': 'Ziel in der App benennen',
-    'community.hiveTip2Body':
+    'community.sharedTip2Title': 'Ziel in der App benennen',
+    'community.sharedTip2Body':
       'Ob „Urlaub“ oder „Polster“ — eine Bezeichnung macht das Ziel greifbar. Nein zu Extras fällt leichter, wenn das Ja einen Namen hat.',
-    'community.hiveTip3Title': 'Spaßgeld, gleiche Summe',
-    'community.hiveTip3Body':
+    'community.sharedTip3Title': 'Spaßgeld, gleiche Summe',
+    'community.sharedTip3Body':
       'Paare: zwei kleine Töpfe „ohne Fragen“. WG: klar festlegen, wie ihr Einkauf vs. Lieferung teilt — dann kontrolliert niemand die Tabelle.',
-    'community.hiveTip4Title': 'Zuerst das zukünftige Ich',
-    'community.hiveTip4Body':
+    'community.sharedTip4Title': 'Zuerst das zukünftige Ich',
+    'community.sharedTip4Body':
       'Am Zahltag zuerst sparen oder Schulden bedienen, bevor du shopst. Schon ein kleiner Dauerauftrag trainiert die Gewohnheit vor dem Lifestyle-Creep.',
-    'community.sectionVoicesTitle': 'So gehen andere mit Geld um',
-    'community.sectionVoicesIntro':
-      'Kurze Schnappschüsse von Mitgliedern (vorerst kuratiert). Wenn Posting offen ist, leben geteilte Erfahrungen hier.',
-    'community.story1Tag': 'Schneeball-Schulden',
-    'community.story1Byline': 'Jordan · Schritt für Schritt',
-    'community.story1Body':
-      'Ich notiere Stimmung neben Ausgaben in harten Wochen. „Müde + Lieferessen“ in einer Zeile hat mir geholfen, günstigeren Trost zu planen.',
-    'community.story2Tag': 'Paare',
-    'community.story2Byline': 'Rina · Tierarzt & Einkauf',
-    'community.story2Body':
-      'Ein Topf für Hund + Einkauf und je ein Spaß-Topf. Streit ging runter, weil „wer dran ist“ klar war.',
-    'community.story3Tag': 'Abos',
-    'community.story3Byline': 'Alex · Streaming-Frühjahrsputz',
-    'community.story3Body':
-      'Januar-Check: drei kleine Anbieter weg, ein Paket besser. 20 Minuten — genug für ein besseres Notfallpolster.',
-    'community.sectionNextTitle': 'Was als Nächstes kommt',
+    'community.sectionForumTitle': 'Forum',
+    'community.sectionForumIntro':
+      'Thread öffnen zum Lesen — Startpost und Beispielantworten vorerst; sag uns in Hilfe (💬), was wir zeigen sollen.',
+    'community.forumCat1Title': 'Sparen & Schulden',
+    'community.forumCat2Title': 'Haushalt & Paare',
+    'community.forumCat3Title': 'Apps & Gewohnheiten',
+    'community.forumThread1Title': 'Welche Mini-Geldgewohnheit hat wirklich gehalten?',
+    'community.forumThread1Meta': '34 Antworten · heute',
+    'community.forumThread2Title': 'Schneeball vs Lawine — was hat geklappt?',
+    'community.forumThread2Meta': '12 Antworten · gestern',
+    'community.forumThread3Title': 'Einkauf teilen ohne wöchentlichen Streit',
+    'community.forumThread3Meta': '28 Antworten · vor 2 Tagen',
+    'community.forumThread4Title': 'Spaßgeld-Regeln, die fair wirken',
+    'community.forumThread4Meta': '19 Antworten · heute',
+    'community.forumThread5Title': 'Welchen Tracker öffnet ihr täglich?',
+    'community.forumThread5Meta': '41 Antworten · gestern',
+    'community.forumThread6Title': 'Abo-Check — Checkliste teilen',
+    'community.forumThread6Meta': '8 Antworten · vor 3 Tagen',
+    'community.forumBackToForum': '← Zurück zum Forum',
+    'community.forumRepliesHeading': 'Antworten',
+    'community.forumOpenerLabel': 'Eröffnungsbeitrag',
+    'community.forumThread1Opener':
+      'Ich habe aufgehört, perfekte Budgets zu jagen. Ein kleiner Dauerauftrag am Zahltag ist langweilig — und die einzige Gewohnheit, die ich nie ausgelassen habe. Macht das noch jemand in Mini-Schritten?',
+    'community.forumThread2Opener':
+      'Lawine für die Zahlen, Schneeball für Motivation. Wir haben zuerst den kleinsten Saldo getilgt, obwohl woanders der Zins höher war — die Erfolgsserie zählte mehr als die Tabelle.',
+    'community.forumThread3Opener':
+      'Sonntagabend schreiben wir, wer was für die Woche kauft — in Notizen, nicht an der Kasse. Zwei Wochen bis es saß, der wöchentliche Streit ist fast weg.',
+    'community.forumThread4Opener':
+      'Gemeinsamer Topf für Miete und Fixkosten, festes „Spaßgeld“ pro Person. Wenn mehr nötig ist, reden wir — aber nicht jedes Mal neu verhandeln.',
+    'community.forumThread5Opener':
+      'Ich öffne diese App jeden Morgen zum Kaffee — Kategorien schlagen eine einzige gruselige Summe. Was öffnet ihr täglich?',
+    'community.forumThread6Opener':
+      'Ein Blatt: Dienst, Monatskosten, Verlängerung, behalten/kündigen. Letzter Durchlauf: drei Streamer raus, ein Paket besser — 25 Minuten, echtes Geld zurück.',
+    'community.forumLiveReply1': 'Klein schlägt riesige Vorsätze. Genau das brauchte ich.',
+    'community.forumLiveReply2': 'Mit meinem Partner geteilt. Die Spaßgeld-Regel ist jetzt praktisch unser Deal.',
+    'community.forumLiveReply3': 'Merke ich mir vor dem nächsten Abo-Check — danke euch.',
+    'community.forumLiveFootnote':
+      'Editor und Threads mit Konto sind geplant — Hilfe (💬) ist heute der schnellste Weg, dich einzubringen.',
+    'community.sectionNextTitle': 'Auf dem Laufenden bleiben',
     'community.sectionNextIntro':
-      'Wir arbeiten an sicheren Wegen, Tipps zu veröffentlichen, zu kommentieren und Threads zu folgen. Lass dich benachrichtigen, wenn die erste Version live ist — kein Spam.',
-    'community.messagesCta': 'Benachrichtigen, wenn Diskussionen starten',
+      'Neue Forum-Themen, Features oder sicherere Räume? Trag dich ein — kein Spam.',
+    'community.messagesCta': 'Mail mir, wenn es Neues zum Forum gibt',
     'community.messagesToast':
-      'Gespeichert. Wir melden uns in der App, sobald Community-Diskussionen live sind — bis dahin ist Hilfe (💬) der beste Ort für Ideen.',
+      'Du stehst auf der Liste. Ideen oder Sorgen jederzeit: Hilfe (💬) in der Kopfzeile.',
     'community.helpHint':
-      'Budget-Hack, Sorge oder Feature-Idee? Öffne Hilfe (💬) in der Kopfzeile — wir lesen alles.',
+      'Vorschläge, Bugs oder Geschichten fürs Forum? Hilfe (💬) kommt direkt bei uns an.',
     'community.tipsTitle': 'Gesprächsanstöße',
     'community.tip1': 'Frag, welche App sie für Alltagsausgaben nutzen.',
     'community.tip2': 'Erzähl ein Abo, das du gekündigt hast — und womit du es ersetzt hast.',
@@ -986,7 +1061,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.tileExpenses': 'Ajouter ou modifier des dépenses ponctuelles.',
     'appHome.tileWallet': 'Revenus, comptes, soldes et virements.',
     'appHome.tilePlan': 'Charges récurrentes, abonnements et objectifs d’épargne mensuels.',
-    'appHome.tileCommunity': 'Échanger des idées budget et argent avec d’autres.',
+    'appHome.tileCommunity': 'La communauté — idées budget, voix et espace qui grandit ensemble.',
     'plan.navTitle': 'Plan du mois',
     'plan.title': 'Plan du mois',
     'plan.subtitle':
@@ -1012,7 +1087,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'nav.bottomTabWallet': 'Comptes',
     'nav.bottomTabPlan': 'Plan',
     'nav.bottomTabAdd': 'Ajouter',
-    'nav.bottomTabCommunity': 'Idées',
+    'nav.bottomTabCommunity': 'Communauté',
     'nav.bottomTabHome': 'Accueil',
     'nav.wallet': 'Portefeuilles',
     'nav.past': 'Passé',
@@ -1198,51 +1273,76 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'savings.removeConfirm': 'Supprimer cet objectif ?',
     'savings.savedSoFar': 'Épargné jusqu\'ici',
     'savings.accountOptional': 'Compte (optionnel)',
-    'community.title': 'Idées & budget',
+    'community.title': 'Communauté',
     'community.subtitle':
-      'Un endroit pour échanger des idées concrètes sur l’argent : ce qui marche dans ton budget, ce qui coince et ce que tu veux tester ensuite. On construit fils de discussion et réponses ; pour l’instant : accroches, idées à essayer et voix courtes de la communauté.',
+      'Idées concrètes sur l’argent : ce qui marche, ce qui bloque et ce que tu testes ensuite. Le forum live est ci-dessous, les accroches pour les proches, et Aide (💬) quand tu veux.',
+    'community.dailyRhyme': 'Un conseil par jour éloigne le stress lié à l’argent.',
     'community.demoBanner':
-      'Aujourd’hui : questions réutilisables dans la vraie vie, idées à tester et histoires de membres (curatées). Ensuite : publier tes propres conseils et discuter. Questions ou idées ? Ouvre Aide (💬) — ça guide ce qu’on développe.',
-    'community.sectionStartersTitle': 'Accroches pour échanger',
+      'Les accroches en haut restent pour éviter une page vide — le forum ci-dessous est live. Envie d’influencer la suite ? Écris dans Aide (💬).',
+    'community.sectionStartersTitle': 'Ouvrir une vraie conversation',
     'community.sectionStartersIntro':
-      'À utiliser avec des ami·e·s, ton/ta partenaire, des collègues ou un groupe en ligne — le but est d’ouvrir un vrai échange sur l’argent, pas la conversation légère.',
-    'community.sectionIdeasTitle': 'Idées à essayer',
-    'community.sectionIdeasIntro': 'Petites tactiques pour cette semaine — reprends, adapte ou raconte ce qui a marché.',
-    'community.hiveTip1Title': 'Dimanche des abonnements',
-    'community.hiveTip1Body':
+      'Trois questions pour les personnes en qui tu as confiance — celles qui mènent à un échange sur habitudes et budget, pas au small talk.',
+    'community.sectionIdeasTitle': 'Idées de départ pour tout le monde',
+    'community.sectionIdeasIntro':
+      'Petites habitudes à essayer. Si l’une te va, transmets-la — c’est ainsi qu’une communauté apprend.',
+    'community.sharedTip1Title': 'Dimanche des abonnements',
+    'community.sharedTip1Body':
       'Un dimanche par trimestre : liste chaque prélèvement, résilie ou rétrograde ce que tu n’utilises pas. Souvent une ligne « fantôme ».',
-    'community.hiveTip2Title': 'Nomme l’objectif dans l’app',
-    'community.hiveTip2Body':
+    'community.sharedTip2Title': 'Nomme l’objectif dans l’app',
+    'community.sharedTip2Body':
       '« Voyage » ou « coussin » : un libellé rend l’objectif concret. Dire non aux extras est plus facile quand le oui a un nom.',
-    'community.hiveTip3Title': 'Argent fun, même total',
-    'community.hiveTip3Body':
+    'community.sharedTip3Title': 'Argent fun, même total',
+    'community.sharedTip3Body':
       'En couple : deux petits pots « sans questions ». En coloc : fixez comment vous partagez courses vs livraison pour éviter le contrôle du tableau.',
-    'community.hiveTip4Title': 'D’abord le toi du futur',
-    'community.hiveTip4Body':
+    'community.sharedTip4Title': 'D’abord le toi du futur',
+    'community.sharedTip4Body':
       'Le jour de paie, épargne ou dettes avant les achats. Même un petit virement auto installe l’habitude avant l’inflation du style de vie.',
-    'community.sectionVoicesTitle': 'Comment les autres gèrent l’argent',
-    'community.sectionVoicesIntro':
-      'Instantanés de membres (curatés pour l’instant). Quand on ouvrira la publication, les expériences partagées vivront ici.',
-    'community.story1Tag': 'Boule de neige dettes',
-    'community.story1Byline': 'Jordan · remboursement doux',
-    'community.story1Body':
-      'Je note l’humeur à côté des dépenses les semaines dures. Voir « fatiguée + livraison » sur une ligne m’a aidée à prévoir du réconfort moins cher.',
-    'community.story2Tag': 'Couples',
-    'community.story2Byline': 'Rina · véto & courses',
-    'community.story2Body':
-      'Un pot chien + courses et des poches « plaisir » chacun·e. Moins de disputes quand ce n’était plus « à qui le tour ».',
-    'community.story3Tag': 'Abonnements',
-    'community.story3Byline': 'Alex · grand ménage streaming',
-    'community.story3Body':
-      'Audit de janvier : trois petits services en moins, un bundle mieux. 20 minutes pour un coussin d’urgence plus confortable.',
-    'community.sectionNextTitle': 'La suite',
+    'community.sectionForumTitle': 'Forum',
+    'community.sectionForumIntro':
+      'Ouvre un fil pour lire — message d’ouverture et réponses d’exemple pour l’instant ; dis-nous quoi mettre en avant dans Aide (💬).',
+    'community.forumCat1Title': 'Épargne & dettes',
+    'community.forumCat2Title': 'Foyer & couple',
+    'community.forumCat3Title': 'Apps & habitudes',
+    'community.forumThread1Title': 'La petite habitude d’argent qui a vraiment tenu?',
+    'community.forumThread1Meta': '34 réponses · aujourd’hui',
+    'community.forumThread2Title': 'Boule de neige vs avalanche — ça a marché comment?',
+    'community.forumThread2Meta': '12 réponses · hier',
+    'community.forumThread3Title': 'Partager le budget courses sans dispute chaque semaine',
+    'community.forumThread3Meta': '28 réponses · il y a 2 jours',
+    'community.forumThread4Title': 'Règles « argent plaisir » qui semblent justes',
+    'community.forumThread4Meta': '19 réponses · aujourd’hui',
+    'community.forumThread5Title': 'Quelle appli ouvrez-vous chaque jour pour les dépenses?',
+    'community.forumThread5Meta': '41 réponses · hier',
+    'community.forumThread6Title': 'Audit abonnements — partagez votre checklist',
+    'community.forumThread6Meta': '8 réponses · il y a 3 jours',
+    'community.forumBackToForum': '← Retour au forum',
+    'community.forumRepliesHeading': 'Réponses',
+    'community.forumOpenerLabel': 'Message d’ouverture',
+    'community.forumThread1Opener':
+      'J’ai arrêté de courir après le budget parfait. Un petit virement auto le jour de paie, c’est plat — et c’est la seule habitude que je n’ai jamais lâchée. D’autres commencent micro?',
+    'community.forumThread2Opener':
+      'Avalanche pour les chiffres, boule de neige pour la motivation. On a payé le plus petit solde d’abord même si le taux était plus haut ailleurs — la série de victoires comptait plus que le tableur.',
+    'community.forumThread3Opener':
+      'Dimanche soir on note qui achète quoi pour la semaine — dans Notes, pas à la caisse. Deux semaines pour que ça tienne, la dispute hebdo a quasi disparu.',
+    'community.forumThread4Opener':
+      'Pot commun loyer et charges, même « argent plaisir sans questions » chacun·e. Si on veut plus, on en parle — mais pas une négociation à chaque fois.',
+    'community.forumThread5Opener':
+      'J’ouvre cette appli chaque matin avec le café — les catégories battent un total unique qui fait peur. Vous ouvrez quoi au quotidien?',
+    'community.forumThread6Opener':
+      'Une feuille : service, coût mensuel, renouvellement, garder/résilier. Dernier passage : trois streamers en moins, un bundle mieux — 25 minutes, cash réel.',
+    'community.forumLiveReply1': 'Petit bat les énormes résolutions. Il me fallait ça.',
+    'community.forumLiveReply2': 'Partagé avec mon partenaire. La règle plaisir, c’est quasiment notre accord maintenant.',
+    'community.forumLiveReply3': 'Je garde avant mon prochain audit d’abos — merci tout le monde.',
+    'community.forumLiveFootnote':
+      'Rédacteur et fils avec compte arrivent — Aide (💬) reste le plus rapide pour te faire entendre aujourd’hui.',
+    'community.sectionNextTitle': 'Reste informé·e',
     'community.sectionNextIntro':
-      'On travaille sur des façons sûres de publier des conseils, commenter et suivre des fils. Reçois une notif quand la première version arrive — pas de spam.',
-    'community.messagesCta': 'Me prévenir quand les discussions ouvrent',
+      'Nouveaux sujets de forum, fonctions ou espaces plus sûrs ? Laisse un rappel — pas de spam.',
+    'community.messagesCta': 'Préviens-moi quand il y a du neuf pour le forum',
     'community.messagesToast':
-      'Enregistré. On te préviendra dans l’app quand les discussions communautaires seront là — d’ici là, Aide (💬) est le meilleur endroit pour partager des idées.',
+      'Tu es sur la liste. Idées ou inquiétudes quand tu veux : Aide (💬) dans l’en-tête.',
     'community.helpHint':
-      'Un truc budget, une inquiétude ou une idée de fonction ? Ouvre Aide (💬) dans l’en-tête — on lit tout.',
+      'Suggestions, bugs ou histoires pour le forum ? Aide (💬) nous arrive directement.',
     'community.tipsTitle': 'Accroches conversation',
     'community.tip1': 'Demande quelle appli elle utilise pour suivre les dépenses du quotidien.',
     'community.tip2': 'Raconte un abo que tu as résilié et par quoi tu l’as remplacé.',
@@ -1295,7 +1395,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'appHome.tileExpenses': 'Añade o edita gastos puntuales.',
     'appHome.tileWallet': 'Ingresos, cuentas, saldos y transferencias.',
     'appHome.tilePlan': 'Cargos recurrentes, suscripciones y metas de ahorro mensuales.',
-    'appHome.tileCommunity': 'Intercambia ideas de presupuesto y dinero con otros.',
+    'appHome.tileCommunity': 'La comunidad: ideas de presupuesto, voces y espacio que crece junto.',
     'plan.navTitle': 'Plan mensual',
     'plan.title': 'Plan mensual',
     'plan.subtitle':
@@ -1321,7 +1421,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'nav.bottomTabWallet': 'Cuentas',
     'nav.bottomTabPlan': 'Plan',
     'nav.bottomTabAdd': 'Añadir',
-    'nav.bottomTabCommunity': 'Ideas',
+    'nav.bottomTabCommunity': 'Comunidad',
     'nav.bottomTabHome': 'Inicio',
     'nav.wallet': 'Monederos',
     'nav.past': 'Pasado',
@@ -1507,51 +1607,76 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     'savings.removeConfirm': '¿Eliminar este objetivo?',
     'savings.savedSoFar': 'Ahorrado hasta ahora',
     'savings.accountOptional': 'Cuenta (opcional)',
-    'community.title': 'Ideas y presupuesto',
+    'community.title': 'Comunidad',
     'community.subtitle':
-      'Un espacio para intercambiar ideas prácticas sobre dinero: qué te funciona en el presupuesto, qué no y qué quieres probar después. Estamos construyendo hilos y respuestas; por ahora hay preguntas para conversar, ideas para experimentar y voces breves de la comunidad.',
+      'Ideas prácticas sobre dinero: qué te funciona, qué no y qué estás probando. El foro live está abajo, los rompehielos para gente de confianza y Ayuda (💬) cuando quieras.',
+    'community.dailyRhyme': 'Un consejo al día aleja el estrés del dinero.',
     'community.demoBanner':
-      'Hoy: preguntas que puedes usar en la vida real, ideas para probar e historias de miembros (curadas). Después: publicar tus propios consejos y debatir. ¿Dudas o sugerencias? Abre Ayuda (💬) — nos guía qué construir.',
-    'community.sectionStartersTitle': 'Preguntas para intercambiar ideas',
+      'Los rompehielos arriba siguen para que nadie vea una página vacía — el foro de abajo está live. ¿Quieres influir en lo siguiente? Escribe en Ayuda (💬).',
+    'community.sectionStartersTitle': 'Abre una conversación de verdad',
     'community.sectionStartersIntro':
-      'Úsalas con amigos, pareja, compañeros de piso o un grupo online: están pensadas para abrir un intercambio real sobre dinero, no charla superficial.',
-    'community.sectionIdeasTitle': 'Ideas para probar',
-    'community.sectionIdeasIntro': 'Tácticas breves para esta semana — copia, adapta o cuenta qué te funcionó.',
-    'community.hiveTip1Title': 'Domingo de suscripciones',
-    'community.hiveTip1Body':
+      'Tres preguntas para gente de confianza: las que llevan a intercambiar hábitos y presupuesto, no charla superficial.',
+    'community.sectionIdeasTitle': 'Ideas iniciales para todos',
+    'community.sectionIdeasIntro':
+      'Pequeños hábitos para probar. Si uno te funciona, pásalo: así aprende una comunidad.',
+    'community.sharedTip1Title': 'Domingo de suscripciones',
+    'community.sharedTip1Body':
       'Un domingo por trimestre: lista cada cargo recurrente, cancela o baja lo que no usas. Mucha gente encuentra un cargo «fantasma».',
-    'community.hiveTip2Title': 'Ponle nombre a la meta en la app',
-    'community.hiveTip2Body':
+    'community.sharedTip2Title': 'Ponle nombre a la meta en la app',
+    'community.sharedTip2Body':
       '«Viaje» o «colchón»: la etiqueta hace la meta real. Decir no a extras es más fácil cuando el sí tiene nombre.',
-    'community.hiveTip3Title': 'Diversión, mismo total',
-    'community.hiveTip3Body':
+    'community.sharedTip3Title': 'Diversión, mismo total',
+    'community.sharedTip3Body':
       'Pareja: dos bolsillos pequeños «sin preguntas». Piso: acordad cómo repartís compras vs delivery para no vigilar la hoja.',
-    'community.hiveTip4Title': 'Primero el tú del futuro',
-    'community.hiveTip4Body':
+    'community.sharedTip4Title': 'Primero el tú del futuro',
+    'community.sharedTip4Body':
       'El día de paga, ahorro o deudas antes de gastar. Hasta una transferencia automática pequeña crea el hábito antes del lifestyle creep.',
-    'community.sectionVoicesTitle': 'Cómo otras personas manejan el dinero',
-    'community.sectionVoicesIntro':
-      'Retratos breves de miembros (curados por ahora). Cuando abramos publicar, aquí vivirán las experiencias compartidas.',
-    'community.story1Tag': 'Bola de nieve deudas',
-    'community.story1Byline': 'Jordan · pagando despacio',
-    'community.story1Body':
-      'Anoto el ánimo junto al gasto en semanas duras. Ver «cansada + delivery» en una fila me ayudó a planear consuelo más barato.',
-    'community.story2Tag': 'Parejas',
-    'community.story2Byline': 'Rina · vet y compras',
-    'community.story2Body':
-      'Un fondo para perro y compras y «diversión» cada uno. Menos discusiones cuando ya no era «a quién le toca».',
-    'community.story3Tag': 'Suscripciones',
-    'community.story3Byline': 'Alex · limpieza de streaming',
-    'community.story3Body':
-      'Auditoría de enero: tres servicios menos, un paquete mejor. 20 minutos para un colchón de emergencia más cómodo.',
-    'community.sectionNextTitle': 'Qué viene después',
+    'community.sectionForumTitle': 'Foro',
+    'community.sectionForumIntro':
+      'Abre un hilo para leer — apertura y respuestas de ejemplo por ahora; dinos qué destacar en Ayuda (💬).',
+    'community.forumCat1Title': 'Ahorro y deudas',
+    'community.forumCat2Title': 'Hogar y pareja',
+    'community.forumCat3Title': 'Apps y hábitos',
+    'community.forumThread1Title': '¿Qué hábito pequeño con el dinero sí se quedó?',
+    'community.forumThread1Meta': '34 respuestas · hoy',
+    'community.forumThread2Title': 'Bola de nieve vs avalancha — ¿qué te funcionó?',
+    'community.forumThread2Meta': '12 respuestas · ayer',
+    'community.forumThread3Title': 'Repartir compras sin pelear cada semana',
+    'community.forumThread3Meta': '28 respuestas · hace 2 días',
+    'community.forumThread4Title': 'Reglas de «dinero diversión» que se sienten justas',
+    'community.forumThread4Meta': '19 respuestas · hoy',
+    'community.forumThread5Title': '¿Qué tracker abrís cada día?',
+    'community.forumThread5Meta': '41 respuestas · ayer',
+    'community.forumThread6Title': 'Auditoría de suscripciones — comparte tu lista',
+    'community.forumThread6Meta': '8 respuestas · hace 3 días',
+    'community.forumBackToForum': '← Volver al foro',
+    'community.forumRepliesHeading': 'Respuestas',
+    'community.forumOpenerLabel': 'Mensaje inicial',
+    'community.forumThread1Opener':
+      'Dejé de perseguir presupuestos perfectos. Una transferencia pequeña el día de paga es aburrida — y es el único hábito que no salté nunca. ¿Alguien más empieza en micro?',
+    'community.forumThread2Opener':
+      'Avalancha por los números, bola de nieve por la motivación. Pagamos primero el saldo más pequeño aunque el interés fuera mayor en otra tarjeta — la racha de victorias importaba más que la hoja.',
+    'community.forumThread3Opener':
+      'El domingo por la noche anotamos quién compra qué para la semana — en Notas, no en la caja. Dos semanas hasta que pegara y la pelea semanal casi desapareció.',
+    'community.forumThread4Opener':
+      'Bote común para alquiler y fijos, mismo «dinero diversión sin preguntas» cada uno. Si hace falta más, hablamos — pero no renegociamos cada vez.',
+    'community.forumThread5Opener':
+      'Abro esta app cada mañana con el café — las categorías ganan a un total único que asusta. ¿Qué abrís vosotros a diario?',
+    'community.forumThread6Opener':
+      'Una hoja: servicio, coste mensual, renovación, mantener/cancelar. Última pasada: tres streaming menos, un paquete mejor — 25 minutos, dinero real de vuelta.',
+    'community.forumLiveReply1': 'Pequeño gana a propósitos enormes. Lo necesitaba.',
+    'community.forumLiveReply2': 'Lo compartí con mi pareja. La regla del dinero diversión es casi nuestro acuerdo ya.',
+    'community.forumLiveReply3': 'Guardado antes de la próxima auditoría de suscripciones — gracias a todes.',
+    'community.forumLiveFootnote':
+      'Editor e hilos con cuenta van en roadmap — Ayuda (💬) es hoy la vía más rápida para que te escuchen.',
+    'community.sectionNextTitle': 'Mantente al día',
     'community.sectionNextIntro':
-      'Estamos trabajando en formas seguras de publicar consejos, comentar y seguir hilos. Recibe un aviso cuando salga la primera versión — sin spam.',
-    'community.messagesCta': 'Avísame cuando abran las discusiones',
+      '¿Temas nuevos en el foro, funciones o espacios más seguros? Deja un aviso — sin spam.',
+    'community.messagesCta': 'Avísame cuando haya novedades del foro',
     'community.messagesToast':
-      'Guardado. Te avisaremos en la app cuando haya discusiones en la comunidad — hasta entonces Ayuda (💬) es el mejor sitio para compartir ideas.',
+      'Estás en la lista. Ideas o dudas cuando quieras: Ayuda (💬) en la cabecera.',
     'community.helpHint':
-      '¿Truco de presupuesto, duda o idea para la app? Abre Ayuda (💬) en la cabecera — lo leemos todo.',
+      '¿Sugerencias, bugs o historias para el foro? Ayuda (💬) llega directo a nosotros.',
     'community.tipsTitle': 'Rompehielos',
     'community.tip1': 'Pregunta qué app usan para el gasto diario.',
     'community.tip2': 'Cuenta una suscripción que cancelaste y con qué la sustituiste.',

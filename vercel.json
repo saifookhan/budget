@@ -8,6 +8,7 @@
     { "source": "/app", "destination": "/index.html" },
     { "source": "/expenses", "destination": "/index.html" },
     { "source": "/community", "destination": "/index.html" },
+    { "source": "/community/thread/:threadId", "destination": "/index.html" },
     { "source": "/categories", "destination": "/index.html" },
     { "source": "/income", "destination": "/index.html" },
     { "source": "/overview", "destination": "/index.html" },
